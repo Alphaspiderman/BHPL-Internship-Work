@@ -7,7 +7,7 @@ from sanic.log import logger
 import aiohttp
 import json
 
-from .app import appserver
+from .app import IntranetApp, appserver
 
 # noinspection PyUnresolvedReferences
 # flake8: noqa
@@ -19,10 +19,10 @@ config = dotenv_values(".env")
 
 # Read the public and private keys and add them to the config.
 with open("public-key.pem") as public_key_file:
-    config["PUB_KEY"] = public_key_file.read()
+    pub_key = public_key_file.read()
 
 with open("private-key.pem") as private_key_file:
-    config["PRIV_KEY"] = private_key_file.read()
+    priv_key = private_key_file.read()
 
 # Try to get state from the ENV, defaults to being dev.
 is_prod: str = config.get("IS_PROD", "false")
@@ -30,14 +30,13 @@ is_prod: str = config.get("IS_PROD", "false")
 # Convert the string to a bool and update the config with the bool.
 config.update({"IS_PROD": is_prod.lower() == "true"})
 
-app: Sanic = appserver
+app: IntranetApp = appserver
 app.config.update(config)
 app.config.PROXIES_COUNT = int(config.get("PROXIES_COUNT", 0))
 
 
 @app.listener("before_server_start")
-async def setup_app(app: Sanic):
-
+async def setup_app(app: IntranetApp):
     logger.info("Fetching OpenID Configuration of Entra")
 
     # Fetch OpenID Configuration of Entra from https://login.microsoftonline.com/common/.well-known/openid-configuration
@@ -65,8 +64,8 @@ async def setup_app(app: Sanic):
         kid = jwk["kid"]
         public_keys[kid] = algorithms.RSAAlgorithm.from_jwk(json.dumps(jwk))
 
-    logger.info("Saving public keys to the app context")
-    app.ctx.public_keys = public_keys
+    logger.info("Saving public keys to the app")
+    app.set_entra_jwt_keys(public_keys)
 
 
 @app.get("/ping")
@@ -79,9 +78,11 @@ async def jwt_status(request: Request):
     if not request.token:
         d = {"authenticated": False, "message": "No token"}
         return response.json(d)
+    
+    app:IntranetApp = request.app
 
     try:
-        jwt.decode(request.token, key=request.app.config["PUB_KEY"], algorithms="RS256")
+        jwt.decode(request.token, key=app.get_public_key, algorithms="RS256")
     except jwt.exceptions.ImmatureSignatureError:
         # Raised when a token’s nbf claim represents a time in the future
         d = {
@@ -129,4 +130,4 @@ if __name__ == "__main__":
         kwargs["auto_reload"] = True
 
     # Run the API Server
-    app.run(**kwargs)
+    app.run(pub_key, priv_key, **kwargs)
