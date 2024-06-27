@@ -27,6 +27,17 @@ with open("private-key.pem") as private_key_file:
 # Try to get state from the ENV, defaults to being dev.
 is_prod: str = config.get("IS_PROD", "false")
 
+# Load default values for the database connection
+config.update(
+    {
+        "DB_HOST": config.get("DB_HOST", "localhost"),
+        "DB_PORT": config.get("DB_PORT", 3306),
+        "DB_USERNAME": config.get("DB_USERNAME", "root"),
+        "DB_PASSWORD": config.get("DB_PASSWORD", "password"),
+        "DB_NAME": config.get("DB_NAME", "intranet"),
+    },
+)
+
 # Convert the string to a bool and update the config with the bool.
 config.update({"IS_PROD": is_prod.lower() == "true"})
 
@@ -37,6 +48,11 @@ app.config.PROXIES_COUNT = int(config.get("PROXIES_COUNT", 0))
 
 @app.listener("before_server_start")
 async def setup_app(app: IntranetApp):
+    try:
+        await app.connect_db()
+    except Exception:
+        logger.error(f"Error connecting to DB")
+        quit(1)
     logger.info("Fetching OpenID Configuration of Entra")
 
     # Fetch OpenID Configuration of Entra from https://login.microsoftonline.com/common/.well-known/openid-configuration
@@ -78,8 +94,8 @@ async def jwt_status(request: Request):
     if not request.token:
         d = {"authenticated": False, "message": "No token"}
         return response.json(d)
-    
-    app:IntranetApp = request.app
+
+    app: IntranetApp = request.app
 
     try:
         jwt.decode(request.token, key=app.get_public_key, algorithms="RS256")
