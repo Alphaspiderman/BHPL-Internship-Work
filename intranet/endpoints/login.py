@@ -3,6 +3,6 @@ from sanic.views import HTTPMethodView
 from sanic_ext import render
 
 
-class Index(HTTPMethodView):
+class Login(HTTPMethodView):
     async def get(self, request: Request):
-        return await render("index.html", status=400)
+        return await render("login.html", status=400)

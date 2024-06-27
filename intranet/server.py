@@ -89,41 +89,14 @@ async def ping_test(request: Request):
     return response.text("Pong")
 
 
-@app.get("/jwt")
-async def jwt_status(request: Request):
-    if not request.token:
-        d = {"authenticated": False, "message": "No token"}
-        return response.json(d)
-
-    app: IntranetApp = request.app
-
-    try:
-        jwt.decode(request.token, key=app.get_public_key, algorithms="RS256")
-    except jwt.exceptions.ImmatureSignatureError:
-        # Raised when a token’s nbf claim represents a time in the future
-        d = {
-            "authenticated": False,
-            "message": "JWT Token not allowed to be used at time",
-        }
-        status = 401
-    except jwt.exceptions.InvalidIssuedAtError:
-        # Raised when a token’s iat claim is in the future
-        d = {"authenticated": False, "message": "JWT issues in future"}
-        status = 401
-    except jwt.exceptions.ExpiredSignatureError:
-        # Raised when a token’s exp claim indicates that it has expired
-        d = {"authenticated": False, "message": "JWT has expired"}
-        status = 401
-    except jwt.exceptions.InvalidTokenError:
-        # Generic invalid token
-        d = {"authenticated": False, "message": "JWT invalid"}
-        status = 401
+@app.get("/")
+async def route_to_login_or_home(request: Request):
+    # Get the Authorization cookie
+    auth = request.cookies.get("Authorization")
+    if auth is None:
+        return response.redirect("login")
     else:
-        # Valid Token
-        d = {"authenticated": True, "message": "JWT is valid"}
-        status = 200
-
-    return response.json(d, status=status)
+        return response.redirect("home")
 
 
 if __name__ == "__main__":
