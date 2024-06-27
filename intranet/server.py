@@ -2,7 +2,7 @@ import jwt
 from jwt import algorithms
 
 from dotenv import dotenv_values
-from sanic import Request, Sanic, response
+from sanic import Request, response
 from sanic.log import logger
 import aiohttp
 import json
@@ -12,7 +12,6 @@ from .app import IntranetApp, appserver
 # noinspection PyUnresolvedReferences
 # flake8: noqa
 import intranet.endpoints
-
 
 logger.debug("Loading ENV")
 config = dotenv_values(".env")
@@ -44,6 +43,9 @@ config.update({"IS_PROD": is_prod.lower() == "true"})
 app: IntranetApp = appserver
 app.config.update(config)
 app.config.PROXIES_COUNT = int(config.get("PROXIES_COUNT", 0))
+
+# Static files
+app.static("/static/", "./static/", name="static")
 
 
 @app.listener("before_server_start")
