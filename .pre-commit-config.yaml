@@ -21,7 +21,7 @@ repos:
         name: Black
         description: Formats the python source code using black.
         language: system
-        entry: poetry run task format
+        entry: python -m poetry run task format
         require_serial: true
         pass_filenames: false
 
@@ -29,6 +29,6 @@ repos:
         name: Flake8
         description: Lints this repository using flake8.
         language: system
-        entry: poetry run python -m flake8
+        entry: python -m flake8
         require_serial: true
         pass_filenames: false
