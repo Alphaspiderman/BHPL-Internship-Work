@@ -17,7 +17,7 @@ def require_login():
 
             # Check if the request is authorized
             is_jwt_valid: JWTStatus = app.check_server_jwt(
-                request.cookies.get("jwt", "")
+                request.cookies.get("JWT_TOKEN", "")
             )
 
             if is_jwt_valid.authenticated:

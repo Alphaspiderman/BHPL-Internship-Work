@@ -94,7 +94,7 @@ async def ping_test(request: Request):
 @app.get("/")
 async def route_to_login_or_home(request: Request):
     # Get the Authorization cookie
-    auth = request.cookies.get("Authorization")
+    auth = request.cookies.get("JWT_TOKEN")
     if auth is None:
         return response.redirect("login")
     else:
