@@ -2,22 +2,61 @@
 <html>
   <head>
     <title>My App</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/nav.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+      integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4="
+      crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" type="text/css" href="/static/css/home.css" />
   </head>
   <body>
-    <div class="topnav">
-      <ul class="nav">
-        <li><a href="home">Home</a></li>
-        <li><a href="annoucements">News / Annoucements</a></li>
-        <li><a href="connectivity">Connectivity Status</a></li>
-        <li><a href="sales">Sales Dashboard</a></li>
-        <li><a href="vendor">Vendor Management</a></li>
-        <li style="float: right"><a href="user">User</a></li>
-      </ul>
-    </div>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="https://burmanhospitality.com/">
+            <img
+              src="/static/images/bh.svg"
+              alt="Burman Hospitality"
+              height="30px"
+              >
+          </a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a class="active" href="home">Home</a></li>
+          <li><a href="annoucements">Annoucements</a></li>
+          <li><a href="connectivity">Connectivity Status</a></li>
+          <li><a href="sales">Sales Dashboard</a></li>
+          <li><a href="vendor">Vendor Management</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <!-- <li>
+            <a href="#"
+              ><span class="glyphicon glyphicon-user"></span> Account</a
+            >
+          </li> -->
+          <li>
+            <a href="api/logout"
+              ><span class="glyphicon glyphicon-log-in"></span> Logout</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
     <div class="body">
-      <p>Hello, world!</p>
+      <p>Body Here</p>
     </div>
   </body>
 </html>
