@@ -11,6 +11,7 @@ class IntranetApp(Sanic):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ctx.entra_public_keys = dict()
+        self.ctx.login_states = dict()
 
     def run(self, public_key: str, private_key: str, *args, **kwargs):
         self.ctx.signing_keys = {"public_key": public_key, "private_key": private_key}
@@ -97,6 +98,14 @@ class IntranetApp(Sanic):
             {"exp": expire, "iat": now, "nbf": now, "iss": iss, "state": target.lower()}
         )
         return jwt.encode(data, app.config["PRIV_KEY"], algorithm="RS256")
+
+    def add_login_state(self, state: str, nonce: str):
+        dic: dict = self.ctx.login_states
+        dic[nonce] = state
+
+    def consume_login_state(self, nonce: str) -> str:
+        dic: dict = self.ctx.login_states
+        return dic.pop(nonce)
 
 
 appserver = IntranetApp("intranet", strict_slashes=False)

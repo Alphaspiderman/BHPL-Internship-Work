@@ -8,6 +8,9 @@ from intranet.app import IntranetApp
 
 
 class Callback(HTTPMethodView):
+    async def get(self, request: Request):
+        return redirect("/login?error=invalid_request")
+
     async def post(self, request: Request):
         # Get the token from the request.
         form = request.form
@@ -28,6 +31,12 @@ class Callback(HTTPMethodView):
                 algorithms=["RS256"],
                 audience=request.app.config["AZURE_AD_CLIENT_ID"],
             )
+            # Consume the nonce
+            app.consume_login_state(decoded["nonce"])
+        except KeyError:
+            logger.error("Possible replay attack!")
+            # Invalid token
+            return redirect("login?error=replay_attack")
         except jwt.exceptions.InvalidAudienceError:
             logger.warning("Invalid audience for JWT")
             # Invalid token
@@ -83,7 +92,7 @@ class Callback(HTTPMethodView):
         )
 
         # Redirect to home with JWT set in cookie
-        rsp = redirect("home")
+        rsp = redirect("/home")
         rsp.add_cookie("JWT_TOKEN", token)
 
         # Redirect to home

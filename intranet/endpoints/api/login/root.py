@@ -3,6 +3,8 @@ from sanic.request import Request
 from sanic.response import redirect
 from sanic.views import HTTPMethodView
 
+from intranet.app import IntranetApp
+
 
 class Login_Root(HTTPMethodView):
     template = (
@@ -20,7 +22,8 @@ class Login_Root(HTTPMethodView):
         nonce = uuid.uuid1()
 
         # Save the token ID and nonce
-        request.app.ctx.tokens[nonce] = state
+        app: IntranetApp = request.app
+        app.add_login_state(state, nonce)
 
         # Generate the URL to redirect the user to.
         url = self.template % {
