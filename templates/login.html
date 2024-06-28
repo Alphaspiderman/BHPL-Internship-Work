@@ -2,14 +2,38 @@
 <html>
   <head>
     <title>Login Page</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+      integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4="
+      crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" type="text/css" href="/static/css/login.css" />
     <script src="/static/js/login.js"></script>
   </head>
   <body>
-    <div class="container">
+    <div class="container" align-content: center;>
+      <!-- Error Info -->
+      <div class="alert alert-danger" id="error-message" hidden="true">
+        <strong>Error!</strong> Use your "burmanhospitality.com" account!
+      </div>
+      <!-- Heading -->
       <h1>Please login to proceed</h1>
       <!-- Button to rediect to /api/login -->
-      <button type="button" id="login-btn">Click Here to Login!</button>
+      <button type="button" class="btn btn-primary" id="login-btn">Login</button>
+      <div class="alert alert-info" >
+        <strong>Info!</strong> Use your "burmanhospitality.com" account!
+      </div>
     </div>
   </body>
 </html>

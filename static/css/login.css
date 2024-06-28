@@ -3,24 +3,18 @@
   margin: auto;
 }
 
-.btn {
-  border: none;
-  background-color: inherit;
-  padding: 14px 28px;
-  font-size: 16px;
-  cursor: pointer;
-  display: inline-block;
-}
-
-/* On mouse-over */
-.btn:hover {
-  background: #eee;
-}
-
 .container {
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 4px;
+}
+
+.alert {
+  margin-top: 20px;
+}
+
+#login-btn {
+  margin-top: 10px;
 }
