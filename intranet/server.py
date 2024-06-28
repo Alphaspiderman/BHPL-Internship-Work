@@ -1,4 +1,3 @@
-import jwt
 from jwt import algorithms
 
 from dotenv import dotenv_values
@@ -37,6 +36,15 @@ config.update(
     },
 )
 
+# Check if AZURE_AD env variables are set
+if (
+    config.get("AZURE_AD_TENANT_ID") is None
+    or config.get("AZURE_AD_CLIENT_ID") is None
+    or config.get("AZURE_AD_REDIRECT_URI") is None
+):
+    logger.error("MISSING AZURE AD ENV VARIABLES")
+    quit(1)
+
 # Convert the string to a bool and update the config with the bool.
 config.update({"IS_PROD": is_prod.lower() == "true"})
 
@@ -54,7 +62,7 @@ async def setup_app(app: IntranetApp):
         await app.connect_db()
     except Exception:
         logger.error(f"Error connecting to DB")
-        quit(1)
+        app.stop()
     logger.info("Fetching OpenID Configuration of Entra")
 
     # Fetch OpenID Configuration of Entra from https://login.microsoftonline.com/common/.well-known/openid-configuration
