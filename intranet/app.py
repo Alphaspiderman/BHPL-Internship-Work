@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Literal
+from typing import Literal, Tuple
 from sanic import Sanic
 import aiomysql
 import jwt
@@ -12,6 +12,8 @@ class IntranetApp(Sanic):
         super().__init__(*args, **kwargs)
         self.ctx.entra_public_keys = dict()
         self.ctx.login_states = dict()
+        self.ctx.site_check_last_run = None
+        self.ctx.site_status = {"online": [], "offline": []}
 
     def run(self, public_key: str, private_key: str, *args, **kwargs):
         self.ctx.signing_keys = {"public_key": public_key, "private_key": private_key}
@@ -106,6 +108,17 @@ class IntranetApp(Sanic):
     def consume_login_state(self, nonce: str) -> str:
         dic: dict = self.ctx.login_states
         return dic.pop(nonce)
+
+    def set_site_status(self, online_sites: list, offline_sites: list):
+        self.ctx.site_check_last_run = datetime.now(timezone.utc)
+        self.ctx.site_status = {"online": online_sites, "offline": offline_sites}
+
+    def get_site_status(self) -> Tuple[list, list]:
+        """Returns the online and offline sites"""
+        return self.ctx.site_status["online"], self.ctx.site_status["offline"]
+
+    def get_site_check_time(self) -> datetime:
+        return self.ctx.site_check_last_run
 
 
 appserver = IntranetApp("intranet", strict_slashes=False)
