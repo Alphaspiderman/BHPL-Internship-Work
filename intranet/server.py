@@ -29,7 +29,7 @@ is_prod: str = config.get("IS_PROD", "false")
 config.update(
     {
         "DB_HOST": config.get("DB_HOST", "localhost"),
-        "DB_PORT": config.get("DB_PORT", 3306),
+        "DB_PORT": int(config.get("DB_PORT", 3306)),
         "DB_USERNAME": config.get("DB_USERNAME", "root"),
         "DB_PASSWORD": config.get("DB_PASSWORD", "password"),
         "DB_NAME": config.get("DB_NAME", "intranet"),
@@ -63,6 +63,7 @@ async def setup_app(app: IntranetApp):
     except Exception:
         logger.error(f"Error connecting to DB")
         app.stop()
+
     logger.info("Fetching OpenID Configuration of Entra")
 
     # Fetch OpenID Configuration of Entra from https://login.microsoftonline.com/common/.well-known/openid-configuration
@@ -92,6 +93,13 @@ async def setup_app(app: IntranetApp):
 
     logger.info("Saving public keys to the app")
     app.set_entra_jwt_keys(public_keys)
+
+
+@app.listener("after_server_stop")
+async def close_connection(app: IntranetApp, loop):
+    pool = app.get_db_pool
+    pool.close()
+    await pool.wait_closed()
 
 
 @app.get("/ping")
