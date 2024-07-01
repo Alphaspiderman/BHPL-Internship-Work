@@ -1,15 +1,17 @@
 var api_data = "/api/sites/status";
 var api_refresh = "/api/sites/checker";
+var refresh_interval = 300000 / 30;
+var refresh_set = false;
 
 window.onload = function () {
   var btn = document.getElementById("recheck-btn");
   btn.onclick = function () {
     recheck_sites();
   };
-  refresh();
+  get_data();
 };
 
-function refresh() {
+function get_data() {
   $.ajax({
     type: "GET",
     url: api_data,
@@ -27,6 +29,26 @@ function refresh() {
 }
 
 function process_data(api_response) {
+  // Last run time
+  var last_run = document.getElementById("last-run");
+  var date = new Date(api_response.last_run);
+
+  var now = new Date();
+  var diff = now - date;
+
+  if (!refresh_set) {
+    // Start refresh with next refresh
+    setTimeout(function() {
+      setInterval(recheck_sites, refresh_interval);
+    }, refresh_interval - diff);
+  }
+
+  // If the last run was more than 5 minutes ago, recheck
+  if (diff > refresh_interval + 5000) {
+    recheck_sites();
+    return;
+  }
+
   var data = {
     labels: ["Online", "Offline", "Processing"],
     datasets: [
@@ -36,7 +58,7 @@ function process_data(api_response) {
       },
     ],
   };
-  var to_process = api_response.total_count - api_response.checked
+  var to_process = api_response.total_count - api_response.checked;
 
   data.datasets[0].data[0] = api_response.online.length;
   data.datasets[0].data[1] = api_response.offline.length;
@@ -45,8 +67,6 @@ function process_data(api_response) {
   build_chart(data);
 
   // Set last run
-  var last_run = document.getElementById("last-run");
-  var date = new Date(api_response.last_run);
   last_run.innerHTML = "Last Run at - " + date.toLocaleString();
 
   if (api_response.offline.length > 0) {
@@ -64,15 +84,13 @@ function process_data(api_response) {
     });
   } else {
     // Update message
-  var msg = document.getElementById("checkMsg");
-  msg.innerHTML = "All Sites are Online";
+    var msg = document.getElementById("checkMsg");
+    msg.innerHTML = "All Sites are Online";
 
-  // Update offline list
-  var offline_list = document.getElementById("offline-list");
-  offline_list.innerHTML = "";
+    // Update offline list
+    var offline_list = document.getElementById("offline-list");
+    offline_list.innerHTML = "";
   }
-
-
 }
 
 function build_chart(data) {
@@ -108,11 +126,12 @@ function recheck_sites() {
   // Empty offline list
   var offline_list = document.getElementById("offline-list");
   offline_list.innerHTML = "";
+  // Trigger the recheck
   $.ajax({
-    type: "POST",
+    type: "GET",
     url: api_refresh,
     success: function (data) {
-      refresh();
+      get_data();
     },
     error: function (data) {
       console.log(data);
