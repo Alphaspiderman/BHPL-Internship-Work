@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My App</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+      integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
+    <script src="/static/js/create_annoucement.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker3.css"
+    />
+    <link rel="stylesheet" href="/static/css/styles.css" />
+    <link rel="stylesheet" href="/static/css/create_form.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target="#myNavbar"
+          >
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://burmanhospitality.com/">
+            <img
+              src="/static/images/bh.svg"
+              alt="Burman Hospitality"
+              height="30px"
+            />
+          </a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li><a href="/home">Home</a></li>
+            <li><a href="/locations">Location Master</a></li>
+            <li><a href="/connectivity">Connectivity Status</a></li>
+            <li><a href="/sales">Sales Dashboard</a></li>
+            <li><a href="/vendors">Vendor Management</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="api/logout">
+                <span class="glyphicon glyphicon-log-in"> </span> Logout</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="body">
+      <div class="container">
+        <form action="/api/announcements" method="post">
+          <div class="form-group">
+            <label for="title">Announcement Title</label>
+            <input id="title" name="title" type="text" />
+          </div>
+          <div class="form-group">
+            <label for="date_from">Start Date</label>
+            <input
+              id="date_from"
+              name="date_from"
+              type="text"
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+            />
+          </div>
+          <div class="form-group">
+            <label for="date_to">End Date</label>
+            <input
+              id="date_to"
+              name="date_to"
+              type="text"
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+            />
+          </div>
+          <div class="form-group">
+            <label>Body</label>
+            <div id="quillEditor"></div>
+          </div>
+          <button type="submit">Submit Form</button>
+          <button type="button" id="resetForm">Reset to Initial Data</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
