@@ -2,36 +2,43 @@ from sanic.request import Request
 from sanic.response import json
 from sanic.views import HTTPMethodView
 from sanic.log import logger
-import aiohttp
+import aioping
 from intranet.utils import tasks
 
-from intranet.app import IntranetApp, appserver
+from intranet.app import IntranetApp
 
 
 class Site_Checker(HTTPMethodView):
-    running = False
-    total_count = 0
-    count_checked = 0
-    count_online = 0
-    count_offline = 0
-
     def __init__(self):
         super().__init__()
-        self.check_site_connection.start(appserver)
+        # asyncio.ensure_future(self.check_site_connection(appserver))
 
     async def get(self, request: Request):
-        if self.running:
+        app: IntranetApp = request.app
+        stats = app.get_site_checker_info()
+        if stats["is_processing"]:
             return json(
                 {
-                    "message": "Site check is currently running",
-                    "total_count": self.total_count,
-                    "checked": self.count_checked,
-                    "online": self.count_online,
-                    "offline": self.count_offline,
+                    "message": "Site check is currently processing",
+                    "total_count": stats["total"],
+                    "checked": stats["checked"],
+                    "online": stats["online"],
+                    "offline": stats["offline"],
+                }
+            )
+        else:
+            return json(
+                {
+                    "message": "Site check is not currently processing",
+                    "total_count": stats["total"],
+                    "checked": stats["checked"],
+                    "online": stats["online"],
+                    "offline": stats["offline"],
                 }
             )
 
     async def post(self, request: Request):
+        await request.respond(json({"message": "Site check triggered"}))
         await self.check_sites(request.app)
 
     @tasks.loop(minutes=5)
@@ -41,39 +48,35 @@ class Site_Checker(HTTPMethodView):
     async def check_sites(self, app: IntranetApp):
         logger.info("Checking site connection")
 
-        # Get IPs from DB
+        # # Get IPs from DB
         db_pool = app.get_db_pool
 
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute("SELECT name, ip FROM sites")
                 sites = await cur.fetchall()
+        total_count = len(sites)
 
-        self.total_count = len(sites)
-        self.count_checked = 0
-        self.count_online = 0
-        self.count_offline = 0
+        app.set_site_checked_total(total_count)
 
-        online_sites = []
-        offline_sites = []
+        logger.info(f"Total sites: {total_count}")
 
         # Check if the site is up
         for site in sites:
             name, ip = site
-            async with aiohttp.ClientSession() as session:
-                try:
-                    async with session.get(ip) as resp:
-                        if resp.status == 200:
-                            online_sites.append(name)
-                            self.count_online += 1
-                        else:
-                            offline_sites.append(name)
-                            self.count_offline += 1
-                except Exception:
-                    offline_sites.append(name)
-                    self.count_offline += 1
-                finally:
-                    self.checked += 1
+            logger.info(f"Checking {name} at {ip}")
+            try:
+                await aioping.ping(ip, 5)
+                app.add_site_checker(name, True)
+                logger.info(f"Online - {name}")
+            except Exception:
+                app.add_site_checker(name, False)
+                logger.info(f"Offline - {name}")
 
-        # Update on app
-        app.set_site_status(online_sites=online_sites, offline_sites=offline_sites)
+        stats = app.get_site_checker_info()
+        logger.info(f"Total sites: {total_count}")
+        logger.info(f"Checked: {stats['checked']}")
+        logger.info(f"Online: {len(stats['online'])}")
+        logger.info(f"Offline: {len(stats['offline'])}")
+
+        print(stats)

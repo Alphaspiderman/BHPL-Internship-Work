@@ -11,12 +11,13 @@ class Site_Status(HTTPMethodView):
         last_run = app.get_site_check_time()
         if last_run is None:
             return json({"message": "Site check has not been run yet"})
-        online, offline = app.get_site_status()
+        stats = app.get_site_checker_info()
         return json(
             {
-                "online_count": len(online),
-                "offline_count": len(offline),
-                offline: offline,
-                last_run: last_run,
+                "total_count": stats["total"],
+                "checked": stats["checked"],
+                "online": stats["online"],
+                "offline": stats["offline"],
+                "last_run": str(last_run),
             }
         )

@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Literal, Tuple
+from typing import Literal
 from sanic import Sanic
 import aiomysql
 import jwt
@@ -13,7 +13,13 @@ class IntranetApp(Sanic):
         self.ctx.entra_public_keys = dict()
         self.ctx.login_states = dict()
         self.ctx.site_check_last_run = None
-        self.ctx.site_status = {"online": [], "offline": []}
+        self.ctx.site_checker = {
+            "total": 0,
+            "checked": 0,
+            "online": list(),
+            "offline": list(),
+            "is_processing": False,
+        }
 
     def run(self, public_key: str, private_key: str, *args, **kwargs):
         self.ctx.signing_keys = {"public_key": public_key, "private_key": private_key}
@@ -41,7 +47,6 @@ class IntranetApp(Sanic):
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute("SELECT 42;")
-                print(cur.description)
                 (r,) = await cur.fetchone()
         try:
             assert r == 42
@@ -109,16 +114,34 @@ class IntranetApp(Sanic):
         dic: dict = self.ctx.login_states
         return dic.pop(nonce)
 
-    def set_site_status(self, online_sites: list, offline_sites: list):
-        self.ctx.site_check_last_run = datetime.now(timezone.utc)
-        self.ctx.site_status = {"online": online_sites, "offline": offline_sites}
-
-    def get_site_status(self) -> Tuple[list, list]:
-        """Returns the online and offline sites"""
-        return self.ctx.site_status["online"], self.ctx.site_status["offline"]
-
     def get_site_check_time(self) -> datetime:
         return self.ctx.site_check_last_run
+
+    def reset_site_checker(self):
+        self.ctx.site_checker = {
+            "total": 0,
+            "checked": 0,
+            "online": list(),
+            "offline": list(),
+            "is_processing": False,
+        }
+
+    def set_site_checked_total(self, total: int):
+        self.ctx.site_check_last_run = datetime.now(timezone.utc)
+        self.ctx.site_checker["total"] = total
+
+    def add_site_checker(self, site: str, is_online: bool):
+        self.ctx.site_checker["checked"] += 1
+        if is_online:
+            self.ctx.site_checker["online"].append(site)
+        else:
+            self.ctx.site_checker["offline"].append(site)
+
+    def get_site_checker_status(self):
+        return self.ctx.site_checker["is_processing"]
+
+    def get_site_checker_info(self):
+        return self.ctx.site_checker
 
 
 appserver = IntranetApp("intranet", strict_slashes=False)
