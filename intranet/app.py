@@ -12,13 +12,13 @@ class IntranetApp(Sanic):
         super().__init__(*args, **kwargs)
         self.ctx.entra_public_keys = dict()
         self.ctx.login_states = dict()
-        self.ctx.site_check_last_run = None
         self.ctx.site_checker = {
             "total": 0,
             "checked": 0,
             "online": list(),
             "offline": list(),
             "is_processing": False,
+            "last_run": None,
         }
 
     def run(self, public_key: str, private_key: str, *args, **kwargs):
@@ -124,10 +124,11 @@ class IntranetApp(Sanic):
             "online": list(),
             "offline": list(),
             "is_processing": False,
+            "last_run": None,
         }
 
     def set_site_checked_total(self, total: int):
-        self.ctx.site_check_last_run = datetime.now(timezone.utc)
+        self.ctx.site_checker["last_run"] = datetime.now(timezone.utc)
         self.ctx.site_checker["total"] = total
 
     def add_site_checker(self, site: str, is_online: bool):
