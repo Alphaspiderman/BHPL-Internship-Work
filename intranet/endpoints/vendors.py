@@ -5,7 +5,8 @@ from sanic_ext import render
 from intranet.decorators.require_login import require_login
 
 
-class Home(HTTPMethodView):
+class Vendors(HTTPMethodView):
     @require_login()
+    # TODO - Add Role Check
     async def get(self, request: Request):
-        return await render("home.html")
+        return await render("vendors.html")
