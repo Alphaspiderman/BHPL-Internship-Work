@@ -1,6 +1,6 @@
 var api_data = "/api/sites/status";
 var api_refresh = "/api/sites/checker";
-var refresh_interval = 300000 / 30;
+var refresh_interval = 300000;
 var refresh_set = false;
 
 window.onload = function () {
@@ -38,7 +38,8 @@ function process_data(api_response) {
 
   if (!refresh_set) {
     // Start refresh with next refresh
-    setTimeout(function() {
+    refresh_set = true;
+    setTimeout(function () {
       setInterval(recheck_sites, refresh_interval);
     }, refresh_interval - diff);
   }
@@ -87,6 +88,12 @@ function process_data(api_response) {
     var msg = document.getElementById("checkMsg");
     msg.innerHTML = "All Sites are Online";
 
+    // Update Counts
+    var onlcount = document.getElementById("online-count");
+    onlcount.innerHTML = "Online - " + api_response.online.length;
+    var offcount = document.getElementById("offline-count");
+    offcount.innerHTML = "Offline - " + api_response.offline.length;
+
     // Update offline list
     var offline_list = document.getElementById("offline-list");
     offline_list.innerHTML = "";
@@ -123,6 +130,10 @@ function recheck_sites() {
   // Update message
   var msg = document.getElementById("checkMsg");
   msg.innerHTML = "Checking sites... Please wait";
+  var onlcount = document.getElementById("online-count");
+  onlcount.innerHTML = "Online - Processing...";
+  var offcount = document.getElementById("offline-count");
+  offcount.innerHTML = "Offline - Processing...";
   // Empty offline list
   var offline_list = document.getElementById("offline-list");
   offline_list.innerHTML = "";

@@ -22,7 +22,7 @@ class Site_Checker(HTTPMethodView):
 
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute("SELECT name, ip FROM sites")
+                await cur.execute("SELECT store_code, static_ip FROM sites")
                 sites = await cur.fetchall()
 
         app.reset_site_checker()
