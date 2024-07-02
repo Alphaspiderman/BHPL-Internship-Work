@@ -1,5 +1,6 @@
-from sanic.views import HTTPMethodView
 from sanic import Request, response
+from sanic.views import HTTPMethodView
+
 from intranet.app import IntranetApp
 from intranet.models.JWTStatus import JWTStatus
 

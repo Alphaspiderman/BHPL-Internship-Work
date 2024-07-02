@@ -71,7 +71,7 @@ class Callback(HTTPMethodView):
         # Get the user from the database
         async with app.get_db_pool.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+                await cur.execute("SELECT * FROM people WHERE email = %s", (email,))
                 user = await cur.fetchall()
 
         # Check if user exists
@@ -80,15 +80,22 @@ class Callback(HTTPMethodView):
         if len(user) > 1:
             return redirect("login?error=too_many_users")
 
-        # TODO - Extract data for adding to JWT
+        # Extract data for adding to JWT
+        Employee_Id: str = user[0][0]
+        Full_Name = f"{user[0][1]} {user[0][2]}"
+        Emp_Type: str = user[0][4].upper()
+        Department: str = user[0][5].upper()
 
-        # TODO - Generate Token
+        # Generate Token for 3 days
         token = app.generate_jwt(
             {
                 "email": email,
-                "name": decoded["name"],
+                "name": Full_Name,
+                "emp_id": Employee_Id,
+                "emp_type": Emp_Type,
+                "department": Department,
             },
-            60,
+            3 * 24 * 60,
         )
 
         # Redirect to home with JWT set in cookie

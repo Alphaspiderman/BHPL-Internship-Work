@@ -58,11 +58,14 @@ class IntranetApp(Sanic):
     def get_db_pool(self):
         return self.ctx.db_pool
 
+    def decode_jwt(self, jwt_token: str) -> dict:
+        return jwt.decode(jwt_token, key=self.public_key, algorithms="RS256")
+
     def check_server_jwt(self, jwt_token: str) -> JWTStatus:
         if not jwt_token or jwt_token == "":
             return JWTStatus(authenticated=False, message="JWT Token not provided")
         try:
-            jwt.decode(jwt_token, key=self.public_key, algorithms="RS256")
+            self.decode_jwt(jwt_token)
         except jwt.exceptions.ImmatureSignatureError:
             # Raised when a token’s nbf claim represents a time in the future
             d = JWTStatus(
