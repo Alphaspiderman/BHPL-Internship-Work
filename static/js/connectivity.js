@@ -59,10 +59,12 @@ function process_data(api_response) {
       },
     ],
   };
+  var online_cnt = api_response.online.length
+  var offline_cnt = api_response.offline.length
   var to_process = api_response.total_count - api_response.checked;
 
-  data.datasets[0].data[0] = api_response.online.length;
-  data.datasets[0].data[1] = api_response.offline.length;
+  data.datasets[0].data[0] = online_cnt;
+  data.datasets[0].data[1] = offline_cnt;
   data.datasets[0].data[2] = to_process;
 
   build_chart(data);
@@ -70,33 +72,41 @@ function process_data(api_response) {
   // Set last run
   last_run.innerHTML = "Last Run at - " + date.toLocaleString();
 
+  // Update Counts
+  var onlcount = document.getElementById("online-count");
+  onlcount.innerHTML = "Online - " + online_cnt;
+  var offcount = document.getElementById("offline-count");
+  offcount.innerHTML = "Offline - " + offline_cnt;
+
+  var offline_list_1 = document.getElementById("offline-list-1");
+  var offline_list_2 = document.getElementById("offline-list-2");
+  offline_list_1.innerHTML = "";
+  offline_list_2.innerHTML = "";
+
   if (api_response.offline.length > 0) {
     // Update message
     var msg = document.getElementById("checkMsg");
     msg.innerHTML = "The following sites are offline:";
 
-    // Update offline list
-    var offline_list = document.getElementById("offline-list");
-    offline_list.innerHTML = "";
-    api_response.offline.forEach(function (site) {
-      var li = document.createElement("li");
-      li.appendChild(document.createTextNode(site));
-      offline_list.appendChild(li);
-    });
+    if (api_response.offline.length > 5) {
+      api_response.offline.forEach(function (site, index) {
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(site));
+        index % 2 == 0
+          ? offline_list_1.appendChild(li)
+          : offline_list_2.appendChild(li);
+      });
+    } else {
+      api_response.offline.forEach(function (site) {
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(site));
+        offline_list_1.appendChild(li);
+      });
+    }
   } else {
     // Update message
     var msg = document.getElementById("checkMsg");
     msg.innerHTML = "All Sites are Online";
-
-    // Update Counts
-    var onlcount = document.getElementById("online-count");
-    onlcount.innerHTML = "Online - " + api_response.online.length;
-    var offcount = document.getElementById("offline-count");
-    offcount.innerHTML = "Offline - " + api_response.offline.length;
-
-    // Update offline list
-    var offline_list = document.getElementById("offline-list");
-    offline_list.innerHTML = "";
   }
 }
 
@@ -124,6 +134,7 @@ function build_chart(data) {
       },
     },
   });
+  myChart.render();
 }
 
 function recheck_sites() {
@@ -135,8 +146,10 @@ function recheck_sites() {
   var offcount = document.getElementById("offline-count");
   offcount.innerHTML = "Offline - Processing...";
   // Empty offline list
-  var offline_list = document.getElementById("offline-list");
-  offline_list.innerHTML = "";
+  var offline_list_1 = document.getElementById("offline-list-1");
+  var offline_list_2 = document.getElementById("offline-list-2");
+  offline_list_1.innerHTML = "";
+  offline_list_2.innerHTML = "";
   // Trigger the recheck
   $.ajax({
     type: "GET",
