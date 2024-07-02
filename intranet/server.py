@@ -9,8 +9,7 @@ import json
 from .app import IntranetApp, appserver
 
 # noinspection PyUnresolvedReferences
-# flake8: noqa
-import intranet.endpoints
+import intranet.endpoints  # noqa: F401
 
 logger.debug("Loading ENV")
 config = dotenv_values(".env")
@@ -54,6 +53,8 @@ app.config.PROXIES_COUNT = int(config.get("PROXIES_COUNT", 0))
 
 # Static files
 app.static("/static/", "./static/", name="static")
+# Dynamic files (Uploaded files, temp storage for download files, etc.)
+app.static("/files/", "./dynamic/", name="files")
 
 
 @app.listener("before_server_start")
@@ -61,12 +62,13 @@ async def setup_app(app: IntranetApp):
     try:
         await app.connect_db()
     except Exception:
-        logger.error(f"Error connecting to DB")
+        logger.error("Error connecting to DB")
         app.stop()
 
     logger.info("Fetching OpenID Configuration of Entra")
 
-    # Fetch OpenID Configuration of Entra from https://login.microsoftonline.com/common/.well-known/openid-configuration
+    # Fetch OpenID Configuration of Entra
+    # https://login.microsoftonline.com/common/.well-known/openid-configuration
     async with aiohttp.ClientSession() as session:
         async with session.get(
             "https://login.microsoftonline.com/common/.well-known/openid-configuration"

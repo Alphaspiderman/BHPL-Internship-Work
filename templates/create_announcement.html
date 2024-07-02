@@ -26,7 +26,7 @@
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
     ></script>
     <link href="/static/css/styles.css" rel="stylesheet" />
-    <script src="/static/js/create_annoucement.js"></script>
+    <script src="/static/js/create_announcement.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
     <link
       href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css"
@@ -92,7 +92,12 @@
     </nav>
     <div class="body">
       <div class="container">
-        <form action="/api/announcements" method="post">
+        <form
+          action="/api/announcements"
+          method="post"
+          enctype="multipart/form-data"
+          id="createAnnouncementForm"
+        >
           <div class="form-group">
             <label for="title">Announcement Title</label>
             <input id="title" name="title" type="text" />
@@ -121,17 +126,16 @@
             <label>Body</label>
             <div id="quillEditor"></div>
           </div>
-          <label for="formFileMultiple" class="form-label"
-            >File Upload</label
-          >
-          <input
-            class="form-control"
-            type="file"
-            id="formFileMultiple"
-            multiple
-          /><br /><br />
-          <button type="submit">Submit Form</button>
-          <button id="resetForm" type="button">Reset to Initial Data</button>
+          <div class="mb-3">
+            <input name="file" type="file" multiple />
+          </div>
+          <br /><br />
+          <button type="submit" class="btn btn-primary" id="submitForm">
+            Submit Form
+          </button>
+          <button type="button" class="btn btn-secondary" id="resetForm">
+            Reset Form
+          </button>
         </form>
       </div>
     </div>

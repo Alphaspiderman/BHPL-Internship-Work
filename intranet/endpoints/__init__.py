@@ -1,14 +1,13 @@
 from intranet.app import appserver
 
-# flake8: noqa
-import intranet.endpoints.api
+import intranet.endpoints.api  # noqa: F401
 from intranet.endpoints.connectivity import Connectivity
 from intranet.endpoints.home import Home
 from intranet.endpoints.locations import Locations
 from intranet.endpoints.login import Login
 from intranet.endpoints.sales import Sales
 from intranet.endpoints.vendors import Vendors
-from intranet.endpoints.create_annoucement import Create_Announcement
+from intranet.endpoints.create_announcement import Create_Announcement
 
 appserver.add_route(Home.as_view(), "/home")
 appserver.add_route(Login.as_view(), "/login")

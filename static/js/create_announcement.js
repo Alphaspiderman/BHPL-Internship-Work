@@ -9,7 +9,6 @@ const initialData = {
 
 var quill;
 window.onload = function () {
-  $(".input-group.date").datepicker({ format: "yyyy-mm-dd" });
   quill = new Quill("#quillEditor", {
     modules: {
       toolbar: [
@@ -20,22 +19,21 @@ window.onload = function () {
     theme: "snow",
   });
 
-  function resetForm() {
-    document.querySelector('[name="title"]').value = initialData.name;
-    quill.setContents(initialData.about);
-  }
+  reset_btn = document.getElementById("resetForm");
+  reset_btn.onclick = resetForm;
 
-  const form = document.querySelector("form");
+  form = document.getElementById("createAnnouncementForm");
   form.addEventListener("formdata", (event) => {
     data = document.getElementsByClassName("ql-editor")[0].innerHTML;
-    // Append Quill content before submitting
-    console.log(data);
     event.formData.append("body", data);
-  });
-
-  document.querySelector("#resetForm").addEventListener("click", () => {
-    resetForm();
   });
 
   resetForm();
 };
+
+function resetForm() {
+  document.querySelector('[name="title"]').value = initialData.name;
+  document.querySelector('[name="date_from"]').value = "";
+  document.querySelector('[name="date_to"]').value = "";
+  quill.setContents(initialData.about);
+}
