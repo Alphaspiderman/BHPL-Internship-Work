@@ -3,22 +3,22 @@
   <head>
     <title>My App</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
     <link
-      rel="stylesheet"
+      crossorigin="anonymous"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
       integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE="
-      crossorigin="anonymous"
+      rel="stylesheet"
     />
     <script
-      src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
     ></script>
     <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
-      integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4="
       crossorigin="anonymous"
+      integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4="
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
@@ -28,21 +28,21 @@
       rel="stylesheet"
     />
     <link
-      rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker3.css"
+      rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/css/styles.css" />
-    <link rel="stylesheet" href="/static/css/create_form.css" />
+    <link href="/static/css/styles.css" rel="stylesheet" />
+    <link href="/static/css/create_form.css" rel="stylesheet" />
   </head>
   <body>
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
           <button
-            type="button"
             class="navbar-toggle"
-            data-toggle="collapse"
             data-target="#myNavbar"
+            data-toggle="collapse"
+            type="button"
           >
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -50,9 +50,9 @@
           </button>
           <a class="navbar-brand" href="https://burmanhospitality.com/">
             <img
-              src="/static/images/bh.svg"
               alt="Burman Hospitality"
               height="30px"
+              src="/static/images/bh.svg"
             />
           </a>
         </div>
@@ -82,31 +82,33 @@
             <input id="title" name="title" type="text" />
           </div>
           <div class="form-group">
-            <label for="date_from">Start Date</label>
+            <label for="date_from">Start Date (YYYY-MM-DD)</label>
             <input
+              class="form-control"
               id="date_from"
               name="date_from"
+              placeholder="YYYY-MM-DD"
               type="text"
-              class="form-control"
-              placeholder="yyyy-mm-dd"
             />
           </div>
           <div class="form-group">
-            <label for="date_to">End Date</label>
+            <label for="date_to">End Date (YYYY-MM-DD)</label>
             <input
+              class="form-control"
               id="date_to"
               name="date_to"
+              placeholder="YYYY-MM-DD"
               type="text"
-              class="form-control"
-              placeholder="yyyy-mm-dd"
             />
           </div>
           <div class="form-group">
             <label>Body</label>
             <div id="quillEditor"></div>
           </div>
+          <label for="files">Select files:</label>
+          <input id="files" multiple name="files" type="file" /><br /><br />
           <button type="submit">Submit Form</button>
-          <button type="button" id="resetForm">Reset to Initial Data</button>
+          <button id="resetForm" type="button">Reset to Initial Data</button>
         </form>
       </div>
     </div>
