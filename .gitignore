@@ -366,3 +366,4 @@ FodyWeavers.xsd
 *.env
 *.pem
 .vscode/settings.json
+utility/
