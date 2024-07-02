@@ -2,7 +2,6 @@ import asyncio
 from sanic.request import Request
 from sanic.response import json
 from sanic.views import HTTPMethodView
-from sanic.log import logger
 import aioping
 
 from intranet.app import IntranetApp
@@ -22,7 +21,9 @@ class Site_Checker(HTTPMethodView):
 
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute("SELECT store_code, static_ip FROM sites")
+                await cur.execute(
+                    "SELECT Store_Name, Static_Ip FROM sites WHERE Status = 'Operational'"
+                )
                 sites = await cur.fetchall()
 
         app.reset_site_checker()
@@ -41,7 +42,5 @@ class Site_Checker(HTTPMethodView):
         try:
             await aioping.ping(ip, 2)
             app.add_site_checker(name, True)
-            logger.info(f"Online - {name}")
         except Exception:
             app.add_site_checker(name, False)
-            logger.info(f"Offline - {name}")
