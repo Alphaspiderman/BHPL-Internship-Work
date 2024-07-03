@@ -17,7 +17,7 @@ class Site_Checker(HTTPMethodView):
         await response.send()
 
         # Get IPs from DB
-        db_pool = app.get_db_pool
+        db_pool = app.get_db_pool()
 
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:

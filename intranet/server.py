@@ -16,10 +16,10 @@ config = dotenv_values(".env")
 
 # Read the public and private keys and add them to the config.
 with open("public-key.pem") as public_key_file:
-    pub_key = public_key_file.read()
+    config["PUB_KEY"] = public_key_file.read()
 
 with open("private-key.pem") as private_key_file:
-    priv_key = private_key_file.read()
+    config["PRIV_KEY"] = private_key_file.read()
 
 # Try to get state from the ENV, defaults to being dev.
 is_prod: str = config.get("IS_PROD", "false")
@@ -99,7 +99,7 @@ async def setup_app(app: IntranetApp):
 
 @app.listener("after_server_stop")
 async def close_connection(app: IntranetApp, loop):
-    pool = app.get_db_pool
+    pool = app.get_db_pool()
     pool.close()
     await pool.wait_closed()
 
@@ -139,4 +139,4 @@ if __name__ == "__main__":
         kwargs["auto_reload"] = True
 
     # Run the API Server
-    app.run(pub_key, priv_key, **kwargs)
+    app.run(**kwargs)

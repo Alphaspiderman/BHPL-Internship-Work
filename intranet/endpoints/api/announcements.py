@@ -42,7 +42,7 @@ class Announcements(HTTPMethodView):
                 await f.write(file.body)
 
         app: IntranetApp = request.app
-        db_pool = app.get_db_pool
+        db_pool = app.get_db_pool()
 
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:

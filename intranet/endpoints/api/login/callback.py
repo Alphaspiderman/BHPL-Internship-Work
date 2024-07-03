@@ -21,7 +21,7 @@ class Callback(HTTPMethodView):
         kid = jwt.get_unverified_header(token)["kid"]
 
         # Get the public key to verify the token.
-        key = app.entra_jwt_keys.get(kid, "")
+        key = app.get_entra_jwt_keys().get(kid, "")
 
         try:
             # Decode the token.
@@ -69,7 +69,7 @@ class Callback(HTTPMethodView):
             return redirect("login?error=invalid_domain")
 
         # Get the user from the database
-        async with app.get_db_pool.acquire() as conn:
+        async with app.get_db_pool().acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute("SELECT * FROM people WHERE email = %s", (email,))
                 user = await cur.fetchall()
