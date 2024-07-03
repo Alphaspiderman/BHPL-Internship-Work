@@ -69,7 +69,7 @@ class Location_Master(HTTPMethodView):
                 async with conn.cursor() as cur:
                     await cur.execute("SELECT Store_Code, Store_Name FROM sites")
                     locations = await cur.fetchall()
-            return json({"locations": locations})
+            return json_resp({"locations": locations})
         else:
             if location == "all":
                 async with db_pool.acquire() as conn:
@@ -86,9 +86,20 @@ class Location_Master(HTTPMethodView):
         # Check for IT Department in JWT
         jwt_data = app.decode_jwt(request.cookies.get("JWT_TOKEN"))
         modified_schema = self.table_schema.copy()
+        # Remove IT specific fields if the user is not from IT department
         if jwt_data["department"] != "IT":
-            # drop data
-            pass
+            modified_schema.remove("Ip_Range_Start")
+            modified_schema.remove("Ip_Range_End")
+            modified_schema.remove("Subnet")
+            modified_schema.remove("Static_Ip")
+            modified_schema.remove("Link_ISP")
+            modified_schema.remove("Link_Type")
+            if isinstance(data[0], list):
+                for idx, entry in enumerate(data):
+                    data[idx] = entry[: len(modified_schema)]
+            else:
+                data = data[: len(modified_schema)]
+        # Return the data using custom JSON serializer
         return json_resp(
             {
                 "data": data,
