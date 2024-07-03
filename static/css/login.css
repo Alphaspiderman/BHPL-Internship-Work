@@ -18,3 +18,11 @@
 #login-btn {
     margin-top: 10px;
 }
+
+body {
+    background-color: #495057;
+}
+
+h1 {
+    color: white;
+}
