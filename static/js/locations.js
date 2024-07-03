@@ -1,7 +1,11 @@
 window.onload = function () {
   // Get location from query string
   var loc = new URLSearchParams(window.location.search).get("loc");
-  // Listen to the submit event of the button to get the selected location
+  // Listen to the change of the dropdown
+  document.getElementById("loc-select").addEventListener("change", function () {
+    var loc = document.getElementById("loc-select").value;
+    process_location(loc);
+  });
 
   // Get list of locations for the dropdown
   $.ajax({
@@ -55,9 +59,6 @@ function load_data_table(data) {
 
   headerData = data["schema"];
   tableData = data["data"];
-
-  console.log(headerData);
-  console.log(tableData);
 
   headerData.forEach((element) => {
     var th = document.createElement("th");
