@@ -367,3 +367,4 @@ FodyWeavers.xsd
 *.pem
 .vscode/settings.json
 utility/
+dynamic/
