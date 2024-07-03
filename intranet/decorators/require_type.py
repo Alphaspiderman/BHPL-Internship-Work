@@ -8,7 +8,7 @@ def require_type(
     require: Optional[
         Literal[
             "STORE",
-            "CORPORATE",
+            "CORP",
         ]
     ] = None,
     is_api: bool = True,
