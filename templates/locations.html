@@ -86,20 +86,26 @@
       </div>
     </nav>
     <div class="body">
-      <div class="form-group">
-        <select
-          class="form-select"
-          aria-label="Select a Location"
-          id="loc-select"
-        >
-          <option value="all">Show All</option>
-        </select>
-      </div>
-      <div class="table-responsive overflow-x-auto">
-        <table class="table table-hover">
-          <thead class="thead-dark" id="table-head"></thead>
-          <tbody id="table-body"></tbody>
-        </table>
+      <div class="container-fluid" style="padding: 2%;">
+        <div class="alert alert-info">
+          <strong>Info!</strong> The table is scrollable horizontally and vertically.
+          Use Ctrl + F to find data quickly or filter by location using the dropdown.
+        </div>
+        <div class="form-group">
+          <select
+            class="form-select"
+            aria-label="Select a Location"
+            id="loc-select"
+          >
+            <option value="all">Show All</option>
+          </select>
+        </div>
+        <div class="table-responsive overflow-x-auto">
+          <table class="table table-hover">
+            <thead class="thead-dark" id="table-head"></thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </body>
