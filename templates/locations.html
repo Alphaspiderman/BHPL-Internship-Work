@@ -26,6 +26,8 @@
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
     ></script>
     <link href="/static/css/styles.css" rel="stylesheet" />
+    <script src="/static/js/locations.js"></script>
+    <link href="/static/css/locations.css" rel="stylesheet" />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -84,7 +86,22 @@
       </div>
     </nav>
     <div class="body">
-      <p>Body Here</p>
+      <div class="form-group">
+        <select
+          class="form-select"
+          aria-label="Select a Location"
+          id="loc-select"
+          hidden
+        >
+          <option value="all">Show All</option>
+        </select>
+      </div>
+      <div class="table-responsive overflow-x-auto">
+        <table class="table table-hover">
+          <thead class="thead-dark" id="table-head"></thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
     </div>
   </body>
 </html>
