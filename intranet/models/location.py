@@ -60,6 +60,7 @@ class Location:
         "Primary_Brand_Channel",
         "Facility_Type",
         "Ordering_Methods",
+        "Store_Email",
         "Sunday_Open",
         "Sunday_Close",
         "Monday_Open",
@@ -94,14 +95,14 @@ class Location:
     def get_data(self, is_IT: bool) -> dict:
         data = self.to_dict()
         for field in self.hidden_fields:
-            data.pop(field)
+            data.pop(field, None)
         if not is_IT:
             for field in self.IT_only_fields:
-                data.pop(field)
+                data.pop(field, None)
         return data
 
     def get_schema(self, is_IT) -> dict:
-        schema = self.fields
+        schema = self.fields.copy()
         for field in self.hidden_fields:
             schema.remove(field)
         if not is_IT:

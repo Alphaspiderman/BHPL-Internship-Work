@@ -2,64 +2,12 @@ from sanic.request import Request
 from sanic.response import json as json_resp
 from sanic.views import HTTPMethodView
 import json
+from intranet.models.location import Location
 
 from intranet.app import IntranetApp
 
 
 class Location_Master(HTTPMethodView):
-    table_schema = [
-        "Store_Code",
-        "Store_Name",
-        "Posist_Store_Name",
-        "Ownership_Type",
-        "Local_Address",
-        "City",
-        "State_Name",
-        "Region_Internal",
-        "Postal_Code",
-        "Champs_Number",
-        "Primary_Brand_Channel",
-        "Facility_Type",
-        "Ordering_Methods",
-        "Store_Type",
-        "Store_Phone",
-        "Store_Email",
-        "Status",
-        "Latitude",
-        "Longitude",
-        "Store_Open_Date",
-        "Posit_Live_Date",
-        "Seat_Count",
-        "Local_Org_Name",
-        "Franchisee_id",
-        "Temp_Close_Date",
-        "Reopen_Date",
-        "Store_Closure_Date",
-        "Sunday_Open",
-        "Sunday_Close",
-        "Monday_Open",
-        "Monday_Close",
-        "Tuesday_Open",
-        "Tuesday_Close",
-        "Wednesday_Open",
-        "Wednesday_Close",
-        "Thursday_Open",
-        "Thursday_Close",
-        "Friday_Open",
-        "Friday_Close",
-        "Saturday_Open",
-        "Saturday_Close",
-        "Market_Name",
-        "Area_Name",
-        "Coach_ID",
-        "Ip_Range_Start",
-        "Ip_Range_End",
-        "Subnet",
-        "Static_Ip",
-        "Link_ISP",
-        "Link_Type",
-    ]
-
     async def get(self, request: Request):
         location = request.args.get("location")
         app: IntranetApp = request.app
@@ -70,40 +18,42 @@ class Location_Master(HTTPMethodView):
                     await cur.execute("SELECT Store_Code, Store_Name FROM sites")
                     locations = await cur.fetchall()
             return json_resp({"locations": locations})
+        # There is a location specified
+        location_data = list()
+        # Get the data from the database
+        if location == "all":
+            async with db_pool.acquire() as conn:
+                async with conn.cursor() as cur:
+                    await cur.execute("SELECT * FROM sites")
+                    data = await cur.fetchall()
+                    location_data = [Location(entry) for entry in data]
         else:
-            if location == "all":
-                async with db_pool.acquire() as conn:
-                    async with conn.cursor() as cur:
-                        await cur.execute("SELECT * FROM sites")
-                        data = await cur.fetchall()
-            else:
-                async with db_pool.acquire() as conn:
-                    async with conn.cursor() as cur:
-                        await cur.execute(
-                            "SELECT * FROM sites WHERE Store_Code = %s", (location,)
-                        )
-                        data = await cur.fetchone()
+            async with db_pool.acquire() as conn:
+                async with conn.cursor() as cur:
+                    await cur.execute(
+                        "SELECT * FROM sites WHERE Store_Code = %s", (location,)
+                    )
+                    data = await cur.fetchone()
+                    location_data = [Location(data)]
         # Check for IT Department in JWT
         jwt_data = app.decode_jwt(request.cookies.get("JWT_TOKEN"))
-        modified_schema = self.table_schema.copy()
         # Remove IT specific fields if the user is not from IT department
         if jwt_data["department"] != "IT":
-            modified_schema.remove("Ip_Range_Start")
-            modified_schema.remove("Ip_Range_End")
-            modified_schema.remove("Subnet")
-            modified_schema.remove("Static_Ip")
-            modified_schema.remove("Link_ISP")
-            modified_schema.remove("Link_Type")
-            if isinstance(data[0], list):
-                for idx, entry in enumerate(data):
-                    data[idx] = entry[: len(modified_schema)]
-            else:
-                data = data[: len(modified_schema)]
+            data = [
+                list(entry.get_data(is_IT=False).values()) for entry in location_data
+            ]
+            schema = location_data[0].get_schema(is_IT=False)
+        else:
+            data = [
+                list(entry.get_data(is_IT=True).values()) for entry in location_data
+            ]
+            schema = location_data[0].get_schema(is_IT=True)
+
         # Return the data using custom JSON serializer
         return json_resp(
             {
                 "data": data,
-                "schema": modified_schema,
+                "schema": schema,
             },
             dumps=lambda x: json.dumps(x, default=str),
         )
