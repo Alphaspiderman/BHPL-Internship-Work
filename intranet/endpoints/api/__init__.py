@@ -4,6 +4,7 @@ from .logout import Logout
 from .sites.checker import Site_Checker
 from .sites.status import Site_Status
 from .announcements import Announcements
+from .lm import Location_Master
 
 from intranet.app import appserver
 
@@ -24,3 +25,6 @@ appserver.add_route(Site_Status.as_view(), "/api/sites/status")
 
 # Register the announcements endpoint
 appserver.add_route(Announcements.as_view(), "/api/announcements")
+
+# Register the location master endpoint
+appserver.add_route(Location_Master.as_view(), "/api/lm")
