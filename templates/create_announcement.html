@@ -92,8 +92,9 @@
     </nav>
     <div class="body">
       <div class="container">
+        <br />
         <form
-          action="/api/announcements"
+          action="/api/announcements/new"
           method="post"
           enctype="multipart/form-data"
           id="createAnnouncementForm"
@@ -126,10 +127,14 @@
             <label>Body</label>
             <div id="quillEditor"></div>
           </div>
+          <p>You can select multiple files</p>
+          <p>Re-selecting replaces previous files</p>
           <div class="mb-3">
             <input name="file" type="file" multiple />
           </div>
-          <br /><br />
+          <div class="alert alert-info">
+            <strong>Info!</strong> The first file should be the header image.
+          </div>
           <button type="submit" class="btn btn-primary" id="submitForm">
             Submit Form
           </button>
