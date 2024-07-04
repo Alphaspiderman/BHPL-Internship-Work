@@ -1,0 +1,51 @@
+Table departments {
+  Department_Code varchar [primary key]
+  Department_Name varchar
+  Department_Head_Name varchar
+  Department_Email varchar
+}
+
+Table vendor_info {
+  Vendor_Code varchar [primary key]
+  Vendor_Name varchar
+  Vendor_Address varchar
+  Vendor_Phone varchar
+  PAN_Number varchar
+  GST_Number varchar
+  Account_Number varchar
+}
+
+Table vendor_contract {
+  Vendor_Code varchar [primary key]
+  Department varchar [primary key]
+  Contract_Active varchar
+  Contract_Description varchar
+  AMC_ID varchar
+  Invoice_Frequency varchar
+  Invoice_Base_Cost decimal
+  Reminder_Addresses varchar
+  Next_Reminder date
+}
+
+Table contract_amc {
+  AMC_ID varchar [primary key]
+  Start_Date date
+  End_Date date
+  File_Name varchar
+}
+
+Table contract_payment {
+  Vendor_Code varchar [primary key]
+  Department varchar [primary key]
+  Invoice_Status varchar
+  Due_Date date
+  Due_Ammount decimal
+  Payment_Date date
+  Payment_Amount decimal
+}
+
+Ref: departments.Department_Code < vendor_contract.Department
+Ref: vendor_info.Vendor_Code < vendor_contract.Vendor_Code
+Ref: vendor_contract.AMC_ID - contract_amc.AMC_ID
+Ref: vendor_contract.Vendor_Code < contract_payment.Vendor_Code
+Ref: vendor_contract.Department < contract_payment.Department

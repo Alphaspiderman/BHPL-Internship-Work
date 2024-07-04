@@ -1,0 +1,87 @@
+Table state_master {
+  State_Name varchar [primary key]
+  Region varchar
+  Gst varchar
+}
+
+Table sites {
+  Store_Code varchar [primary key]
+  Store_Name varchar
+  Posist_Store_Name varchar
+  Ownership_Type varchar [DEFAULT: 'OWN']
+  Local_Address varchar
+  City varchar
+  State_Name varchar
+  Region_Internal varchar
+  Postal_Code varchar
+  Champs_Number varchar
+  Primary_Brand_Channel varchar
+  Facility_Type varchar
+  Ordering_Methods varchar
+  Store_Type varchar
+  Store_Phone varchar
+  Store_Email varchar
+  Status varchar [DEFAULT: 'Open']
+  Latitude varchar
+  Longitude varchar
+  Store_Open_Date date
+  Posit_Live_Date date
+  Seat_Count varchar
+  Local_Org_Name varchar [DEFAULT: 'BHPL']
+  Franchisee_id varchar [DEFAULT: '10870']
+  Temp_Close_Date date
+  Reopen_Date date
+  Store_Closure_Date date
+  // Sunday_Open time
+  // Sunday_Close time
+  // Monday_Open time
+  // Monday_Close time
+  // Tuesday_Open time
+  // Tuesday_Close time
+  // Wednesday_Open time
+  // Wednesday_Close time
+  // Thursday_Open time
+  // Thursday_Close time
+  // Friday_Open time
+  // Friday_Close time
+  // Saturday_Open time
+  // Saturday_Close time
+  Market_Name varchar
+  Area_Name varchar
+  Coach_ID varchar
+  Ip_Range_Start varchar
+  Ip_Range_End varchar
+  Subnet varchar
+  Static_Ip varchar
+  Link_ISP varchar
+  Link_Type varchar
+
+  Note: Columns for Opening and Closing times of the week are hidden
+}
+
+Table announcements {
+  Announcement_Id varchar [primary key]
+  Title varchar
+  Body text
+  Date_From date
+  Date_To date
+}
+
+Table announcement_files {
+  Announcement_Id varchar
+  File_Name varchar
+  Deleted varchar
+}
+
+Table people {
+  Employee_Id varchar [primary key]
+  First_Name varchar
+  Last_Name varchar
+  Email varchar
+  Emp_Type varchar [DEFAULT: 'Store']
+  Department varchar [DEFAULT: 'Operation']
+}
+
+Ref: sites.State_Name > state_master.State_Name
+Ref: sites.Coach_ID > people.Employee_Id
+Ref: announcement_files.Announcement_Id > announcements.Announcement_Id
