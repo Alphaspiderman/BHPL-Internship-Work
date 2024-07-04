@@ -87,20 +87,65 @@
     <div class="body">
       <div class="col-lg-6 col-xxl-4 my-5 mx-auto">
         <div class="d-grid gap-2">
-          <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm" id="pillNav2" role="tablist" style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white);">
+          <ul
+            class="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm"
+            id="pillNav2"
+            role="tablist"
+            style="
+              --bs-nav-link-color: var(--bs-white);
+              --bs-nav-pills-link-active-color: var(--bs-primary);
+              --bs-nav-pills-link-active-bg: var(--bs-white);
+            "
+          >
             <li class="nav-item" role="presentation">
-              <button class="nav-link active rounded-5" id="show-vendors" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">Show Vendors</button>
+              <button
+                class="nav-link active rounded-5"
+                id="show-vendors"
+                data-bs-toggle="tab"
+                type="button"
+                role="tab"
+                aria-selected="true"
+              >
+                Show Vendors
+              </button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link rounded-5" id="show-contracts" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Show Contracts</button>
+              <button
+                class="nav-link rounded-5"
+                id="show-contracts"
+                data-bs-toggle="tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+              >
+                Show Contracts
+              </button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link rounded-5" id="contract-payments" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Payment Status</button>
+              <button
+                class="nav-link rounded-5"
+                id="contract-payments"
+                data-bs-toggle="tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+              >
+                Payment Status
+              </button>
             </li>
           </ul>
         </div>
       </div>
-      <div class="container-fluid" id="workingBody">
+      <div class="container-fluid" id="page-container">
+        <select class="form-select" id="item-select">
+          <option value="all">Show All</option>
+        </select>
+        <div class="table-responsive overflow-x-auto">
+          <table class="table table-hover">
+            <thead class="thead-dark" id="table-head"></thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </body>
