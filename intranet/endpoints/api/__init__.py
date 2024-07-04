@@ -24,7 +24,7 @@ appserver.add_route(Site_Checker.as_view(), "/api/sites/checker")
 appserver.add_route(Site_Status.as_view(), "/api/sites/status")
 
 # Register the announcements endpoint
-appserver.add_route(Announcements.as_view(), "/api/announcements")
+appserver.add_route(Announcements.as_view(), "/api/announcements/<id:strorempty>")
 
 # Register the location master endpoint
 appserver.add_route(Location_Master.as_view(), "/api/lm")

@@ -26,6 +26,7 @@
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
     ></script>
     <link href="/static/css/styles.css" rel="stylesheet" />
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
     <script src="/static/js/announcements.js"></script>
   </head>
   <body>
@@ -87,7 +88,8 @@
       </div>
     </nav>
     <div class="body">
-      <div class="row row-cols-1 row-cols-md-2 g-4" id="announcements-container">
+      <br/>
+      <div class="row" data-masonry='{"percentPosition": true }' id="announcements-container">
     </div>
   </body>
 </html>

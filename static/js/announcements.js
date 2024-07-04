@@ -18,16 +18,16 @@ window.onload = function () {
 </div> */
 
 function load_announcements(data) {
-  console.log(data);
   container = document.getElementById("announcements-container");
+  container.style = "display: flex; flex-wrap: wrap; padding: 20px;";
   data.forEach((element) => {
     image = element["2"];
     title = element["1"];
     id = element["0"];
     div = document.createElement("div");
-    div.className = "col";
+    div.className = "col-sm-6 col-lg-4 mb-4";
     announcement = document.createElement("div");
-    announcement.className = "card h-100";
+    announcement.className = "card";
     img = document.createElement("img");
     img.src = `/files/${image}`;
     img.class = "rounded mx-auto d-block";
