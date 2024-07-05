@@ -4,16 +4,28 @@ window.onload = function () {
   console.log(active_tab);
   switch (active_tab) {
     case "vendors":
+      // Set button as active
+      document.getElementById("show-vendors").classList.add("active");
+      document.getElementById("show-contracts").classList.remove("active");
+      document.getElementById("contract-payments").classList.remove("active");
       // Load the dropdown
       load_dropdown("vendors");
       show_vendors(null);
       break;
     case "contracts":
+      // Set button as active
+      document.getElementById("show-vendors").classList.remove("active");
+      document.getElementById("show-contracts").classList.add("active");
+      document.getElementById("contract-payments").classList.remove("active");
       // Load the dropdown
       load_dropdown("contracts");
       show_contracts(null);
       break;
     case "payments":
+      // Set button as active
+      document.getElementById("show-vendors").classList.remove("active");
+      document.getElementById("show-contracts").classList.remove("active");
+      document.getElementById("contract-payments").classList.add("active");
       // Load the dropdown
       load_dropdown("payments");
       show_payments(null);
@@ -22,6 +34,8 @@ window.onload = function () {
       // Change the URL
       history.pushState("", "", "/vendors?show=vendors");
       // Navigate to the vendors tab
+      // Load the dropdown
+      load_dropdown("vendors");
       show_vendors(null);
       break;
   }
@@ -32,7 +46,6 @@ window.onload = function () {
       history.pushState("", "", "/vendors?show=vendors");
       // Load the dropdown
       load_dropdown("vendors");
-      // Navigate to the tab
       show_vendors(null);
     });
   document
@@ -108,9 +121,15 @@ function load_dropdown(type) {
       elem.innerHTML = "";
       elem.appendChild(new Option("Show All", "all"));
       response.forEach((element) => {
-        elem.appendChild(
-          new Option(element[0] + " - " + element[1], element[0])
-        );
+        if (element.length > 1) {
+          elem.appendChild(
+            new Option(element[0] + " - " + element[1], element[0])
+          );
+        } else{
+          elem.appendChild(
+            new Option(element[0], element[0])
+          );
+        }
       });
     },
     error: function (response) {
@@ -131,9 +150,11 @@ function render_table(data) {
 
   headerData.forEach((element) => {
     var th = document.createElement("th");
-    th.innerHTML = element;
+    th.innerHTML = element.replaceAll("_", " ");
     tableHead.appendChild(th);
   });
+
+  console.log(tableData);
 
   tableData.forEach((element) => {
     var tr = document.createElement("tr");
