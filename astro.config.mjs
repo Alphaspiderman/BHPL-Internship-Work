@@ -7,10 +7,10 @@ import node from "@astrojs/node";
 export default defineConfig({
   integrations: [tailwind()],
   redirects: {
-    '/': '/home'
+    "/": "/home",
   },
   output: "server",
   adapter: node({
-    mode: "standalone"
-  })
+    mode: "standalone",
+  }),
 });

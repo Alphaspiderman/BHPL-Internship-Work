@@ -11,6 +11,10 @@ const unprotectedPaths = [
   "/public.pem",
 ];
 
+const routeDepartments = {
+  "/api/location": ["IT"],
+};
+
 async function checkProtected(context, next) {
   context.require_authentication = true;
   const path = context.url.pathname;
@@ -18,6 +22,9 @@ async function checkProtected(context, next) {
     context.require_authentication = false;
   }
   if (path.startsWith("/static/")) {
+    context.require_authentication = false;
+  }
+  if (path.startsWith("/api/")) {
     context.require_authentication = false;
   }
   return await next();
@@ -41,13 +48,28 @@ async function decodeJWT(context, next) {
     const key = fs.readFileSync("./public-key.pem");
     // Convert to string
     const keyString = key.toString();
-    const publicKey = await jose.importSPKI(keyString, 'RS256')
+    const publicKey = await jose.importSPKI(keyString, "RS256");
     const { payload, header } = await jose.jwtVerify(jwt, publicKey);
-    // console.log(payload);
-    // console.log(header);
+    context.jwt_payload = payload;
+    context.jwt_header = header;
     return await next();
   }
   return await next();
 }
 
-export const onRequest = sequence(checkProtected, checkJWTCookie, decodeJWT);
+async function routeRequiresDepartment(context, next) {
+  if (context.require_authentication) {
+    if (routeDepartments[context.url.pathname]) {
+      const department = context.jwt_payload["department"];
+      if (routeDepartments[context.url.pathname].includes(department)) {
+        return await next();
+      } else {
+        console.log(context);
+        return context.send("Unauthorized", 401);
+      }
+    }
+  }
+  return await next();
+}
+
+export const onRequest = sequence(checkProtected, checkJWTCookie, decodeJWT, routeRequiresDepartment);
