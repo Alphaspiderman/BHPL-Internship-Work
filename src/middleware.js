@@ -1,6 +1,8 @@
 import { sequence } from "astro:middleware";
 import { Astro } from "astro";
 import * as jose from "jose";
+import fs from "fs";
+import crypto from "crypto";
 
 const unprotectedPaths = [
   "/login",
@@ -35,10 +37,14 @@ async function checkJWTCookie(context, next) {
 async function decodeJWT(context, next) {
   if (context.require_authentication) {
     // Load our RSA public key
-    const publicKey = await fetch("/public.pem").then((res) => res.text());
-    jwt = Astro.cookies.get("JWT_TOKEN");
-    payload = jose.JWT.decode(jwt);
-    console.log(payload);
+    const jwt = context.cookies.get("JWT_TOKEN")["value"];
+    const key = fs.readFileSync("./public-key.pem");
+    // Convert to string
+    const keyString = key.toString();
+    const publicKey = await jose.importSPKI(keyString, 'RS256')
+    const { payload, header } = await jose.jwtVerify(jwt, publicKey);
+    // console.log(payload);
+    // console.log(header);
     return await next();
   }
   return await next();
