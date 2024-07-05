@@ -1,0 +1,82 @@
+---
+import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
+interface Props {
+  activeVal?: string;
+}
+const { activeVal = "home" } = Astro.props;
+---
+
+<header
+  id="navbar"
+  class="mx-auto container lg:flex justify-between p-5 gap-5"
+  data-activeVal={activeVal}
+>
+  <Astronav closeOnClick>
+    <div class="flex w-full lg:w-auto justify-between">
+      <a href="https://burmanhospitality.com/"
+        ><img alt="Burman Hospitality" height="30px" src="/logo.svg" /></a
+      >
+      <div class="block lg:hidden">
+        <MenuIcon class="wx-auto hx-auto text-white lg:flex" />
+      </div>
+    </div>
+    <MenuItems class="hidden lg:flex">
+      <ul class="flex flex-col lg:flex-row lg:gap-5">
+        <li>
+          <a class="nav-link" href="/home">Home</a>
+        </li>
+        <li>
+          <a class="nav-link" href="/locations">Location Master</a>
+        </li>
+        <li>
+          <a class="nav-link" href="/connectivity">Connectivity Status</a>
+        </li>
+        <li>
+          <a class="nav-link" href="/sales">Sales Dashboard</a>
+        </li>
+        <li>
+          <a class="nav-link" href="/vendors">Vendor Management</a>
+        </li>
+        <li>
+          <a class="nav-link" href="/api/logout">Logout</a>
+        </li>
+      </ul>
+    </MenuItems>
+
+    <script>
+      var active_val = document.getElementById("navbar").dataset.activeval;
+      var navLinks = document.querySelectorAll(".nav-link");
+      // Add active class to the current link (highlight it)
+      for (var i = 0; i < navLinks.length; i++) {
+        navLinks[i].innerHTML.toLowerCase() === active_val.toLowerCase()
+          ? navLinks[i].classList.add("active")
+          : null;
+      }
+    </script>
+
+    <style>
+      #navbar {
+        background-color: #212529;
+        margin: 0;
+      }
+      li {
+        /* Center the text */
+        display: flex;
+        align-items: center;
+        /* Set text color to white */
+        color: grey;
+        font-size: medium;
+        padding: 10px;
+      }
+      .active {
+        color: white;
+        font-weight: bold;
+      }
+      .center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style></Astronav
+  >
+</header>
