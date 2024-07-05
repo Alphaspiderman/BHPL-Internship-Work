@@ -1,5 +1,6 @@
 ---
 import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
+import { Button } from "./Button.astro";
 interface Props {
   activeVal?: string;
 }
@@ -21,7 +22,7 @@ const { activeVal = "home" } = Astro.props;
       </div>
     </div>
     <MenuItems class="hidden lg:flex">
-      <ul class="flex flex-col lg:flex-row lg:gap-5">
+      <ul class="flex flex-col lg:flex-row lg:gap-5 items-center">
         <li>
           <a class="nav-link" href="/home">Home</a>
         </li>
@@ -38,10 +39,12 @@ const { activeVal = "home" } = Astro.props;
           <a class="nav-link" href="/vendors">Vendor Management</a>
         </li>
         <li>
-          <a class="nav-link" href="/api/logout">Logout</a>
+          <a type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900" href="/api/logout">Logout</a>
+          <!-- <a class="nav-link" href="/api/logout">Logout</a> -->
         </li>
       </ul>
     </MenuItems>
+    <div></div>
 
     <script>
       var active_val = document.getElementById("navbar").dataset.activeval;
@@ -55,15 +58,19 @@ const { activeVal = "home" } = Astro.props;
     </script>
 
     <style>
-      #navbar {
+      html,
+      body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .header {
+        flex-direction: row;
+        width: 100%;
         background-color: #212529;
         margin: 0;
       }
       li {
-        /* Center the text */
-        display: flex;
-        align-items: center;
-        /* Set text color to white */
         color: grey;
         font-size: medium;
         padding: 10px;
@@ -71,11 +78,6 @@ const { activeVal = "home" } = Astro.props;
       .active {
         color: white;
         font-weight: bold;
-      }
-      .center {
-        display: flex;
-        align-items: center;
-        justify-content: center;
       }
     </style></Astronav
   >
