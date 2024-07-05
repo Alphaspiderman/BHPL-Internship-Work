@@ -1,6 +1,5 @@
 ---
 import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
-import { Button } from "./Button.astro";
 interface Props {
   activeVal?: string;
 }
@@ -15,7 +14,7 @@ const { activeVal = "home" } = Astro.props;
   <Astronav closeOnClick>
     <div class="flex w-full lg:w-auto justify-between">
       <a href="https://burmanhospitality.com/"
-        ><img alt="Burman Hospitality" height="30px" src="/logo.svg" /></a
+        ><img alt="Burman Hospitality" height="30px" src="/static/logo.svg" /></a
       >
       <div class="block lg:hidden">
         <MenuIcon class="wx-auto hx-auto text-white lg:flex" />
