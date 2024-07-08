@@ -25,7 +25,7 @@ class VendorContract:
     def __init__(self, data):
         for idx, field in enumerate(self.fields):
             setattr(self, field, data[idx])
-    
+
     def to_dict(self) -> dict:
         return {field: getattr(self, field) for field in self.fields}
 
@@ -37,7 +37,7 @@ class VendorContract:
             data[field] = convert(data[field])
         return data
 
-    def get_schema(self) -> dict:
+    def get_schema(self) -> list:
         schema = self.fields.copy()
         for field in self.hidden_fields:
             schema.remove(field)
