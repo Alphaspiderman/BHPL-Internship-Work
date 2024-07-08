@@ -6,8 +6,8 @@ from intranet.app import IntranetApp
 from intranet.decorators.require_login import require_login
 from intranet.models.vendor_contract import VendorContract
 
-class Vendor_Contract(HTTPMethodView):
 
+class Vendor_Contract(HTTPMethodView):
     @require_login()
     async def get(self, request: Request):
         app: IntranetApp = request.app
@@ -25,7 +25,9 @@ class Vendor_Contract(HTTPMethodView):
                     vendor_contract = await cur.fetchall()
                     return json(vendor_contract)
                 elif contract_id in ["all", "null"]:
-                    await cur.execute("SELECT * FROM vendor_contract ORDER BY AMC_Start_Date DESC")
+                    await cur.execute(
+                        "SELECT * FROM vendor_contract ORDER BY AMC_Start_Date DESC"
+                    )
                     vendor_contract = await cur.fetchall()
                     contact_info = [VendorContract(entry) for entry in vendor_contract]
                 else:

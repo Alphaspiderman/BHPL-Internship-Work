@@ -22,7 +22,6 @@ class Vendor_Info(HTTPMethodView):
     async def get(self, request: Request):
         app: IntranetApp = request.app
         vendor_id = request.args.get("id")
-        print(f"Vendor ID: {vendor_id} Type: {type(vendor_id)}")
         db_pool = app.get_db_pool()
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
