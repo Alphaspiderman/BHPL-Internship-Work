@@ -8,6 +8,10 @@ window.onload = function () {
     var loc = document.getElementById("loc-select").value;
     load_emp(loc);
   });
+  // Listen to the submit button
+  document.getElementById("submit-form").addEventListener("click", function () {
+    process_submission();
+  });
 };
 
 function load_loc() {
@@ -34,7 +38,7 @@ function load_emp() {
     var select = document.getElementById("emp-select");
     select.innerHTML = "";
     select.appendChild(new Option("Please select a location", ""));
-    select.setAttribute("disabled");
+    select.setAttribute("disabled", "");
     return;
   }
   $.ajax({
@@ -86,6 +90,67 @@ function load_bells() {
       table.appendChild(card_5);
       table.appendChild(card_4);
       table.appendChild(card_3);
+    },
+    error: function (data) {
+      console.log(data);
+    },
+  });
+}
+
+function process_submission() {
+  store_code = document.getElementById("loc-select").value;
+  emp_code = document.getElementById("emp-select").value;
+  is_5_bells = document.getElementById("cardFive").checked;
+  is_4_bells = document.getElementById("cardFour").checked;
+  is_3_bells = document.getElementById("cardThree").checked;
+  reason = document.getElementById("reasonInput").value;
+
+  if (store_code == "") {
+    alert("Please select a location");
+    return;
+  }
+  if (emp_code == "") {
+    alert("Please select an employee");
+    return;
+  }
+  if (reason == "") {
+    alert("Please enter a reason");
+    return;
+  }
+  if (reason.length > 250) {
+    alert("Reason is too long (" + reason.length + " characters)");
+    return;
+  }
+
+  form_data = {
+    Store_Code: store_code,
+    Employee_Code: emp_code,
+    Award_Date: new Date().toISOString().split("T")[0],
+    Reason: reason,
+  };
+
+  if (is_5_bells) {
+    form_data.Bells_Awarded = "Card_5";
+  } else if (is_4_bells) {
+    form_data.Bells_Awarded = "Card_4";
+  } else if (is_3_bells) {
+    form_data.Bells_Awarded = "Card_3";
+  } else {
+    alert("Please select the number of bells to award");
+    return;
+  }
+
+  $.ajax({
+    type: "POST",
+    url: "/api/bells/award",
+    data: form_data,
+    success: function (data) {
+      if (data.status == "success") {
+        alert("Bells awarded successfully");
+        window.location.href = "/home";
+      } else {
+        alert(data.message);
+      }
     },
     error: function (data) {
       console.log(data);

@@ -53,7 +53,7 @@ class Award_Bells(HTTPMethodView):
             async with conn.cursor() as cur:
                 # Check if the employee has the bells to award
                 await cur.execute(
-                    "SELECT * FROM bell_info WHERE Employee_ID = %s", (Awarded_By_Id,)
+                    "SELECT * FROM bells_info WHERE Employee_ID = %s", (Awarded_By_Id,)
                 )
                 bell_info = await cur.fetchall()
                 if bell_info is None:
@@ -61,9 +61,9 @@ class Award_Bells(HTTPMethodView):
                         {"status": "failure", "message": "You can't award bells"},
                         status=404,
                     )
-                card_5_left = int(bell_info[4])
-                card_4_left = int(bell_info[5])
-                card_3_left = int(bell_info[6])
+                card_5_left = int(bell_info[0][4])
+                card_4_left = int(bell_info[0][5])
+                card_3_left = int(bell_info[0][6])
 
                 if Bells_Awarded == "Card_5":
                     if card_5_left == 0:
@@ -85,10 +85,13 @@ class Award_Bells(HTTPMethodView):
                                 Reason,
                             ),
                         )
+                        await cur.fetchall()
                         await cur.execute(
-                            "UPDATE bell_info SET Card_5_Left = %s WHERE Employee_ID = %s",
+                            "UPDATE bells_info SET Card_5_Left = %s WHERE Employee_ID = %s",
                             (card_5_left - 1, Awarded_By_Id),
                         )
+                        await cur.fetchall()
+                        await conn.commit()
                         return json({"status": "success", "message": "Bells awarded"})
                 elif Bells_Awarded == "Card_4":
                     if card_4_left == 0:
@@ -110,10 +113,13 @@ class Award_Bells(HTTPMethodView):
                                 Reason,
                             ),
                         )
+                        await cur.fetchall()
                         await cur.execute(
-                            "UPDATE bell_info SET Card_4_Left = %s WHERE Employee_ID = %s",
+                            "UPDATE bells_info SET Card_4_Left = %s WHERE Employee_ID = %s",
                             (card_4_left - 1, Awarded_By_Id),
                         )
+                        await cur.fetchall()
+                        await conn.commit()
                         return json({"status": "success", "message": "Bells awarded"})
                 elif Bells_Awarded == "Card_3":
                     if card_3_left == 0:
@@ -135,10 +141,13 @@ class Award_Bells(HTTPMethodView):
                                 Reason,
                             ),
                         )
+                        await cur.fetchall()
                         await cur.execute(
-                            "UPDATE bell_info SET Card_3_Left = %s WHERE Employee_ID = %s",
+                            "UPDATE bells_info SET Card_3_Left = %s WHERE Employee_ID = %s",
                             (card_3_left - 1, Awarded_By_Id),
                         )
+                        await cur.fetchall()
+                        await conn.commit()
                         return json({"status": "success", "message": "Bells awarded"})
                 else:
                     return json(
