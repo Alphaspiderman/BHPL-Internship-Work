@@ -59,8 +59,8 @@ function process_data(api_response) {
       },
     ],
   };
-  var online_cnt = api_response.online.length
-  var offline_cnt = api_response.offline.length
+  var online_cnt = api_response.online.length;
+  var offline_cnt = api_response.offline.length;
   var to_process = api_response.total_count - api_response.checked;
 
   data.datasets[0].data[0] = online_cnt;

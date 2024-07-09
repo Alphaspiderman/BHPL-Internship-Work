@@ -19,7 +19,8 @@ window.onload = function () {
 
 function load_announcements(data) {
   container = document.getElementById("announcements-container");
-  container.style = "position: relative; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;";
+  container.style =
+    "position: relative; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;";
   data.forEach((element) => {
     image = element["2"];
     title = element["1"];

@@ -123,12 +123,10 @@ function load_dropdown(type) {
       response.forEach((element) => {
         if (element.length > 1) {
           elem.appendChild(
-            new Option(element[0] + " - " + element[1], element[0])
+            new Option(element[0] + " - " + element[1], element[0]),
           );
-        } else{
-          elem.appendChild(
-            new Option(element[0], element[0])
-          );
+        } else {
+          elem.appendChild(new Option(element[0], element[0]));
         }
       });
     },

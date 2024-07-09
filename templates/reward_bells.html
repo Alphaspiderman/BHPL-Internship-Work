@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>My App</title>
@@ -87,16 +87,25 @@
     <div class="body">
       <div class="container-fluid">
         <h1 class="center">Reward Bells</h1>
-        <br/>
+        <br />
         <div class="mb-3">
           <label for="loc-select" class="form-label">Store Select</label>
-          <select class="form-select" aria-label="Please select a Location" id="loc-select">
+          <select
+            class="form-select"
+            aria-label="Please select a Location"
+            id="loc-select"
+          >
             <option selected value="">Please select a store</option>
           </select>
         </div>
         <div class="mb-3">
           <label for="emp-select" class="form-label">Employee Select</label>
-          <select class="form-select" aria-label="Please select an Employee" id="emp-select" disabled>
+          <select
+            class="form-select"
+            aria-label="Please select an Employee"
+            id="emp-select"
+            disabled
+          >
             <option selected value="">Please select a store first</option>
           </select>
         </div>
@@ -108,23 +117,41 @@
                 <th scope="col">Cards Remaining</th>
               </tr>
             </thead>
+            <fieldset class="mb-3">
+              <legend>Bells to Award</legend>
+              <div class="form-check">
+                <input
+                  type="radio"
+                  name="radios"
+                  class="form-check-input"
+                  id="cardFive"
+                  value="Card_5"
+                />
+                <label class="form-check-label" for="cardFive">5 Bells</label>
+              </div>
+              <div class="form-check">
+                <input
+                  type="radio"
+                  name="radios"
+                  class="form-check-input"
+                  id="cardFour"
+                  value="Card_4"
+                />
+                <label class="form-check-label" for="cardFour">4 Bells</label>
+              </div>
+              <div class="form-check">
+                <input
+                  type="radio"
+                  name="radios"
+                  class="form-check-input"
+                  id="cardThree"
+                  value="Card_3"
+                />
+                <label class="form-check-label" for="cardThree">3 Bells</label>
+              </div>
+            </fieldset>
+          </table>
         </div>
-      </div>
-        <fieldset class="mb-3">
-          <legend>Bells to Award</legend>
-          <div class="form-check">
-            <input type="radio" name="radios" class="form-check-input" id="cardFive" value="Card_5">
-            <label class="form-check-label" for="cardFive">5 Bells</label>
-          </div>
-          <div class="form-check">
-            <input type="radio" name="radios" class="form-check-input" id="cardFour" value="Card_4">
-            <label class="form-check-label" for="cardFour">4 Bells</label>
-          </div>
-          <div class="form-check">
-            <input type="radio" name="radios" class="form-check-input" id="cardThree" value="Card_3">
-            <label class="form-check-label" for="cardThree">3 Bells</label>
-          </div>
-        </fieldset>
       </div>
     </div>
   </body>
