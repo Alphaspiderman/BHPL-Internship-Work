@@ -18,21 +18,20 @@ class Award_Bells(HTTPMethodView):
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(
-                    "SELECT * FROM bell_info WHERE Employee_ID = %s", (employee_id,)
+                    "SELECT * FROM bells_info WHERE Employee_ID = %s", (employee_id,)
                 )
                 bell_info = await cur.fetchall()
-        if bell_info is None:
-            return json(
-                {"status": "failure", "message": "You can't award bells"}, status=404
-            )
+        if len(bell_info) == 0:
+            return json({"status": "failure", "message": "You can't award bells"})
         return json(
             {
-                "Card_5_Total": int(bell_info[1]),
-                "Card_4_Total": int(bell_info[2]),
-                "Card_3_Total": int(bell_info[3]),
-                "Card_5_Left": int(bell_info[4]),
-                "Card_4_Left": int(bell_info[5]),
-                "Card_3_Left": int(bell_info[6]),
+                "status": "success",
+                "Card_5_Total": int(bell_info[0][1]),
+                "Card_4_Total": int(bell_info[0][2]),
+                "Card_3_Total": int(bell_info[0][3]),
+                "Card_5_Left": int(bell_info[0][4]),
+                "Card_4_Left": int(bell_info[0][5]),
+                "Card_3_Left": int(bell_info[0][6]),
             }
         )
 
@@ -73,7 +72,6 @@ class Award_Bells(HTTPMethodView):
                                 "status": "failure",
                                 "message": "You can't award more 5 Bell Cards",
                             },
-                            status=404,
                         )
                     else:
                         await cur.execute(
@@ -91,6 +89,7 @@ class Award_Bells(HTTPMethodView):
                             "UPDATE bell_info SET Card_5_Left = %s WHERE Employee_ID = %s",
                             (card_5_left - 1, Awarded_By_Id),
                         )
+                        return json({"status": "success", "message": "Bells awarded"})
                 elif Bells_Awarded == "Card_4":
                     if card_4_left == 0:
                         return json(
@@ -98,7 +97,6 @@ class Award_Bells(HTTPMethodView):
                                 "status": "failure",
                                 "message": "You can't award more 4 Bell Cards",
                             },
-                            status=404,
                         )
                     else:
                         await cur.execute(
@@ -116,6 +114,7 @@ class Award_Bells(HTTPMethodView):
                             "UPDATE bell_info SET Card_4_Left = %s WHERE Employee_ID = %s",
                             (card_4_left - 1, Awarded_By_Id),
                         )
+                        return json({"status": "success", "message": "Bells awarded"})
                 elif Bells_Awarded == "Card_3":
                     if card_3_left == 0:
                         return json(
@@ -123,7 +122,6 @@ class Award_Bells(HTTPMethodView):
                                 "status": "failure",
                                 "message": "You can't award more 3 Bell Cards",
                             },
-                            status=404,
                         )
                     else:
                         await cur.execute(
@@ -141,8 +139,8 @@ class Award_Bells(HTTPMethodView):
                             "UPDATE bell_info SET Card_3_Left = %s WHERE Employee_ID = %s",
                             (card_3_left - 1, Awarded_By_Id),
                         )
+                        return json({"status": "success", "message": "Bells awarded"})
                 else:
                     return json(
                         {"status": "failure", "message": "Invalid bell card"},
-                        status=404,
                     )
