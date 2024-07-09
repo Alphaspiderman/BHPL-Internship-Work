@@ -10,7 +10,7 @@ window.onload = function () {
   // Get list of locations for the dropdown
   $.ajax({
     type: "GET",
-    url: "/api/lm/",
+    url: "/api/sites/info/",
     success: function (data) {
       load_options(data["locations"]);
     },
@@ -30,7 +30,7 @@ window.onload = function () {
 function process_location(loc) {
   $.ajax({
     type: "GET",
-    url: "/api/lm/",
+    url: "/api/sites/info/",
     data: {
       location: loc,
     },

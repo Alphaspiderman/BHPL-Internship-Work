@@ -3,8 +3,8 @@ from .login.root import Login_Root
 from .logout import Logout
 from .sites.checker import Site_Checker
 from .sites.status import Site_Status
+from .sites.info import Location_Master
 from .announcements import Announcements
-from .lm import Location_Master
 from .vendors.payment import Vendor_Payment
 from .vendors.info import Vendor_Info
 from .vendors.contract import Vendor_Contract
@@ -26,11 +26,11 @@ appserver.add_route(Site_Checker.as_view(), "/api/sites/checker")
 # Register the site status endpoint
 appserver.add_route(Site_Status.as_view(), "/api/sites/status")
 
+# Register the location master endpoint
+appserver.add_route(Location_Master.as_view(), "/api/sites/info")
+
 # Register the announcements endpoint
 appserver.add_route(Announcements.as_view(), "/api/announcements/<id:strorempty>")
-
-# Register the location master endpoint
-appserver.add_route(Location_Master.as_view(), "/api/lm")
 
 # Register the vendor payment endpoint
 appserver.add_route(Vendor_Payment.as_view(), "/api/vendors/payment")
