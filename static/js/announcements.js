@@ -19,13 +19,13 @@ window.onload = function () {
 
 function load_announcements(data) {
   container = document.getElementById("announcements-container");
-  container.style = "display: flex; flex-wrap: wrap; padding: 20px;";
+  container.style = "position: relative; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;";
   data.forEach((element) => {
     image = element["2"];
     title = element["1"];
     id = element["0"];
     div = document.createElement("div");
-    div.className = "col-sm-6 col-lg-4 mb-4";
+    div.style = "width: 500px; padding: 10px; margin: 10px;";
     announcement = document.createElement("div");
     announcement.className = "card";
     img = document.createElement("img");
