@@ -50,22 +50,16 @@ function process_data(api_response) {
     return;
   }
 
-  var data = {
-    labels: ["Online", "Offline", "Processing"],
-    datasets: [
-      {
-        data: [0, 0, 0],
-        backgroundColor: ["green", "red", "grey"],
-      },
-    ],
-  };
   var online_cnt = api_response.online.length;
   var offline_cnt = api_response.offline.length;
   var to_process = api_response.total_count - api_response.checked;
+  var total_count = api_response.total_count;
 
-  data.datasets[0].data[0] = online_cnt;
-  data.datasets[0].data[1] = offline_cnt;
-  data.datasets[0].data[2] = to_process;
+  var data = [
+    { label: "Online", y: (online_cnt / total_count) * 100 },
+    { label: "Offline", y: (offline_cnt / total_count) * 100 },
+    { label: "To Process", y: (to_process / total_count) * 100 },
+  ];
 
   build_chart(data);
 
@@ -111,30 +105,30 @@ function process_data(api_response) {
 }
 
 function build_chart(data) {
-  var ctx = document.getElementById("connectivityChart").getContext("2d");
-  var chart = Chart.getChart(ctx);
-  if (chart) {
-    chart.data = data;
-    chart.update();
-    return;
-  }
+  console.log(data);
 
-  var myChart = new Chart(ctx, {
-    type: "pie",
-    data: data,
-    options: {
-      layout: {
-        padding: 20,
-      },
-      responsive: true,
-      maintainAspectRatio: false,
-      legend: {
-        display: true,
-        position: "bottom",
-      },
+  var chart = new CanvasJS.Chart("chartContainer", {
+    theme: "light2",
+    exportEnabled: true,
+    animationEnabled: true,
+    title: {
+      text: "Site Connectivity Status",
     },
+    data: [
+      {
+        type: "pie",
+        toolTipContent: "<b>{label}</b>: {y}%",
+        showInLegend: "true",
+        legendText: "{label}",
+        indexLabelFontSize: 16,
+        indexLabel: "{label} - {y}%",
+        dataPoints: data,
+      },
+    ],
   });
-  myChart.render();
+  chart.render();
+  console.log(chart);
+  console.log("Chart Rendered");
 }
 
 function recheck_sites() {
