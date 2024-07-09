@@ -12,7 +12,7 @@ class ContractPayment:
     convert_fields = {
         "Due_Date": lambda x: x.strftime("%Y-%m-%d") if x else None,
         "Due_Amount": lambda x: str(x) if x else None,
-        "Payment_Amount": lambda x: x.strftime("%Y-%m-%d") if x else None,
+        "Payment_Date": lambda x: x.strftime("%Y-%m-%d") if x else None,
         "Payment_Amount": lambda x: str(x) if x else None,
     }
 
@@ -30,6 +30,6 @@ class ContractPayment:
         for field, convert in self.convert_fields.items():
             data[field] = convert(data[field])
         return data
-    
+
     def get_schema(self) -> list:
         return self.fields.copy()

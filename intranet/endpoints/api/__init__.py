@@ -1,15 +1,17 @@
+from intranet.app import appserver
+
+from .announcements import Announcements_API
+from .bells.award import Award_Bells
+from .bells.info import Bell_Info
 from .login.callback import Callback
 from .login.root import Login_Root
 from .logout import Logout
 from .sites.checker import Site_Checker
-from .sites.status import Site_Status
 from .sites.info import Location_Master
-from .announcements import Announcements
-from .vendors.payment import Vendor_Payment
-from .vendors.info import Vendor_Info
+from .sites.status import Site_Status
 from .vendors.contract import Vendor_Contract
-
-from intranet.app import appserver
+from .vendors.info import Vendor_Info
+from .vendors.payment import Vendor_Payment
 
 # Register the login endpoints
 appserver.add_route(Login_Root.as_view(), "/api/login")
@@ -30,7 +32,7 @@ appserver.add_route(Site_Status.as_view(), "/api/sites/status")
 appserver.add_route(Location_Master.as_view(), "/api/sites/info")
 
 # Register the announcements endpoint
-appserver.add_route(Announcements.as_view(), "/api/announcements/<id:strorempty>")
+appserver.add_route(Announcements_API.as_view(), "/api/announcements/<id:strorempty>")
 
 # Register the vendor payment endpoint
 appserver.add_route(Vendor_Payment.as_view(), "/api/vendors/payment")
@@ -40,3 +42,9 @@ appserver.add_route(Vendor_Info.as_view(), "/api/vendors/info")
 
 # Register the vendor contract endpoint
 appserver.add_route(Vendor_Contract.as_view(), "/api/vendors/contract")
+
+# Register the award bells endpoint
+appserver.add_route(Award_Bells.as_view(), "/api/bells/award")
+
+# Register the bell info endpoint
+appserver.add_route(Bell_Info.as_view(), "/api/bells/info")

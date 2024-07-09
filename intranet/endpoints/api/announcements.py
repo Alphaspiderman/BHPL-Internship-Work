@@ -12,7 +12,7 @@ from sanic.views import HTTPMethodView
 from intranet.app import IntranetApp
 
 
-class Announcements(HTTPMethodView):
+class Announcements_API(HTTPMethodView):
     async def get(self, request: Request, id: str = None):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()

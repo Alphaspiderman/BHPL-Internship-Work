@@ -7,8 +7,9 @@ from intranet.decorators.require_login import require_login
 
 
 class Award_Bells(HTTPMethodView):
+    insert_query = "INSERT INTO bells_awarded (Store_Code, Employee_Code, Bells_Awarded, Award_Date, Awarded_By_Id, Reason) VALUES (%s, %s, %s, %s, %s, %s)"  # noqa: E501
 
-    @require_login
+    @require_login()
     async def get(self, request: Request):
         """Shows the bells the employee can award."""
         app: IntranetApp = request.app
@@ -35,7 +36,7 @@ class Award_Bells(HTTPMethodView):
             }
         )
 
-    @require_login
+    @require_login()
     async def post(self, request: Request):
         form_data = request.form
         app: IntranetApp = request.app
@@ -76,7 +77,7 @@ class Award_Bells(HTTPMethodView):
                         )
                     else:
                         await cur.execute(
-                            "INSERT INTO bells_awarded (Store_Code, Employee_Code, Bells_Awarded, Award_Date, Awarded_By_Id, Reason) VALUES (%s, %s, %s, %s, %s, %s)",
+                            self.insert_query,
                             (
                                 Store_Code,
                                 Employee_Code,
@@ -101,7 +102,7 @@ class Award_Bells(HTTPMethodView):
                         )
                     else:
                         await cur.execute(
-                            "INSERT INTO bells_awarded (Store_Code, Employee_Code, Bells_Awarded, Award_Date, Awarded_By_Id, Reason) VALUES (%s, %s, %s, %s, %s, %s)",
+                            self.insert_query,
                             (
                                 Store_Code,
                                 Employee_Code,
@@ -126,7 +127,7 @@ class Award_Bells(HTTPMethodView):
                         )
                     else:
                         await cur.execute(
-                            "INSERT INTO bells_awarded (Store_Code, Employee_Code, Bells_Awarded, Award_Date, Awarded_By_Id, Reason) VALUES (%s, %s, %s, %s, %s, %s)",
+                            self.insert_query,
                             (
                                 Store_Code,
                                 Employee_Code,

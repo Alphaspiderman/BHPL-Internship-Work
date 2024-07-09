@@ -39,4 +39,3 @@ class Vendor_Payment(HTTPMethodView):
                     payment_info = [ContractPayment(entry) for entry in vendor_payment]
         data = [list(entry.get_data().values()) for entry in payment_info]
         return json({"data": data, "schema": payment_info[0].get_schema()})
-        

@@ -5,10 +5,10 @@ from sanic.views import HTTPMethodView
 
 from intranet.app import IntranetApp
 from intranet.decorators.require_login import require_login
-from intranet.models.contract_payment import ContractPayment
 
 
 class Bell_Info(HTTPMethodView):
+    @require_login()
     async def get(self, request: Request):
         """Stats about Bells awarded to the employee this month"""
         app: IntranetApp = request.app
