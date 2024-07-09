@@ -28,6 +28,7 @@
     <link href="/static/css/styles.css" rel="stylesheet" />
     <script src="/static/js/page.js"></script>
     <script src="/static/js/rnr.js"></script>
+    <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -51,14 +52,19 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarContent">
-        </div>
+        <div class="collapse navbar-collapse" id="navbarContent"></div>
       </div>
     </nav>
     <div class="body">
       <br />
-      <div id="chartContainer" style="height: 370px; width: 100%"></div>
-      <br />
+      <div class="row justify-content-evenly">
+        <div class="col-xs-12 col-md-6">
+          <div id="chartContainer1" style="height: 370px; width: 100%"></div>
+        </div>
+        <div class="col-xs-12 col-md-6">
+          <div id="chartContainer2" style="height: 370px; width: 100%"></div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
