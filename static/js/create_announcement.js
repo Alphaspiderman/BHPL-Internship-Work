@@ -8,7 +8,7 @@ const initialData = {
 };
 
 var quill;
-window.onload = function () {
+$(document).ready(function () {
   quill = new Quill("#quillEditor", {
     modules: {
       toolbar: [
@@ -29,7 +29,7 @@ window.onload = function () {
   });
 
   resetForm();
-};
+});
 
 function resetForm() {
   document.querySelector('[name="title"]').value = initialData.name;

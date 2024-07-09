@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>My App</title>
+    <title>Burman Hospitality</title>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <link
@@ -25,6 +25,7 @@
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
     ></script>
+    <script src="/static/js/page.js"></script>
     <link href="/static/css/styles.css" rel="stylesheet" />
     <script src="/static/js/locations.js"></script>
     <link href="/static/css/locations.css" rel="stylesheet" />
@@ -32,7 +33,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="https://burmanhospitality.com/">
+        <a class="navbar-brand" href="/home">
           <img
             alt="Burman Hospitality"
             height="30px"
@@ -50,39 +51,7 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-
-        <div class="collapse navbar-collapse" id="navbarContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/home">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/locations"
-                >Location Master</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/connectivity"
-                >Connectivity Status</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/sales"
-                >Sales Dashboard</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/vendors"
-                >Vendor Management</a
-              >
-            </li>
-          </ul>
-          <div class="d-lg-flex col-lg-3 justify-content-lg-end">
-            <a type="button" class="btn btn-outline-danger" href="/api/logout">
-              Logout
-            </a>
-          </div>
-        </div>
+        <div class="collapse navbar-collapse" id="navbarContent"></div>
       </div>
     </nav>
     <div class="body">

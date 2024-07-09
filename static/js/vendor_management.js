@@ -1,4 +1,4 @@
-window.onload = function () {
+$(document).ready(function () {
   var urlParams = new URLSearchParams(window.location.search);
   var active_tab = urlParams.get("show");
   console.log(active_tab);
@@ -92,7 +92,7 @@ window.onload = function () {
           break;
       }
     });
-};
+});
 
 function load_dropdown(type) {
   switch (type) {

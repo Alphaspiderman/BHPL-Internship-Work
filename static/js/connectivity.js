@@ -3,13 +3,13 @@ var api_refresh = "/api/sites/checker";
 var refresh_interval = 300000;
 var refresh_set = false;
 
-window.onload = function () {
+$(document).ready(function () {
   var btn = document.getElementById("recheck-btn");
   btn.onclick = function () {
     recheck_sites();
   };
   get_data();
-};
+});
 
 function get_data() {
   $.ajax({

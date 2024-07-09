@@ -1,4 +1,4 @@
-window.onload = function () {
+$(document).ready(function () {
   $.ajax({
     url: "/api/announcements/",
     type: "GET",
@@ -6,16 +6,7 @@ window.onload = function () {
       load_announcements(data["announcements"]);
     },
   });
-};
-
-/* Announcement card format
- <div class="card">
-    <img/>
-    <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <a href="LINK" class="btn btn-primary">Go somewhere</a>
-    </div>
-</div> */
+});
 
 function load_announcements(data) {
   container = document.getElementById("announcements-container");

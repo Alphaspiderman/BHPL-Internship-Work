@@ -1,4 +1,4 @@
-window.onload = function () {
+$(document).ready(function () {
   // Listen for button click
   document.getElementById("login-btn").addEventListener("click", function () {
     window.location.href = "/api/login";
@@ -27,4 +27,4 @@ window.onload = function () {
       elem.innerHTML = "<strong> Error! </strong>" + err_msg[error];
     }
   }
-};
+});

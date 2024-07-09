@@ -1,4 +1,4 @@
-window.onload = function () {
+$(document).ready(function () {
   // Load the available bells
   load_bells();
   // Load the location dropdown
@@ -12,7 +12,7 @@ window.onload = function () {
   document.getElementById("submit-form").addEventListener("click", function () {
     process_submission();
   });
-};
+});
 
 function load_loc() {
   $.ajax({
@@ -146,7 +146,9 @@ function process_submission() {
     data: form_data,
     success: function (data) {
       if (data.status == "success") {
-        alert("Bells awarded successfully");
+        alert(
+          "Bells awarded successfully! Chart may take a few minutes to update.",
+        );
         window.location.href = "/home";
       } else {
         alert(data.message);

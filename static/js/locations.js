@@ -1,4 +1,4 @@
-window.onload = function () {
+$(document).ready(function () {
   // Get location from query string
   var loc = new URLSearchParams(window.location.search).get("loc");
   // Listen to the change of the dropdown
@@ -25,7 +25,7 @@ window.onload = function () {
   } else {
     process_location("all");
   }
-};
+});
 
 function process_location(loc) {
   $.ajax({
