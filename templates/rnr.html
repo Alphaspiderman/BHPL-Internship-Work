@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Burman Hospitality</title>
+    <title>My App</title>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <link
@@ -25,14 +25,14 @@
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
     ></script>
-    <script src="/static/js/page.js"></script>
     <link href="/static/css/styles.css" rel="stylesheet" />
-    <script src="/static/js/announcements.js"></script>
+    <script src="/static/js/page.js"></script>
+    <script src="/static/js/rnr.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/home">
+        <a class="navbar-brand" href="https://burmanhospitality.com/">
           <img
             alt="Burman Hospitality"
             height="30px"
@@ -50,16 +50,15 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarContent"></div>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+        </div>
       </div>
     </nav>
     <div class="body">
-      <h1 class="center">Announcements</h1>
-      <div
-        class="row"
-        data-masonry='{"percentPosition": true }'
-        id="announcements-container"
-      ></div>
+      <br />
+      <div id="chartContainer" style="height: 370px; width: 100%"></div>
+      <br />
     </div>
   </body>
 </html>

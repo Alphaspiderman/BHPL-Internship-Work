@@ -7,7 +7,7 @@ navbar_entries = [
   ["/home", "Home"],
   ["/locations", "Location Master"],
   ["/connectivity", "Connectivity Status"],
-  ["/sales", "Sales Dashboard"],
+  ["/rnr", "Reward & Recognition"],
   ["/vendors", "Vendor Management"],
 ];
 
