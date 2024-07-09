@@ -1,6 +1,7 @@
 from intranet.app import appserver
 
 import intranet.endpoints.api  # noqa: F401
+from intranet.endpoints.HTTP_404 import HTTP_404
 from intranet.endpoints.connectivity import Connectivity
 from intranet.endpoints.home import Home
 from intranet.endpoints.locations import Locations
@@ -20,3 +21,4 @@ appserver.add_route(Vendors.as_view(), "/vendors")
 appserver.add_route(Create_Announcement.as_view(), "/create_announcement")
 appserver.add_route(Announcements.as_view(), "/announcement/<uuid:str>")
 appserver.add_route(Reward_Bells.as_view(), "/reward_bells")
+appserver.add_route(HTTP_404.as_view(), "/404")
