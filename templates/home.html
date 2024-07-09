@@ -29,6 +29,8 @@
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
     <script src="/static/js/page.js"></script>
     <script src="/static/js/announcements.js"></script>
+    <script src="/static/js/home.js"></script>
+    <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -52,12 +54,14 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarContent">
-        </div>
+        <div class="collapse navbar-collapse" id="navbarContent"></div>
       </div>
     </nav>
     <div class="body">
       <br />
+      <div id="chartContainer" style="height: 370px; width: 100%"></div>
+      <br />
+      <h1 class="center">Announcements</h1>
       <div
         class="row"
         data-masonry='{"percentPosition": true }'
