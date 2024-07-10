@@ -1,5 +1,9 @@
+html {
+  font-size: 60%;
+}
+
 tr {
-  font-size: 12px;
+  font-size: 10px;
 }
 
 th {
@@ -8,7 +12,7 @@ th {
 }
 
 .container-fluid {
-  margin-top: 20px;
+  margin-top: 7.5px;
   width: 96%;
   margin-right: 20px;
   margin-left: 20px;

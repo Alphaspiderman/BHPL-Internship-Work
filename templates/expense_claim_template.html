@@ -73,23 +73,23 @@
           <table class="table table-bordered" style="width: 100%">
             <thead>
               <tr>
-                <th>Date of Expense</th>
+                <th style="width: 7.5%">Date of Expense</th>
                 <th>Location</th>
                 <th>Total Amount</th>
                 <th>Office Stationary</th>
                 <th>Staff Welfare Meals</th>
-                <th style="width: 7.5%">Business Promotion Meals</th>
+                <th style="width: 4%">Business Promotion Meals</th>
                 <th>Hotel Room Rent</th>
-                <th style="width: 7.5%">Mobile / Broadband Charges</th>
-                <th style="width: 7.5%">Cab / Auto Charges</th>
-                <th style="width: 7.5%">Conveyance (Kms * Rate)</th>
+                <th style="width: 4%">Mobile / Broadband Charges</th>
+                <th style="width: 4%">Cab / Auto Charges</th>
+                <th style="width: 4%">Conveyance (Kms * Rate)</th>
                 <th>Others</th>
                 <th>Bills Attached</th>
                 <th style="width: 7.5%">
                   Total Kms Travelled by Personal Vehicle
                 </th>
                 <th>Vehicle Type</th>
-                <th style="width: 20%">Remarks</th>
+                <th style="width: 17.5%">Remarks</th>
               </tr>
             </thead>
             <tbody>
@@ -139,57 +139,57 @@
                 <td>{{ expense.Reason }}</td>
               </tr>
               {% endfor %}
-              <tr>
+                <tr>
                 <td colspan="2"><b>Total Amount</b></td>
                 <td>
                   <p class="currency">₹</p>
-                  <p class="money">{{ master_total }}</p>
+                  <p class="money"><b>{{ master_total }}</b></p>
                 </td>
                 <td>
                   <p class="currency">₹</p>
-                  <p class="money">{{ Stationary_Total }}</p>
+                  <p class="money"><b>{{ Stationary_Total }}</b></p>
                 </td>
                 <td>
                   <p class="currency">₹</p>
-                  <p class="money">{{ Welfare_Meal_Total }}</p>
+                  <p class="money"><b>{{ Welfare_Meal_Total }}</b></p>
                 </td>
                 <td>
                   <p class="currency">₹</p>
-                  <p class="money">{{ Promotion_Meal_Total }}</p>
+                  <p class="money"><b>{{ Promotion_Meal_Total }}</b></p>
                 </td>
                 <td>
                   <p class="currency">₹</p>
-                  <p class="money">{{ Hotel_Rent_Total }}</p>
+                  <p class="money"><b>{{ Hotel_Rent_Total }}</b></p>
                 </td>
                 <td>
                   <p class="currency">₹</p>
-                  <p class="money">{{ Connectivity_Charges_Total }}</p>
+                  <p class="money"><b>{{ Connectivity_Charges_Total }}</b></p>
                 </td>
                 <td>
                   <p class="currency">₹</p>
-                  <p class="money">{{ Travel_Charge_Total }}</p>
+                  <p class="money"><b>{{ Travel_Charge_Total }}</b></p>
                 </td>
                 <td>
                   <p class="currency">₹</p>
-                  <p class="money">{{ Personal_Vehicle_Cost_Total }}</p>
+                  <p class="money"><b>{{ Personal_Vehicle_Cost_Total }}</b></p>
                 </td>
                 <td>
                   <p class="currency">₹</p>
-                  <p class="money">{{ Other_Total }}</p>
+                  <p class="money"><b>{{ Other_Total }}</b></p>
                 </td>
                 <td></td>
-                <td>{{ Personal_Vehicle_Dist_Total }}</td>
+                <td><b>{{ Personal_Vehicle_Dist_Total }}</b></td>
                 <td></td>
               </tr>
               <tr>
-                <td colspan="2"><b>Advance Adjustment</b></td>
+                <td colspan="2"><b>Adv. Adjustment</b></td>
                 <td>
                   <p class="currency">₹</p>
                   <p class="money">{{ adv_adjustment }}</p>
                 </td>
               </tr>
               <tr>
-                <td colspan="2"><b>NET PAYABLE AMOUNT</b></td>
+                <td colspan="2"><b>Net Payable Amt</b></td>
                 <td>
                   <p class="currency">₹</p>
                   <p class="money">{{ master_total - adv_adjustment }}</p>
@@ -198,6 +198,24 @@
             </tbody>
           </table>
         </div>
+        <h6><b>INSTRUCTIONS :</b></h6>
+        <p>A) Boarding pass should be attached with claim for Air tickets.</p>
+        <p>
+          B) For claiming food expenses, please write the name of persons or
+          'self' on the bill.
+        </p>
+        <h5>EXPLANATION OF UNUSUAL EXPENSE OR EXPENSE OVER GUIDELINES :</h5>
+        <div style="height: 60px;"></div>
+        <div class="row justify-content-between">
+          <div class="col-4">
+            <p class="center">Employee Signature</p>
+          </div>
+          <div class="col-4">
+            <p class="center">Finance Department</p>
+          </div>
+          <div class="col-4">
+            <p class="center">Manager Signature</p>
+          </div>
       </div>
     </div>
   </body>
