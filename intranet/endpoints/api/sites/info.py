@@ -1,10 +1,11 @@
+import json
+
 from sanic.request import Request
 from sanic.response import json as json_resp
 from sanic.views import HTTPMethodView
-import json
-from intranet.models.location import Location
 
 from intranet.app import IntranetApp
+from intranet.models.location import Location
 
 
 class Location_Master(HTTPMethodView):

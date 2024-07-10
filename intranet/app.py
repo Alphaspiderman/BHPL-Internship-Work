@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta, timezone
-from sanic import Sanic
+
 import aiomysql
 import jwt
+from sanic import Sanic
 
 from intranet.models.JWTStatus import JWTStatus
 

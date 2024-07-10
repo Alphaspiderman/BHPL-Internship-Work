@@ -4,9 +4,12 @@ $(document).ready(function () {
   // Load the location dropdown
   load_loc();
   // Listen to the change of the location dropdown
-  $('#loc-select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-    load_emp(e.target.value);
-  });
+  $("#loc-select").on(
+    "changed.bs.select",
+    function (e, clickedIndex, isSelected, previousValue) {
+      load_emp(e.target.value);
+    },
+  );
   // Listen to the submit button
   document.getElementById("submit-form").addEventListener("click", function () {
     process_submission();
@@ -25,8 +28,8 @@ function load_loc() {
         );
       });
       // Re-render the selectpickers
-      $('#loc-select').val(null);
-      $('#loc-select').selectpicker('refresh');
+      $("#loc-select").val(null);
+      $("#loc-select").selectpicker("refresh");
     },
     error: function (data) {
       console.log(data);
@@ -60,8 +63,8 @@ function load_emp(loc) {
       // Destroy and re-render the selectpickers to update the options
       // Its required due to a bug in the Beta release
       // but we need the Beta for the feature to render properly
-      $('#emp-select').selectpicker('destroy');
-      $('#emp-select').selectpicker();
+      $("#emp-select").selectpicker("destroy");
+      $("#emp-select").selectpicker();
     },
     error: function (data) {
       console.log(data);

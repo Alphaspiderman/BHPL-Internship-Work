@@ -1,8 +1,8 @@
 import jwt
-from sanic.request import Request
-from sanic.views import HTTPMethodView
 from sanic.log import logger
+from sanic.request import Request
 from sanic.response import redirect
+from sanic.views import HTTPMethodView
 
 from intranet.app import IntranetApp
 

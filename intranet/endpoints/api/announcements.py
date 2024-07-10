@@ -1,7 +1,7 @@
+import base64
 import uuid
 from datetime import datetime
 from typing import List
-import base64
 
 import aiofiles
 from sanic.request import Request

@@ -1,4 +1,5 @@
 import base64
+
 from sanic.request import Request
 from sanic.response import redirect
 from sanic.views import HTTPMethodView

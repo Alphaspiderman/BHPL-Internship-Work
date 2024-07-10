@@ -1,15 +1,15 @@
-from jwt import algorithms
-
-from dotenv import dotenv_values
-from sanic import Request, response
-from sanic.log import logger
-import aiohttp
 import json
 
+import aiohttp
+from dotenv import dotenv_values
+from jwt import algorithms
+from sanic import Request, response
+from sanic.log import logger
 from .app import IntranetApp, appserver
 
 # noinspection PyUnresolvedReferences
 import intranet.endpoints  # noqa: F401
+
 
 logger.debug("Loading ENV")
 config = dotenv_values(".env")

@@ -1,7 +1,9 @@
-from sanic.views import HTTPMethodView
-from sanic import Request, response
-from intranet.app import IntranetApp
 from typing import Literal, Optional
+
+from sanic import Request, response
+from sanic.views import HTTPMethodView
+
+from intranet.app import IntranetApp
 
 
 def require_type(

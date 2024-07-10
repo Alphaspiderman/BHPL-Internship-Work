@@ -1,8 +1,9 @@
 import asyncio
+
+import aioping
 from sanic.request import Request
 from sanic.response import json
 from sanic.views import HTTPMethodView
-import aioping
 
 from intranet.app import IntranetApp
 

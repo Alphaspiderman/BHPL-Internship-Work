@@ -1,7 +1,8 @@
-from sanic.response import redirect
 from sanic.request import Request
+from sanic.response import redirect
 from sanic.views import HTTPMethodView
 from sanic_ext import render
+
 from intranet.app import IntranetApp
 
 

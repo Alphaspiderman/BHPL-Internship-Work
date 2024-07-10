@@ -1,5 +1,4 @@
 from intranet.app import appserver
-
 from .announcements import Announcements_API
 from .bells.award import Award_Bells
 from .bells.info import Bell_Info
@@ -7,9 +6,9 @@ from .login.callback import Callback
 from .login.root import Login_Root
 from .logout import Logout
 from .sites.checker import Site_Checker
+from .sites.employees import Location_Employees
 from .sites.info import Location_Master
 from .sites.status import Site_Status
-from .sites.employees import Location_Employees
 from .vendors.contract import Vendor_Contract
 from .vendors.info import Vendor_Info
 from .vendors.payment import Vendor_Payment
