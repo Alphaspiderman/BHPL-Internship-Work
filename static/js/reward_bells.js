@@ -4,9 +4,8 @@ $(document).ready(function () {
   // Load the location dropdown
   load_loc();
   // Listen to the change of the location dropdown
-  document.getElementById("loc-select").addEventListener("change", function () {
-    var loc = document.getElementById("loc-select").value;
-    load_emp(loc);
+  $('#loc-select').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+    load_emp(e.target.value);
   });
   // Listen to the submit button
   document.getElementById("submit-form").addEventListener("click", function () {
@@ -25,6 +24,9 @@ function load_loc() {
           new Option(element[0] + " - " + element[1], element[0]),
         );
       });
+      // Re-render the selectpickers
+      $('#loc-select').val(null);
+      $('#loc-select').selectpicker('refresh');
     },
     error: function (data) {
       console.log(data);
@@ -32,12 +34,10 @@ function load_loc() {
   });
 }
 
-function load_emp() {
-  var loc = document.getElementById("loc-select").value;
+function load_emp(loc) {
   if (loc == "") {
     var select = document.getElementById("emp-select");
     select.innerHTML = "";
-    select.appendChild(new Option("Please select a location", ""));
     select.setAttribute("disabled", "");
     return;
   }
@@ -57,6 +57,11 @@ function load_emp() {
         );
       });
       select.removeAttribute("disabled");
+      // Destroy and re-render the selectpickers to update the options
+      // Its required due to a bug in the Beta release
+      // but we need the Beta for the feature to render properly
+      $('#emp-select').selectpicker('destroy');
+      $('#emp-select').selectpicker();
     },
     error: function (data) {
       console.log(data);
