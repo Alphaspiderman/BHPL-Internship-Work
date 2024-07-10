@@ -1,0 +1,29 @@
+tr {
+  font-size: 12px;
+}
+
+th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.container-fluid {
+  margin-top: 20px;
+  width: 96%;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.currency {
+  margin: 0px 0px 0px 0px;
+  width: fit-content;
+  display: inline;
+  float: left;
+}
+
+.money {
+  margin: 0px 0px 0px 0px;
+  width: fit-content;
+  display: inline;
+  float: right;
+}
