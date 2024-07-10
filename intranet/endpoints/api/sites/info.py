@@ -15,7 +15,9 @@ class Location_Master(HTTPMethodView):
         if not location:
             async with db_pool.acquire() as conn:
                 async with conn.cursor() as cur:
-                    await cur.execute("SELECT Store_Code, Store_Name FROM sites")
+                    await cur.execute(
+                        "SELECT Champs_Number, Store_Name FROM sites WHERE Champs_Number IS NOT NULL"
+                    )
                     locations = await cur.fetchall()
             return json_resp({"locations": locations})
         # There is a location specified
@@ -24,18 +26,20 @@ class Location_Master(HTTPMethodView):
         if location == "all":
             async with db_pool.acquire() as conn:
                 async with conn.cursor() as cur:
-                    await cur.execute("SELECT * FROM sites")
+                    await cur.execute(
+                        "SELECT * FROM sites WHERE Champs_Number IS NOT NULL"
+                    )
                     data = await cur.fetchall()
                     location_data = [Location(entry) for entry in data]
         else:
             async with db_pool.acquire() as conn:
                 async with conn.cursor() as cur:
                     await cur.execute(
-                        "SELECT * FROM sites WHERE Store_Code = %s", (location,)
+                        "SELECT * FROM sites WHERE Champs_Number = %s", (location,)
                     )
                     data = await cur.fetchone()
                     location_data = [Location(data)]
-        # Check for IT Department in JWT
+        # # Check for IT Department in JWT
         jwt_data = app.decode_jwt(request.cookies.get("JWT_TOKEN"))
         # Remove IT specific fields if the user is not from IT department
         if jwt_data["department"] != "IT":

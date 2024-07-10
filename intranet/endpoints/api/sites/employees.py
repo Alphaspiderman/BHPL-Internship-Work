@@ -13,7 +13,8 @@ class Location_Employees(HTTPMethodView):
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(
-                    "SELECT * FROM people where Store_Code = %s", (location,)
+                    "SELECT Employee_Id, First_Name, Last_Name FROM people NATURAL JOIN sites WHERE Champs_Number = %s",  # noqa: E501
+                    (location,),
                 )
                 result = await cur.fetchall()
 

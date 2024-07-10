@@ -1,5 +1,6 @@
 class Location:
     fields = [
+        "Champs_Number",
         "Store_Code",
         "Store_Name",
         "Posist_Store_Name",
@@ -9,7 +10,6 @@ class Location:
         "State_Name",
         "Region_Internal",
         "Postal_Code",
-        "Champs_Number",
         "Primary_Brand_Channel",
         "Facility_Type",
         "Ordering_Methods",
@@ -56,7 +56,6 @@ class Location:
         "Posist_Store_Name",
         "Ownership_Type",
         "Local_Address",
-        "Champs_Number",
         "Primary_Brand_Channel",
         "Facility_Type",
         "Ordering_Methods",
