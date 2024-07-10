@@ -88,6 +88,7 @@
                 <th style="width: 7.5%">
                   Total Kms Travelled by Personal Vehicle
                 </th>
+                <th>Vehicle Type</th>
                 <th style="width: 20%">Remarks</th>
               </tr>
             </thead>
@@ -98,7 +99,7 @@
                 <td>{{ expense.Location }}</td>
                 <td>
                   <p class="currency">₹</p>
-                  <p class="money">{{ expense.get_total(cost_per_km) }}</p>
+                  <p class="money">{{ expense.get_total() }}</p>
                 </td>
                 <td>
                   <p class="currency">₹</p>
@@ -126,9 +127,7 @@
                 </td>
                 <td>
                   <p class="currency">₹</p>
-                  <p class="money">
-                    {{ expense.Personal_Vehicle_Dist * cost_per_km }}
-                  </p>
+                  <p class="money">{{ expense.get_personal_vehicle_comp() }}</p>
                 </td>
                 <td>
                   <p class="currency">₹</p>
@@ -136,23 +135,65 @@
                 </td>
                 <td>{{ expense.is_bill_attached() }}</td>
                 <td>{{ expense.Personal_Vehicle_Dist }}</td>
+                <td>{{ expense.get_vehicle_type() }}</td>
                 <td>{{ expense.Reason }}</td>
               </tr>
               {% endfor %}
               <tr>
                 <td colspan="2"><b>Total Amount</b></td>
-                <td>{{ master_total }}</td>
-                <td>{{ Stationary_Total }}</td>
-                <td>{{ Welfare_Meal_Total }}</td>
-                <td>{{ Promotion_Meal_Total }}</td>
-                <td>{{ Hotel_Rent_Total }}</td>
-                <td>{{ Connectivity_Charges_Total }}</td>
-                <td>{{ Travel_Charge_Total }}</td>
-                <td>{{ Personal_Vehicle_Dist_Total * cost_per_km }}</td>
-                <td>{{ Other_Total }}</td>
+                <td>
+                  <p class="currency">₹</p>
+                  <p class="money">{{ master_total }}</p>
+                </td>
+                <td>
+                  <p class="currency">₹</p>
+                  <p class="money">{{ Stationary_Total }}</p>
+                </td>
+                <td>
+                  <p class="currency">₹</p>
+                  <p class="money">{{ Welfare_Meal_Total }}</p>
+                </td>
+                <td>
+                  <p class="currency">₹</p>
+                  <p class="money">{{ Promotion_Meal_Total }}</p>
+                </td>
+                <td>
+                  <p class="currency">₹</p>
+                  <p class="money">{{ Hotel_Rent_Total }}</p>
+                </td>
+                <td>
+                  <p class="currency">₹</p>
+                  <p class="money">{{ Connectivity_Charges_Total }}</p>
+                </td>
+                <td>
+                  <p class="currency">₹</p>
+                  <p class="money">{{ Travel_Charge_Total }}</p>
+                </td>
+                <td>
+                  <p class="currency">₹</p>
+                  <p class="money">{{ Personal_Vehicle_Cost_Total }}</p>
+                </td>
+                <td>
+                  <p class="currency">₹</p>
+                  <p class="money">{{ Other_Total }}</p>
+                </td>
                 <td></td>
                 <td>{{ Personal_Vehicle_Dist_Total }}</td>
                 <td></td>
+              </tr>
+              <tr>
+                <td colspan="2"><b>Advance Adjustment</b></td>
+                <td>
+                  <p class="currency">₹</p>
+                  <p class="money">{{ adv_adjustment }}</p>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2"><b>NET PAYABLE AMOUNT</b></td>
+                <td>
+                  <p class="currency">₹</p>
+                  <p class="money">{{ master_total - adv_adjustment }}</p>
+                </td>
               </tr>
             </tbody>
           </table>
