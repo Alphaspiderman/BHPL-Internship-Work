@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from sanic.request import Request
 from sanic.response import json
 from sanic.views import HTTPMethodView
@@ -35,7 +34,7 @@ class Bell_Info(HTTPMethodView):
             async with db_pool.acquire() as conn:
                 async with conn.cursor() as cur:
                     await cur.execute(
-                        "SELECT Bells_Awarded, s.Champs_Number, Store_Name, Employee_Code, First_Name, Last_Name FROM bells_awarded b NATURAL JOIN sites s JOIN people p ON Employee_Code = p.Employee_Id  WHERE Award_Date >= %s",  # noqa: E501
+                        "SELECT Bells_Awarded, s.Store_Code, Store_Name, Employee_Code, First_Name, Last_Name FROM bells_awarded b NATURAL JOIN sites s JOIN people p ON Employee_Code = p.Employee_Id  WHERE Award_Date >= %s",  # noqa: E501
                         (month_start,),
                     )
                     bells_awarded = await cur.fetchall()

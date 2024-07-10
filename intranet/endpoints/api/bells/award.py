@@ -7,7 +7,7 @@ from intranet.decorators.require_login import require_login
 
 
 class Award_Bells(HTTPMethodView):
-    insert_query = "INSERT INTO bells_awarded (Store_Champs, Employee_Code, Bells_Awarded, Award_Date, Awarded_By_Id, Reason) VALUES (%s, %s, %s, %s, %s, %s)"  # noqa: E501
+    insert_query = "INSERT INTO bells_awarded (Store_Code, Employee_Code, Bells_Awarded, Award_Date, Awarded_By_Id, Reason) VALUES (%s, %s, %s, %s, %s, %s)"  # noqa: E501
 
     @require_login()
     async def get(self, request: Request):
@@ -43,7 +43,7 @@ class Award_Bells(HTTPMethodView):
         Awarded_By_Id = app.decode_jwt(request.cookies.get("JWT_TOKEN"))["emp_id"]
 
         # Extract the information from the form data
-        Store_Champs = form_data.get("Store_Code")
+        Store_Code = form_data.get("Store_Code")
         Employee_Code = form_data.get("Employee_Code")
         Bells_Awarded = form_data.get("Bells_Awarded")
         Award_Date = form_data.get("Award_Date")
@@ -77,7 +77,7 @@ class Award_Bells(HTTPMethodView):
                         await cur.execute(
                             self.insert_query,
                             (
-                                Store_Champs,
+                                Store_Code,
                                 Employee_Code,
                                 "Card_5",
                                 Award_Date,
@@ -105,7 +105,7 @@ class Award_Bells(HTTPMethodView):
                         await cur.execute(
                             self.insert_query,
                             (
-                                Store_Champs,
+                                Store_Code,
                                 Employee_Code,
                                 "Card_4",
                                 Award_Date,
@@ -133,7 +133,7 @@ class Award_Bells(HTTPMethodView):
                         await cur.execute(
                             self.insert_query,
                             (
-                                Store_Champs,
+                                Store_Code,
                                 Employee_Code,
                                 "Card_3",
                                 Award_Date,
