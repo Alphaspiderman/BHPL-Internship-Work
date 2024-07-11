@@ -28,6 +28,7 @@
     <link href="/static/css/styles.css" rel="stylesheet" />
     <script src="/static/js/page.js"></script>
     <script src="/static/js/expense.js"></script>
+    <link href="/static/css/expenses.css" rel="stylesheet" />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -56,98 +57,89 @@
     </nav>
     <div class="body">
       <div class="container-fluid" style="padding: 2%">
-        <h2>Employee Info</h2>
         <div class="row justify-content-between">
-          <div class="col-4">
-            <div class="mb-3">
-              <div class="input-group">
-                <span class="input-group-text" id="basic-addon3"
-                  >Employee Name</span
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="emp_name"
-                  value=" {{ emp_name }} "
-                  disabled
-                  readonly
-                />
+          <div class="row">
+            <div class="col-4">
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Employee ID</span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="emp_id"
+                    value=" {{ emp_id }} "
+                    disabled
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Department</span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="emp_dept"
+                    value=" {{ emp_dept }} "
+                    disabled
+                    readonly
+                  />
+                </div>
               </div>
             </div>
-            <div class="mb-3">
-              <div class="input-group">
-                <span class="input-group-text" id="basic-addon3"
-                  >Employee ID</span
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="emp_id"
-                  value=" {{ emp_id }} "
-                  disabled
-                  readonly
-                />
+            <div class="col-4">
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Employee Name</span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="emp_name"
+                    value=" {{ emp_name }} "
+                    disabled
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Date of Expense</span>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="date"
+                    name="date"
+                    required
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-4">
-            <div class="mb-3">
-              <div class="input-group">
-                <span class="input-group-text" id="basic-addon3"
-                  >Employee Level</span
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="emp_grade"
-                  value=" {{ emp_grade }} "
-                  disabled
-                  readonly
-                />
+            <div class="col-4">
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Employee Level</span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="emp_grade"
+                    value=" {{ emp_grade }} "
+                    disabled
+                    readonly
+                  />
+                </div>
               </div>
-            </div>
-            <div class="mb-3">
-              <div class="input-group">
-                <span class="input-group-text" id="basic-addon3"
-                  >Department</span
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="emp_dept"
-                  value=" {{ emp_dept }} "
-                  disabled
-                  readonly
-                />
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Location</span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="location"
+                    name="location"
+                    required
+                  />
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <!-- Input fields -->
-        <h2>General Info</h2>
-        <div class="row justify-content-between">
-          <div class="col-4">
-            <div class="mb-3">
-              <label for="date" class="form-label">Date of Expense</label>
-              <input
-                type="date"
-                class="form-control"
-                id="date"
-                name="date"
-                required
-              />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="mb-3">
-              <label for="location" class="form-label">Location</label>
-              <input
-                type="text"
-                class="form-control"
-                id="location"
-                name="location"
-                required
-              />
             </div>
           </div>
         </div>
@@ -280,15 +272,17 @@
               />
             </div>
           </div>
-          <div class="mb-3">
-            <label for="reason" class="form-label">Reason</label>
-            <textarea
-              class="form-control"
-              id="reason"
-              name="reason"
-              rows="3"
-              required
-            ></textarea>
+          <div class="col-8">
+            <div class="mb-3">
+              <label for="reason" class="form-label">Reason</label>
+              <input
+                type="text"
+                class="form-control"
+                id="reason"
+                name="reason"
+                required
+              />
+            </div>
           </div>
           <div class="mb-3">
             <label for="formFile" class="form-label">Copy of Bill</label>
