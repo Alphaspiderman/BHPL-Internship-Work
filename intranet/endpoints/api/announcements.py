@@ -16,9 +16,7 @@ class Announcements_API(HTTPMethodView):
     async def get(self, request: Request, id: str = None):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
-        if len(id) == 0:
-            id = None
-        if id is None:
+        if id is None or len(id) == 0:
             # Return list of announcements that can be viewed now
             async with db_pool.acquire() as conn:
                 async with conn.cursor() as cur:
