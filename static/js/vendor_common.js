@@ -1,6 +1,8 @@
 $(document).ready(function () {
-  var path = window.location.pathname;
-  var active_tab = path.replace("/vendors", "").replace("/", "").split("?")[0];
+  var active_tab = window.location.pathname
+    .replace("/vendors", "")
+    .replace("/", "")
+    .split("?")[0];
   switch (active_tab) {
     case "vendors":
       // Load the dropdown
@@ -23,8 +25,10 @@ $(document).ready(function () {
   document
     .getElementById("item-select")
     .addEventListener("change", function () {
-      var path = window.location.pathname;
-      var active_tab = path.replace("/vendors", "").replace("/", "").split("?")[0];
+      var active_tab = window.location.pathname
+        .replace("/vendors", "")
+        .replace("/", "")
+        .split("?")[0];
       // Change the URL
       history.pushState("", "", "/vendors?show=" + active_tab);
       switch (active_tab) {
