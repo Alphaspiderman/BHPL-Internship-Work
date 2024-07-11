@@ -2,6 +2,8 @@ from intranet.app import appserver
 from .announcements import Announcements_API
 from .bells.award import Award_Bells
 from .bells.info import Bell_Info
+from .expenses.pdf import Expenses_PDF
+from .expenses.me import Employee_Expenses
 from .login.callback import Callback
 from .login.root import Login_Root
 from .logout import Logout
@@ -51,3 +53,9 @@ appserver.add_route(Award_Bells.as_view(), "/api/bells/award")
 
 # Register the bell info endpoint
 appserver.add_route(Bell_Info.as_view(), "/api/bells/info")
+
+# Register the employee expenses endpoint
+appserver.add_route(Employee_Expenses.as_view(), "/api/expenses/me")
+
+# Register the expenses pdf endpoint
+appserver.add_route(Expenses_PDF.as_view(), "/api/expenses/pdf")
