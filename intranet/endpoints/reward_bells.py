@@ -9,4 +9,4 @@ class Reward_Bells(HTTPMethodView):
     @require_login()
     # TODO - Add Role Check
     async def get(self, request: Request):
-        return await render("reward_bells.html")
+        return await render("./rewards/reward_bells.html")
