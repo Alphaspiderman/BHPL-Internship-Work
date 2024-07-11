@@ -1,80 +1,30 @@
 $(document).ready(function () {
-  var urlParams = new URLSearchParams(window.location.search);
-  var active_tab = urlParams.get("show");
-  console.log(active_tab);
+  var path = window.location.pathname;
+  var active_tab = path.replace("/vendors", "").replace("/", "").split("?")[0];
   switch (active_tab) {
     case "vendors":
-      // Set button as active
-      document.getElementById("show-vendors").classList.add("active");
-      document.getElementById("show-contracts").classList.remove("active");
-      document.getElementById("contract-payments").classList.remove("active");
       // Load the dropdown
       load_dropdown("vendors");
       show_vendors(null);
       break;
     case "contracts":
-      // Set button as active
-      document.getElementById("show-vendors").classList.remove("active");
-      document.getElementById("show-contracts").classList.add("active");
-      document.getElementById("contract-payments").classList.remove("active");
       // Load the dropdown
       load_dropdown("contracts");
       show_contracts(null);
       break;
     case "payments":
-      // Set button as active
-      document.getElementById("show-vendors").classList.remove("active");
-      document.getElementById("show-contracts").classList.remove("active");
-      document.getElementById("contract-payments").classList.add("active");
       // Load the dropdown
       load_dropdown("payments");
       show_payments(null);
       break;
     default:
-      // Change the URL
-      history.pushState("", "", "/vendors?show=vendors");
-      // Navigate to the vendors tab
-      // Load the dropdown
-      load_dropdown("vendors");
-      show_vendors(null);
-      break;
+      return;
   }
-  document
-    .getElementById("show-vendors")
-    .addEventListener("click", function () {
-      // Change the URL
-      history.pushState("", "", "/vendors?show=vendors");
-      // Load the dropdown
-      load_dropdown("vendors");
-      show_vendors(null);
-    });
-  document
-    .getElementById("show-contracts")
-    .addEventListener("click", function () {
-      // Change the URL
-      history.pushState("", "", "/vendors?show=contracts");
-      // Load the dropdown
-      load_dropdown("contracts");
-      // Navigate to the tab
-      show_contracts(null);
-    });
-  document
-    .getElementById("contract-payments")
-    .addEventListener("click", function () {
-      // Change the URL
-      history.pushState("", "", "/vendors?show=payments");
-      // Load the dropdown
-      load_dropdown("payments");
-      // Navigate to the tab
-      show_payments(null);
-    });
-
   document
     .getElementById("item-select")
     .addEventListener("change", function () {
-      var query = document.getElementById("item-select").value;
-      var urlParams = new URLSearchParams(window.location.search);
-      var active_tab = urlParams.get("show");
+      var path = window.location.pathname;
+      var active_tab = path.replace("/vendors", "").replace("/", "").split("?")[0];
       // Change the URL
       history.pushState("", "", "/vendors?show=" + active_tab);
       switch (active_tab) {
