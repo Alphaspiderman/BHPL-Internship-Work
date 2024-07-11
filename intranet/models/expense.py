@@ -17,16 +17,24 @@ class Expense:
         "Reason",
     ]
 
-    hidden_fields = ["Id"]
+    hidden_fields = ["Id", "Employee_Id"]
 
     convert_fields = {
         "Date_Of_Expense": lambda x: x.strftime("%Y-%m-%d"),
-        "Receipt_Attached": lambda x: "Yes" if x else "No",
+        "Stationary": lambda x: float(x),
+        "Welfare_Meal": lambda x: float(x),
+        "Promotion_Meal": lambda x: float(x),
+        "Hotel_Rent": lambda x: float(x),
+        "Connectivity_Charges": lambda x: float(x),
+        "Travel_Charge": lambda x: float(x),
+        "Others": lambda x: float(x),
+        "Bill_Attached": lambda x: "Yes" if x else "No",
+        "Personal_Vehicle_Dist": lambda x: float(x),
     }
 
     def __init__(self, data, cost_per_km_four_wheeler, cost_per_km_two_wheeler):
-        self.cost_per_km_four_wheeler = cost_per_km_four_wheeler
-        self.cost_per_km_two_wheeler = cost_per_km_two_wheeler
+        self.car_km_cost = cost_per_km_four_wheeler
+        self.bike_km_cost = cost_per_km_two_wheeler
         for idx, field in enumerate(self.fields):
             setattr(self, field, data[idx])
 
@@ -65,10 +73,10 @@ class Expense:
         return "No"
 
     def get_personal_vehicle_comp(self) -> float:
-        if self.Vehicle_Type == "4 Wheeler":
-            return self.Personal_Vehicle_Dist * self.cost_per_km_four_wheeler
-        elif self.Vehicle_Type == "2 Wheeler":
-            return self.Personal_Vehicle_Dist * self.cost_per_km_two_wheeler
+        if self.Vehicle_Type == "Car":
+            return self.Personal_Vehicle_Dist * self.car_km_cost
+        elif self.Vehicle_Type == "Bike":
+            return self.Personal_Vehicle_Dist * self.bike_km_cost
         else:
             return 0.00
 
