@@ -56,9 +56,13 @@ function process_data(api_response) {
   var total_count = api_response.total_count;
 
   var data = [
-    { label: "Online", y: (online_cnt / total_count) * 100 },
-    { label: "Offline", y: (offline_cnt / total_count) * 100 },
-    { label: "To Process", y: (to_process / total_count) * 100 },
+    { label: "Online", y: (online_cnt / total_count) * 100, color: "green" },
+    { label: "Offline", y: (offline_cnt / total_count) * 100, color: "red" },
+    {
+      label: "To Process",
+      y: (to_process / total_count) * 100,
+      color: "yellow",
+    },
   ];
 
   build_chart(data);
