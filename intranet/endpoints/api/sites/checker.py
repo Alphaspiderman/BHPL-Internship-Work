@@ -23,7 +23,7 @@ class Site_Checker(HTTPMethodView):
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(
-                    "SELECT Store_Name, Static_Ip FROM sites WHERE Status = 'Operational'"
+                    "SELECT Store_Name, Static_Ip FROM sites WHERE Status = 'Operational' AND Static_Ip IS NOT NULL"  # noqa: E501
                 )
                 sites = await cur.fetchall()
 
@@ -41,7 +41,7 @@ class Site_Checker(HTTPMethodView):
 
     async def check_site(self, app: IntranetApp, ip: str, name: str):
         try:
-            await aioping.ping(ip, 2)
+            await aioping.ping(ip, 4)
             app.add_site_checker(name, True)
         except Exception:
             app.add_site_checker(name, False)
