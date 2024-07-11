@@ -57,11 +57,35 @@ class Bell_Info(HTTPMethodView):
                 )
                 employee_name_id_map[Employee_Id] = name
 
+            top_10_stores = sorted(
+                store_bell_map.keys(), key=lambda x: store_bell_map[x], reverse=True
+            )[:10]
+            top_10_employees = sorted(
+                employee_bell_map.keys(),
+                key=lambda x: employee_bell_map[x],
+                reverse=True,
+            )[:10]
+
+            bells_other_stores = total_bells_awarded - sum(
+                store_bell_map[store] for store in top_10_stores
+            )
+
+            bells_other_employees = total_bells_awarded - sum(
+                employee_bell_map[employee] for employee in top_10_employees
+            )
+
             return json(
                 {
                     "total_bells_awarded": total_bells_awarded,
-                    "store_bell_map": store_bell_map,
-                    "employee_bell_map": employee_bell_map,
+                    "top_10": {"store": top_10_stores, "employee": top_10_employees},
+                    "others": {
+                        "store": bells_other_stores,
+                        "employee": bells_other_employees,
+                    },
+                    "bell_map": {
+                        "store": store_bell_map,
+                        "employee": employee_bell_map,
+                    },
                     "employee_name_id_map": employee_name_id_map,
                 }
             )

@@ -7,31 +7,30 @@ $(document).ready(function () {
     },
     success: function (data) {
       var dataPoint1 = [];
-      store_bell_map = data.store_bell_map;
-      for (var key in store_bell_map) {
+      data.top_10.store.forEach((store) => {
         dataPoint1.push({
-          label: key,
-          y: store_bell_map[key],
+          label: store,
+          y: data.bell_map.store[store],
         });
-      }
+      });
+      dataPoint1.push({ label: "Others", y: data.others.store });
       load_chart(
         "chartContainer1",
         dataPoint1,
-        "Bells (by Location) Handed out this month",
+        "Most Bells Earned by Stores out this month",
       );
       var dataPoint2 = [];
-      employee_bell_map = data.employee_bell_map;
-      employee_name_id_map = data.employee_name_id_map;
-      for (var key in employee_bell_map) {
+      data.top_10.employee.forEach((employee) => {
         dataPoint2.push({
-          label: employee_name_id_map[key],
-          y: employee_bell_map[key],
+          label: employee,
+          y: data.bell_map.employee[employee],
         });
-      }
+      });
+      dataPoint2.push({ label: "Others", y: data.others.employee });
       load_chart(
         "chartContainer2",
         dataPoint2,
-        "Bells (by Person) Handed out this month",
+        "Most Bells Earned by Employees out this month",
       );
     },
     error: function (data) {
