@@ -10,8 +10,9 @@ $(document).ready(function () {
       load_emp(e.target.value);
     },
   );
-  // Listen to the submit button
-  document.getElementById("submit-form").addEventListener("click", function () {
+  // Listen to the form submission
+  $("#awardBellsForm").submit(function (e) {
+    e.preventDefault();
     process_submission();
   });
 });
@@ -51,7 +52,6 @@ function load_emp(loc) {
       loc: loc,
     },
     success: function (data) {
-      console.log(data);
       var select = document.getElementById("emp-select");
       select.innerHTML = "";
       data.forEach((element) => {
@@ -130,19 +130,21 @@ function process_submission() {
     return;
   }
 
-  form_data = {
-    Store_Code: store_code,
-    Employee_Code: emp_code,
-    Award_Date: new Date().toISOString().split("T")[0],
-    Reason: reason,
-  };
+  let formData = new FormData();
+
+  // Append additional data to formData
+  formData.append("Store_Code", store_code);
+  formData.append("Employee_Code", emp_code);
+  formData.append("Award_Date", new Date().toISOString().split("T")[0]);
+  formData.append("Reason", reason);
+  formData.append("file", $("#fileUpload")[0].files[0]);
 
   if (is_5_bells) {
-    form_data.Bells_Awarded = "Card_5";
+    formData.append("Bells_Awarded", "Card_5");
   } else if (is_4_bells) {
-    form_data.Bells_Awarded = "Card_4";
+    formData.append("Bells_Awarded", "Card_4");
   } else if (is_3_bells) {
-    form_data.Bells_Awarded = "Card_3";
+    formData.append("Bells_Awarded", "Card_3");
   } else {
     alert("Please select the number of bells to award");
     return;
@@ -151,13 +153,15 @@ function process_submission() {
   $.ajax({
     type: "POST",
     url: "/api/bells/award",
-    data: form_data,
+    data: formData,
+    processData: false,
+    contentType: false,
     success: function (data) {
       if (data.status == "success") {
         alert(
           "Bells awarded successfully! Chart may take a few minutes to update.",
         );
-        window.location.href = "/home";
+        location.reload();
       } else {
         alert(data.message);
       }

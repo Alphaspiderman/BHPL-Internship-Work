@@ -66,81 +66,95 @@
     <div class="body">
       <div class="container-fluid" id="form-container">
         <h1 class="center">Reward Bells</h1>
-        <div class="col-6">
-          <h3>Store Select</h3>
-          <select
-            class="selectpicker"
-            aria-label="Please select a Location"
-            id="loc-select"
-            data-live-search="true"
-          ></select>
-          <div class="mb-3"></div>
-          <h3>Employee Select</h3>
-          <select
-            class="selectpicker"
-            aria-label="Please select an Employee"
-            id="emp-select"
-            data-live-search="true"
-            disabled
-          ></select>
-          <div class="mb-3"></div>
-          <table class="table table-bordered" id="bell-table">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">Bells on Card</th>
-                <th scope="col">Cards Remaining</th>
-              </tr>
-            </thead>
-          </table>
-          <fieldset class="mb-3">
-            <legend>Bells to Award</legend>
-            <div class="form-check">
-              <input
-                type="radio"
-                name="radios"
-                class="form-check-input"
-                id="cardFive"
-                value="Card_5"
-              />
-              <label class="form-check-label" for="cardFive">5 Bells</label>
-            </div>
-            <div class="form-check">
-              <input
-                type="radio"
-                name="radios"
-                class="form-check-input"
-                id="cardFour"
-                value="Card_4"
-              />
-              <label class="form-check-label" for="cardFour">4 Bells</label>
-            </div>
-            <div class="form-check">
-              <input
-                type="radio"
-                name="radios"
-                class="form-check-input"
-                id="cardThree"
-                value="Card_3"
-              />
-              <label class="form-check-label" for="cardThree">3 Bells</label>
-            </div>
-          </fieldset>
-          <legend>Reason for Awarding</legend>
-          <div class="form-floating mb-3">
-            <input
-              type="text"
-              class="form-control"
-              id="reasonInput"
-              placeholder="Reason"
-            />
-            <label for="reasonInput">Reason (250 characters)</label>
+        <div class="row justify-content-evenly">
+          <div class="col-5">
+            <form
+              action="/api/bells/award"
+              method="post"
+              enctype="multipart/form-data"
+              id="awardBellsForm"
+            >
+              <h3>Store Select</h3>
+              <select
+                class="selectpicker"
+                aria-label="Please select a Location"
+                id="loc-select"
+                data-live-search="true"
+              ></select>
+              <div class="mb-3"></div>
+              <h3>Employee Select</h3>
+              <select
+                class="selectpicker"
+                aria-label="Please select an Employee"
+                id="emp-select"
+                data-live-search="true"
+                disabled
+              ></select>
+              <div class="mb-3"></div>
+              <fieldset class="mb-3">
+                <legend>Bells to Award</legend>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    name="radios"
+                    class="form-check-input"
+                    id="cardFive"
+                    value="Card_5"
+                  />
+                  <label class="form-check-label" for="cardFive">5 Bells</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    name="radios"
+                    class="form-check-input"
+                    id="cardFour"
+                    value="Card_4"
+                  />
+                  <label class="form-check-label" for="cardFour">4 Bells</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    name="radios"
+                    class="form-check-input"
+                    id="cardThree"
+                    value="Card_3"
+                  />
+                  <label class="form-check-label" for="cardThree"
+                    >3 Bells</label
+                  >
+                </div>
+              </fieldset>
+              <legend>Reason for Awarding</legend>
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="reasonInput"
+                  placeholder="Reason"
+                />
+                <label for="reasonInput">Reason (250 characters)</label>
+              </div>
+              <div class="mb-3">
+                <input name="file" type="file" id="fileUpload" />
+              </div>
+              <button type="submit" class="btn btn-primary" id="submit-form">
+                Submit
+              </button>
+            </form>
+          </div>
+          <div class="col-5">
+            <table class="table table-bordered" id="bell-table">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Bells on Card</th>
+                  <th scope="col">Cards Remaining</th>
+                </tr>
+              </thead>
+            </table>
           </div>
         </div>
-        <button type="button" class="btn btn-primary" id="submit-form">
-          Submit
-        </button>
-        <br />
-        <br />
       </div>
     </div>
   </body>
