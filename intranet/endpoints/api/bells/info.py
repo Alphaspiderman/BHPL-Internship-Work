@@ -8,6 +8,12 @@ from intranet.decorators.require_login import require_login
 
 
 class Bell_Info(HTTPMethodView):
+    bell_value_map = {
+        3: 100,
+        4: 200,
+        5: 300,
+    }
+
     def convert_bells(self, card_type):
         """Converts the bells to the integer value"""
         if card_type == "Card_3":
@@ -40,53 +46,70 @@ class Bell_Info(HTTPMethodView):
                     bells_awarded = await cur.fetchall()
             # Calculate the stats of bells awarded
             total_bells_awarded = 0
-            store_bell_map = {}
-            employee_bell_map = {}
-            employee_name_id_map = {}
+            store_bell_cnt_map = {}
+            store_bell_val_map = {}
+            employee_bell_cnt_map = {}
+            employee_bell_val_map = {}
+            employee_id_name_map = {}
+            employee_id_store_map = {}
+
+            # Map value includes bell count and bell value
             for award in bells_awarded:
                 Store_Name = award[2]
                 Bells_Awarded = self.convert_bells(award[0])
+                Bell_Value = self.bell_value_map[Bells_Awarded]
                 Employee_Id = award[3]
                 name = f"{award[4]} {award[5]}"
                 total_bells_awarded += Bells_Awarded
-                store_bell_map[Store_Name] = (
-                    store_bell_map.get(Store_Name, 0) + Bells_Awarded
+                store_bell_cnt_map[Store_Name] = (
+                    store_bell_cnt_map.get(Store_Name, 0) + Bells_Awarded
                 )
-                employee_bell_map[Employee_Id] = (
-                    employee_bell_map.get(Employee_Id, 0) + Bells_Awarded
+                store_bell_val_map[Store_Name] = (
+                    store_bell_val_map.get(Store_Name, 0) + Bell_Value
                 )
-                employee_name_id_map[Employee_Id] = name
 
-            top_10_stores = sorted(
-                store_bell_map.keys(), key=lambda x: store_bell_map[x], reverse=True
-            )[:10]
-            top_10_employees = sorted(
-                employee_bell_map.keys(),
-                key=lambda x: employee_bell_map[x],
+                employee_bell_cnt_map[Employee_Id] = (
+                    employee_bell_cnt_map.get(Employee_Id, 0) + Bells_Awarded
+                )
+                employee_bell_val_map[Employee_Id] = (
+                    employee_bell_val_map.get(Employee_Id, 0) + Bell_Value
+                )
+
+                employee_id_name_map[Employee_Id] = name
+                employee_id_store_map[Employee_Id] = Store_Name
+
+            # Sort the stores and employees by bell count
+            stores_bells_by_cnt = sorted(
+                store_bell_cnt_map.keys(),
+                key=lambda x: store_bell_cnt_map[x],
                 reverse=True,
-            )[:10]
-
-            bells_other_stores = total_bells_awarded - sum(
-                store_bell_map[store] for store in top_10_stores
             )
-
-            bells_other_employees = total_bells_awarded - sum(
-                employee_bell_map[employee] for employee in top_10_employees
+            employee_bells_by_cnt = sorted(
+                employee_bell_cnt_map.keys(),
+                key=lambda x: employee_bell_cnt_map[x],
+                reverse=True,
+            )
+            employee_bells_by_val = sorted(
+                employee_bell_val_map.keys(),
+                key=lambda x: employee_bell_val_map[x],
+                reverse=True,
             )
 
             return json(
                 {
                     "total_bells_awarded": total_bells_awarded,
-                    "top_10": {"store": top_10_stores, "employee": top_10_employees},
-                    "others": {
-                        "store": bells_other_stores,
-                        "employee": bells_other_employees,
+                    "by_count": {
+                        "store": stores_bells_by_cnt,
+                        "employee": employee_bells_by_cnt,
                     },
-                    "bell_map": {
-                        "store": store_bell_map,
-                        "employee": employee_bell_map,
+                    "by_value": {
+                        "employee": employee_bells_by_val,
                     },
-                    "employee_name_id_map": employee_name_id_map,
+                    "employee_id_bell_count_map": employee_bell_cnt_map,
+                    "employee_id_bell_value_map": employee_bell_val_map,
+                    "store_bell_count_map": store_bell_cnt_map,
+                    "employee_id_name_map": employee_id_name_map,
+                    "employee_id_store_map": employee_id_store_map,
                 }
             )
         else:
