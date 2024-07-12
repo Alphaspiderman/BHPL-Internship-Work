@@ -4,6 +4,7 @@ from .bells.award import Award_Bells
 from .bells.info import Bell_Info
 from .expenses.pdf import Expenses_PDF
 from .expenses.me import Employee_Expenses
+from .files import Files
 from .login.callback import Callback
 from .login.root import Login_Root
 from .logout import Logout
@@ -59,3 +60,6 @@ appserver.add_route(Employee_Expenses.as_view(), "/api/expenses/me")
 
 # Register the expenses pdf endpoint
 appserver.add_route(Expenses_PDF.as_view(), "/api/expenses/pdf")
+
+# Register the files endpoint
+appserver.add_route(Files.as_view(), "/api/files")
