@@ -1,4 +1,6 @@
+from typing import List
 from sanic.request import Request
+from sanic.request.form import File
 from sanic.response import json
 from sanic.views import HTTPMethodView
 
@@ -7,7 +9,7 @@ from intranet.decorators.require_login import require_login
 
 
 class Award_Bells(HTTPMethodView):
-    insert_query = "INSERT INTO bells_awarded (Store_Code, Employee_Code, Bells_Awarded, Award_Date, Awarded_By_Id, Reason) VALUES (%s, %s, %s, %s, %s, %s)"  # noqa: E501
+    insert_query = "INSERT INTO bells_awarded (Store_Code, Employee_Code, Bells_Awarded, Award_Date, Awarded_By_Id, Reason, File_Id) VALUES (%s, %s, %s, %s, %s, %s, %s)"  # noqa: E501
 
     @require_login()
     async def get(self, request: Request):
@@ -41,9 +43,12 @@ class Award_Bells(HTTPMethodView):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
         Awarded_By_Id = app.decode_jwt(request.cookies.get("JWT_TOKEN"))["emp_id"]
+        files: List[File] = request.files.getlist("file")
+        if not files or len(files) == 0:
+            return json({"status": "failure", "message": "No file attached"})
 
         # Extract the information from the form data
-        Store_Code = form_data.get("Store_Code")
+        Store_Champs = form_data.get("Store_Code")
         Employee_Code = form_data.get("Employee_Code")
         Bells_Awarded = form_data.get("Bells_Awarded")
         Award_Date = form_data.get("Award_Date")
@@ -65,6 +70,19 @@ class Award_Bells(HTTPMethodView):
                 card_4_left = int(bell_info[0][5])
                 card_3_left = int(bell_info[0][6])
 
+                # Get Store Code
+                await cur.execute(
+                    "SELECT Store_Code FROM sites WHERE Champs_Number = %s",
+                    (Store_Champs,),
+                )
+                Store_Code = await cur.fetchone()
+                if Store_Code is None:
+                    return json(
+                        {"status": "failure", "message": "Invalid Store Code"},
+                        status=404,
+                    )
+                Store_Code = Store_Code[0]
+
                 if Bells_Awarded == "Card_5":
                     if card_5_left == 0:
                         return json(
@@ -74,6 +92,22 @@ class Award_Bells(HTTPMethodView):
                             },
                         )
                     else:
+                        # Insert file into database
+                        file = files[0]
+                        file_name = file.name
+                        file_data = file.body
+                        file_type = file.type
+
+                        await cur.execute(
+                            "INSERT INTO files (File_Name, File_Data, File_Type, Uploaded_By) VALUES (%s, %s, %s, %s)",  # noqa: E501
+                            (file_name, file_data, file_type, Awarded_By_Id),
+                        )
+
+                        await cur.execute("select LAST_INSERT_ID()")
+
+                        file_id_resp = await cur.fetchone()
+                        file_id = file_id_resp[0]
+
                         await cur.execute(
                             self.insert_query,
                             (
@@ -83,6 +117,7 @@ class Award_Bells(HTTPMethodView):
                                 Award_Date,
                                 Awarded_By_Id,
                                 Reason,
+                                file_id,
                             ),
                         )
                         await cur.fetchall()
@@ -102,6 +137,22 @@ class Award_Bells(HTTPMethodView):
                             },
                         )
                     else:
+                        # Insert file into database
+                        file = files[0]
+                        file_name = file.name
+                        file_data = file.body
+                        file_type = file.type
+
+                        await cur.execute(
+                            "INSERT INTO files (File_Name, File_Data, File_Type, Uploaded_By) VALUES (%s, %s, %s, %s)",  # noqa: E501
+                            (file_name, file_data, file_type, Awarded_By_Id),
+                        )
+
+                        await cur.execute("select LAST_INSERT_ID()")
+
+                        file_id_resp = await cur.fetchone()
+                        file_id = file_id_resp[0]
+
                         await cur.execute(
                             self.insert_query,
                             (
@@ -111,6 +162,7 @@ class Award_Bells(HTTPMethodView):
                                 Award_Date,
                                 Awarded_By_Id,
                                 Reason,
+                                file_id,
                             ),
                         )
                         await cur.fetchall()
@@ -130,6 +182,21 @@ class Award_Bells(HTTPMethodView):
                             },
                         )
                     else:
+                        # Insert file into database
+                        file = files[0]
+                        file_name = file.name
+                        file_data = file.body
+                        file_type = file.type
+
+                        await cur.execute(
+                            "INSERT INTO files (File_Name, File_Data, File_Type, Uploaded_By) VALUES (%s, %s, %s, %s)",  # noqa: E501
+                            (file_name, file_data, file_type, Awarded_By_Id),
+                        )
+
+                        await cur.execute("select LAST_INSERT_ID()")
+
+                        file_id_resp = await cur.fetchone()
+                        file_id = file_id_resp[0]
                         await cur.execute(
                             self.insert_query,
                             (
@@ -139,6 +206,7 @@ class Award_Bells(HTTPMethodView):
                                 Award_Date,
                                 Awarded_By_Id,
                                 Reason,
+                                file_id,
                             ),
                         )
                         await cur.fetchall()
