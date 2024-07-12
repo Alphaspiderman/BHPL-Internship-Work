@@ -37,6 +37,7 @@ class IntranetApp(Sanic):
             user=self.config["DB_USERNAME"],
             password=self.config["DB_PASSWORD"],
             db=self.config["DB_NAME"],
+            autocommit=True,
         )
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
