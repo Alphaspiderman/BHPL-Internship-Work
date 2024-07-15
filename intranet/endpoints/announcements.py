@@ -24,7 +24,7 @@ class Announcements(HTTPMethodView):
             return redirect("/404")
         announcement_title = announcements[0][1]
         announcement_body = base64.b64decode(announcements[0][2]).decode("ascii")
-        announcement_header = f"/files/{announcements[0][5]}"
+        announcement_header = f"/api/files?file_id={announcements[0][5]}"
 
         return await render(
             "announcement_template.html",
