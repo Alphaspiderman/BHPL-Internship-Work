@@ -44,3 +44,25 @@ class Vendor_Info(HTTPMethodView):
                         {"status": "failure", "message": "Vendor not found"}, status=404
                     )
                 return json({"data": vendor_info, "schema": self.schema})
+
+    async def post(self, request: Request):
+        app: IntranetApp = request.app
+        db_pool = app.get_db_pool()
+        data = request.json
+        async with db_pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
+                    "INSERT INTO vendor_info (Vendor_Code, Vendor_Name, Vendor_Address, Vendor_Phone, Vendor_Email, PAN_Number, GST_Number, Account_Number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",  # noqa: E501
+                    (
+                        data["vendorCode"],
+                        data["vendorName"],
+                        data["vendorAddress"],
+                        data["vendorPhone"],
+                        data["vendorEmail"],
+                        data["panNumber"],
+                        data["gstNumber"],
+                        data["accountNumber"],
+                    ),
+                )
+                await conn.commit()
+        return json({"status": "success"})
