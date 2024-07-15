@@ -17,6 +17,10 @@ class Employee_Expenses(HTTPMethodView):
     cost_per_km_2 = 8
 
     async def get(self, request: Request):
+        by_doc_date = request.args.get("by_doc_date")
+        if by_doc_date is not None and by_doc_date.lower() == "true":
+            return await self.get_by_doc_date(request)
+
         app: IntranetApp = request.app
         date_from = request.args.get("from")
         date_to = request.args.get("to")
@@ -26,7 +30,6 @@ class Employee_Expenses(HTTPMethodView):
             date_from = datetime.now().strftime("%Y-%m-01")
         if date_to is None:
             date_to = datetime.now().strftime("%Y-%m-%d")
-        app: IntranetApp = request.app
         db_pool = app.get_db_pool()
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
@@ -177,3 +180,30 @@ class Employee_Expenses(HTTPMethodView):
                     return json({"status": "failure", "message": "Expense not found"})
             await conn.commit()
         return json({"status": "success"})
+
+    async def get_by_doc_date(self, request: Request):
+        app: IntranetApp = request.app
+        db_pool = app.get_db_pool()
+        employee_id = app.decode_jwt(request.cookies.get("JWT_TOKEN"))["emp_id"]
+        async with db_pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
+                    "SELECT * FROM expenses WHERE Employee_Id = %s AND Document_Date >= CURDATE() AND Document_Date < CURDATE() + INTERVAL 1 DAY ORDER BY Document_Date DESC",  # noqa: E501
+                    (employee_id),
+                )
+                result = await cur.fetchall()
+                expense_data = [
+                    Expense(
+                        entry,
+                        cost_per_km_four_wheeler=self.cost_per_km_4,
+                        cost_per_km_two_wheeler=self.cost_per_km_2,
+                    )
+                    for entry in result
+                ]
+        return json(
+            {
+                "data": [list(expense.get_data().values()) for expense in expense_data],
+                "schema": expense_data[0].get_schema(),
+                "total": sum([expense.get_total() for expense in expense_data]),
+            }
+        )
