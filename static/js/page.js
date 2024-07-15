@@ -7,8 +7,8 @@ navbar_entries = [
   ["/home", "Home"],
   {
     Rewards: [
-      ["/rewards", "Reward & Recognition"],
-      ["/reward/bells", "Award Bells"],
+      ["/rewards/view", "Reward & Recognition"],
+      ["/rewards/bells", "Award Bells"],
     ],
   },
   {
@@ -22,8 +22,8 @@ navbar_entries = [
   ["/connectivity", "Connectivity Status"],
   {
     Expenses: [
-      ["/expenses", "Submit Expense"],
-      ["/expense_report", "View Report"],
+      ["/expenses/submit", "Submit Expense"],
+      ["/expenses/report", "View Report"],
     ],
   },
 ];
