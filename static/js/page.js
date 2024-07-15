@@ -23,7 +23,7 @@ navbar_entries = [
   {
     Expenses: [
       ["/expenses", "Submit Expense"],
-      ["/api/expenses/pdf", "Print Report"],
+      ["/expense_report", "View Report"],
     ],
   },
 ];
