@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import List
 import uuid
 
-import aiofiles
 from sanic.response import json
 from sanic.request import Request
 from sanic.views import HTTPMethodView
@@ -78,22 +77,6 @@ class Employee_Expenses(HTTPMethodView):
             float(data.get("Travel_Charge")) if data.get("Travel_Charge") else 0
         )
         others = float(data.get("Others")) if data.get("Others") else 0
-        files: List[File] = request.files.getlist("file")
-        if files:
-            if len(files) == 1:
-                path = "./dynamic"
-                file = files[0]
-                ext = file.name.split(".")[-1]
-                new_name = uuid.uuid4().hex + "." + ext
-                async with aiofiles.open(path + "/" + new_name, "wb") as f:
-                    await f.write(file.body)
-                bill_attached = new_name
-            elif len(files) > 1:
-                return json(
-                    {"status": "failure", "message": "Only one file can be attached"}
-                )
-        else:
-            bill_attached = None
 
         personal_vehicle_dist = (
             float(data["Personal_Vehicle_Dist"])
@@ -107,6 +90,26 @@ class Employee_Expenses(HTTPMethodView):
         reason = data["Reason"]
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
+                files: List[File] = request.files.getlist("file")
+                if files:
+                    if len(files) == 1:
+                        file = files[0]
+                        ext = file.name.split(".")[-1]
+                        new_name = uuid.uuid4().hex + "." + ext
+                        await cur.execute(
+                            "INSERT INTO files(File_Id, File_Name, File_Type, File_Data, Uploaded_By) VALUES (%s, %s, %s, %s, %s)",  # noqa: E501
+                            (new_name, file.name, file.type, file.body, employee_id),
+                        )
+                        bill_attached = new_name
+                    elif len(files) > 1:
+                        return json(
+                            {
+                                "status": "failure",
+                                "message": "Only one file can be attached",
+                            }
+                        )
+                else:
+                    bill_attached = None
                 await cur.execute(
                     "INSERT INTO expenses (Employee_Id, Date_Of_Expense, Location, Stationary, Welfare_Meal, Promotion_Meal, Hotel_Rent, Connectivity_Charges, Travel_Charge, Others, Bill_Attached, Personal_Vehicle_Dist, Vehicle_Type, Reason) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",  # noqa: E501
                     (
