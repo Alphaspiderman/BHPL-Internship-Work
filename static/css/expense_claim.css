@@ -2,6 +2,10 @@ html {
   font-size: 60%;
 }
 
+.center {
+  text-align: center;
+}
+
 tr {
   font-size: 10px;
 }

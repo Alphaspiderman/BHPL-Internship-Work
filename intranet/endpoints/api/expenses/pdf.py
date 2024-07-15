@@ -28,7 +28,7 @@ class Expenses_PDF(HTTPMethodView):
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(
-                    "SELECT * FROM expenses WHERE Employee_Id = %s AND Date_Of_Expense >= %s AND Date_Of_Expense <= %s",  # noqa: E501
+                    "SELECT * FROM expenses WHERE Employee_Id = %s AND Date_Of_Expense >= %s AND Date_Of_Expense <= %s ORDER BY Date_Of_Expense",  # noqa: E501
                     (employee_id, date_from, date_to),
                 )
                 result = await cur.fetchall()
