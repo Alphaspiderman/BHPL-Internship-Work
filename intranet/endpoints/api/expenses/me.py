@@ -45,8 +45,11 @@ class Employee_Expenses(HTTPMethodView):
                 ]
         return json(
             {
-                "data": [list(expense.get_data().values()) for expense in expense_data],
-                "schema": expense_data[0].get_schema(),
+                "data": [
+                    list(expense.get_data(show_id=True).values())
+                    for expense in expense_data
+                ],
+                "schema": expense_data[0].get_schema(show_id=True),
                 "total": sum([expense.get_total() for expense in expense_data]),
             }
         )
@@ -55,7 +58,6 @@ class Employee_Expenses(HTTPMethodView):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
         data = loads(request.form["data"][0])
-        print(data)
         employee_id = app.decode_jwt(request.cookies.get("JWT_TOKEN"))["emp_id"]
         date_of_expense = datetime.strptime(
             data["Date_Of_Expense"], "%Y-%m-%d"
@@ -131,5 +133,41 @@ class Employee_Expenses(HTTPMethodView):
                         reason,
                     ),
                 )
+            await conn.commit()
+        return json({"status": "success"})
+
+    async def delete(self, request: Request):
+        app: IntranetApp = request.app
+        db_pool = app.get_db_pool()
+        emp_id = app.decode_jwt(request.cookies.get("JWT_TOKEN"))["emp_id"]
+        expense_id = request.args.get("expense_id")
+        async with db_pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                try:
+                    # Get attached file name
+                    await cur.execute(
+                        "SELECT Bill_Attached FROM expenses WHERE Id = %s AND Employee_Id = %s",
+                        (
+                            expense_id,
+                            emp_id,
+                        ),
+                    )
+                    result = await cur.fetchone()
+                    await cur.execute(
+                        "DELETE FROM expenses WHERE Id = %s AND Employee_Id = %s",
+                        (
+                            expense_id,
+                            emp_id,
+                        ),
+                    )
+                    if result:
+                        file_name = result[0]
+                        if file_name:
+                            await cur.execute(
+                                "DELETE FROM files WHERE File_Id = %s",
+                                (file_name,),
+                            )
+                except Exception:
+                    return json({"status": "failure", "message": "Expense not found"})
             await conn.commit()
         return json({"status": "success"})

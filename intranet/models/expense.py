@@ -41,17 +41,23 @@ class Expense:
     def to_dict(self) -> dict:
         return {field: getattr(self, field) for field in self.fields}
 
-    def get_data(self) -> dict:
+    def get_data(self, show_id: bool = False) -> dict:
         data = self.to_dict()
-        for field in self.hidden_fields:
+        hide = self.hidden_fields.copy()
+        if show_id:
+            hide.remove("Id")
+        for field in hide:
             data.pop(field, None)
         for field, convert in self.convert_fields.items():
             data[field] = convert(data[field])
         return data
 
-    def get_schema(self) -> dict:
+    def get_schema(self, show_id: bool = False) -> dict:
         schema = self.fields.copy()
-        for field in self.hidden_fields:
+        hide = self.hidden_fields.copy()
+        if show_id:
+            hide.remove("Id")
+        for field in hide:
             schema.remove(field)
         return schema
 
@@ -84,3 +90,7 @@ class Expense:
         if self.Vehicle_Type:
             return self.Vehicle_Type
         return "N/A"
+
+    def get_data_with_id(self) -> dict:
+        data = self.to_dict()["Id"] = self.Id
+        return data
