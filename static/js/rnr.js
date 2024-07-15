@@ -6,7 +6,6 @@ $(document).ready(function () {
       show: "home",
     },
     success: function (data) {
-      console.log(data);
       var dataPoint1 = [];
       var sum_other_stores = 0;
       store_lb_by_cnt = data.by_count.store;
@@ -84,7 +83,6 @@ function load_lb(data) {
   table = document.getElementById("leaderboard");
   employees = data.by_value.employee;
   employees.forEach((entry) => {
-    console.log(entry);
     var row = table.insertRow();
     row.insertCell(0).innerHTML = data.employee_id_name_map[entry];
     row.insertCell(1).innerHTML = data.employee_id_store_map[entry];

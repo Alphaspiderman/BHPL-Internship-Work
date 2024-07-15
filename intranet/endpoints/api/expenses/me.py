@@ -95,7 +95,6 @@ class Employee_Expenses(HTTPMethodView):
             async with conn.cursor() as cur:
                 files: List[File] = request.files.getlist("file")
                 if files:
-                    print(len(files))
                     if len(files) == 1:
                         file = files[0]
                         ext = file.name.split(".")[-1]

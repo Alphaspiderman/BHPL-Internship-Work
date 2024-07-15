@@ -117,8 +117,6 @@ function process_data(api_response) {
 }
 
 function build_chart(data) {
-  console.log(data);
-
   var chart = new CanvasJS.Chart("chartContainer", {
     theme: "light2",
     exportEnabled: true,
@@ -139,7 +137,6 @@ function build_chart(data) {
     ],
   });
   chart.render();
-  console.log(chart);
   console.log("Chart Rendered");
 }
 

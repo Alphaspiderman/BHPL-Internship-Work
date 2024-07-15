@@ -75,10 +75,9 @@ $(document).ready(function () {
       contentType: false,
       processData: false,
       success: function (response) {
-        console.log(response);
         if (response.status == "success") {
           alert("Expense added successfully");
-          window.location.href = "/home";
+          window.location.reload();
         } else {
           alert("Failed to add expense");
         }

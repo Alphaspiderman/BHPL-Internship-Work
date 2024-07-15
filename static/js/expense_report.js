@@ -10,7 +10,7 @@ $(document).ready(function () {
     // Open a new tab
     date_from = document.getElementById("dateFrom").value;
     date_to = document.getElementById("dateTo").value;
-    url = "/api/expenses/pdf?date_from=" + date_from + "&date_to=" + date_to;
+    url = "/api/expenses/pdf?from=" + date_from + "&to=" + date_to;
     window.open(url, "_blank").focus();
   });
   load_data();
@@ -23,8 +23,8 @@ function load_data() {
     url: "/api/expenses/me",
     type: "GET",
     data: {
-      date_from: date_from,
-      date_to: date_to,
+      from: date_from,
+      to: date_to,
     },
     success: function (data) {
       document.getElementById("exportPDF").removeAttribute("disabled");
@@ -33,6 +33,7 @@ function load_data() {
       document.getElementById("totalExpense").value = "₹ " + data.total;
       // Load data into quick view table
       table = document.getElementById("quickViewBody");
+      table.innerHTML = "";
       const dateIDX = data.schema.indexOf("Date_Of_Expense");
       const locIDX = data.schema.indexOf("Location");
       const fileIDX = data.schema.indexOf("Bill_Attached");
@@ -71,7 +72,7 @@ function deleteExpense(id) {
       if (data.status == "success") {
         alert("Entry Deleted");
         // Reload page
-        window.location.reload();
+        load_data();
       } else {
         alert("An error occoured while removing the entry");
       }

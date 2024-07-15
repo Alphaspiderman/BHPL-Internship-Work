@@ -106,8 +106,6 @@ function render_table(data) {
     tableHead.appendChild(th);
   });
 
-  console.log(tableData);
-
   tableData.forEach((element) => {
     var tr = document.createElement("tr");
     element.forEach((ele) => {
