@@ -10,9 +10,15 @@ from intranet.endpoints.login import Login
 from intranet.endpoints.rewards.reward_bells import Reward_Bells
 from intranet.endpoints.rewards.rewards import Rewards
 from intranet.endpoints.sales import Sales
-from intranet.endpoints.vendors.vendors import Vendors
-from intranet.endpoints.vendors.contracts import Contracts
-from intranet.endpoints.vendors.payments import Payments
+from intranet.endpoints.vendors.create.vendors import Vendors_Create
+from intranet.endpoints.vendors.create.payments import Payments_Create
+from intranet.endpoints.vendors.create.contracts import Contracts_Create
+from intranet.endpoints.vendors.edit.vendors import Vendors_Edit
+from intranet.endpoints.vendors.edit.payments import Payments_Edit
+from intranet.endpoints.vendors.edit.contracts import Contracts_Edit
+from intranet.endpoints.vendors.view.vendors import Vendors_View
+from intranet.endpoints.vendors.view.payments import Payments_View
+from intranet.endpoints.vendors.view.contracts import Contracts_View
 from intranet.endpoints.expenses.expenses import Expenses
 from intranet.endpoints.expenses.expense_report import Expense_Report
 
@@ -21,9 +27,15 @@ appserver.add_route(Login.as_view(), "/login")
 appserver.add_route(Locations.as_view(), "/locations")
 appserver.add_route(Sales.as_view(), "/sales")
 appserver.add_route(Connectivity.as_view(), "/connectivity")
-appserver.add_route(Vendors.as_view(), "/vendors/vendors")
-appserver.add_route(Contracts.as_view(), "/vendors/contracts")
-appserver.add_route(Payments.as_view(), "/vendors/payments")
+appserver.add_route(Vendors_View.as_view(), "/vendors/vendors")
+appserver.add_route(Contracts_View.as_view(), "/vendors/contracts")
+appserver.add_route(Payments_View.as_view(), "/vendors/payments")
+appserver.add_route(Vendors_Create.as_view(), "/vendors/vendors/create")
+appserver.add_route(Contracts_Create.as_view(), "/vendors/contracts/create")
+appserver.add_route(Payments_Create.as_view(), "/vendors/payments/create")
+appserver.add_route(Vendors_Edit.as_view(), "/vendors/vendors/edit/<uuid:str>")
+appserver.add_route(Contracts_Edit.as_view(), "/vendors/contracts/edit/<uuid:str>")
+appserver.add_route(Payments_Edit.as_view(), "/vendors/payments/edit/<uuid:str>")
 appserver.add_route(Create_Announcement.as_view(), "/create_announcement")
 appserver.add_route(Announcements.as_view(), "/announcement/<uuid:str>")
 appserver.add_route(Reward_Bells.as_view(), "/rewards/bells")

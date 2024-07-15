@@ -5,8 +5,8 @@ from sanic_ext import render
 from intranet.decorators.require_login import require_login
 
 
-class Contracts(HTTPMethodView):
+class Payments_View(HTTPMethodView):
     @require_login()
     # TODO - Add Role Check
     async def get(self, request: Request):
-        return await render("./vendors/contracts.html")
+        return await render("./vendors/payments.html")
