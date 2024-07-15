@@ -86,14 +86,23 @@ function load_bells() {
       card_5 = document.createElement("tr");
       card_5.innerHTML =
         "<th scope='row'>5 Bells</th><td>" + data.Card_5_Left + "</td>";
+      if (data.Card_5_Left < 1) {
+        document.getElementById("cardFive").setAttribute("disabled", "");
+      }
 
       card_4 = document.createElement("tr");
       card_4.innerHTML =
         "<th scope='row'>4 Bells</th><td>" + data.Card_4_Left + "</td>";
+      if (data.Card_4_Left < 1) {
+        document.getElementById("cardFour").setAttribute("disabled", "");
+      }
 
       card_3 = document.createElement("tr");
       card_3.innerHTML =
         "<th scope='row'>3 Bells</th><td>" + data.Card_3_Left + "</td>";
+      if (data.Card_3_Left < 1) {
+        document.getElementById("cardThree").setAttribute("disabled", "");
+      }
 
       table.appendChild(card_5);
       table.appendChild(card_4);
