@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import List
 import uuid
+from json import loads
 
 from sanic.response import json
 from sanic.request import Request
@@ -53,7 +54,7 @@ class Employee_Expenses(HTTPMethodView):
     async def post(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
-        data = request.json
+        data = loads(request.form["data"][0])
         print(data)
         employee_id = app.decode_jwt(request.cookies.get("JWT_TOKEN"))["emp_id"]
         date_of_expense = datetime.strptime(
@@ -92,6 +93,7 @@ class Employee_Expenses(HTTPMethodView):
             async with conn.cursor() as cur:
                 files: List[File] = request.files.getlist("file")
                 if files:
+                    print(len(files))
                     if len(files) == 1:
                         file = files[0]
                         ext = file.name.split(".")[-1]

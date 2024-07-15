@@ -49,6 +49,8 @@ $(document).ready(function () {
         data.Vehicle_Type = "Bike";
     }
 
+    formdata = new FormData();
+
     // Remove empty fields
     for (var key in data) {
       if (data[key] == "" || data[key] == "0.00" || data[key] == "0") {
@@ -56,13 +58,22 @@ $(document).ready(function () {
       }
     }
 
-    console.log(data);
+    // Get file
+    var file = document.getElementById("formFile").files[0];
+
+    // Add file to formdata
+    formdata.append("file", file);
+
+    // Add data to formdata
+    formdata.append("data", JSON.stringify(data));
+
     // Send data to server
     $.ajax({
       type: "POST",
       url: "/api/expenses/me",
-      data: JSON.stringify(data),
-      contentType: "application/json",
+      data: formdata,
+      contentType: false,
+      processData: false,
       success: function (response) {
         console.log(response);
         if (response.status == "success") {
