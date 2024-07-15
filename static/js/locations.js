@@ -7,6 +7,16 @@ $(document).ready(function () {
     process_location(loc);
   });
 
+  // Listen to the click of the export button
+  document.getElementById("export-btn").addEventListener("click", function () {
+    var loc = document.getElementById("loc-select").value;
+    var url = "/api/sites/csv";
+    if (loc != "all") {
+      url += "?location=" + loc;
+    }
+    window.open(url, "_blank");
+  });
+
   // Get list of locations for the dropdown
   $.ajax({
     type: "GET",
