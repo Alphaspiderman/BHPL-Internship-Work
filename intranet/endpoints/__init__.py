@@ -14,6 +14,7 @@ from intranet.endpoints.vendors import Vendors
 from intranet.endpoints.contracts import Contracts
 from intranet.endpoints.payments import Payments
 from intranet.endpoints.expenses import Expenses
+from intranet.endpoints.expense_report import Expense_Report
 
 appserver.add_route(Home.as_view(), "/home")
 appserver.add_route(Login.as_view(), "/login")
@@ -29,3 +30,4 @@ appserver.add_route(Reward_Bells.as_view(), "/reward/bells")
 appserver.add_route(HTTP_404.as_view(), "/404")
 appserver.add_route(Rewards.as_view(), "/rewards")
 appserver.add_route(Expenses.as_view(), "/expenses")
+appserver.add_route(Expense_Report.as_view(), "/expense_report")
