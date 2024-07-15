@@ -8,7 +8,7 @@
   line-height: 80px;
 }
 
-.navbar-brand > img {
+.navbar-brand>img {
   height: 100%;
   padding: 10px;
   width: auto;
@@ -21,7 +21,7 @@
 }
 
 @media (min-width: 768px) {
-  .navbar-nav > li > a {
+  .navbar-nav>li>a {
     /* (80px - line-height of 27px) / 2 = 26.5px */
     padding-top: 26.5px;
     padding-bottom: 26.5px;
@@ -32,16 +32,28 @@
 
 .body {
   background: rgb(2, 0, 36);
-  background: linear-gradient(
-    119deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(160, 126, 186, 1) 18%,
-    rgba(119, 59, 150, 1) 69%,
-    rgba(83, 28, 111, 1) 100%
-  );
+  background: linear-gradient(119deg,
+      rgba(2, 0, 36, 1) 0%,
+      rgba(160, 126, 186, 1) 18%,
+      rgba(119, 59, 150, 1) 69%,
+      rgba(83, 28, 111, 1) 100%);
   min-height: 100vh;
 }
 
 .center {
   text-align: center;
+}
+
+.table-custom {
+  --bs-table-bg: transparent !important;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dark-bg-transparent {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.table-custom th,
+.table-custom td {
+  color: white !important;
 }
