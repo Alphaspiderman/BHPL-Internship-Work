@@ -30,6 +30,18 @@
   }
 }
 
+.body {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    119deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(160, 126, 186, 1) 18%,
+    rgba(119, 59, 150, 1) 69%,
+    rgba(83, 28, 111, 1) 100%
+  );
+  min-height: 100vh;
+}
+
 .center {
   text-align: center;
 }

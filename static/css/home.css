@@ -1,8 +1,12 @@
-/* Set a background image for the body element */
-body {
-  background-image: url("/static/images/splash.png");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
+/* Add an SVG over the gradient background */
+#home-logo {
+  width: 100vh;
+  vertical-align: center;
+}
+
+#logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
