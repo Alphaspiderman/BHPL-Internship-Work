@@ -31,7 +31,7 @@ class Employee_Expenses(HTTPMethodView):
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(
-                    "SELECT * FROM expenses WHERE Employee_Id = %s AND Date_Of_Expense >= %s AND Date_Of_Expense <= %s",  # noqa: E501
+                    "SELECT * FROM expenses WHERE Employee_Id = %s AND Date_Of_Expense >= %s AND Date_Of_Expense <= %s ORDER BY Date_Of_Expense",  # noqa: E501
                     (employee_id, date_from, date_to),
                 )
                 result = await cur.fetchall()
@@ -46,7 +46,7 @@ class Employee_Expenses(HTTPMethodView):
         return json(
             {
                 "data": [
-                    list(expense.get_data(show_id=True).values())
+                    list(expense.get_data(show_id=True, show_file_names=True).values())
                     for expense in expense_data
                 ],
                 "schema": expense_data[0].get_schema(show_id=True),
@@ -140,7 +140,14 @@ class Employee_Expenses(HTTPMethodView):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
         emp_id = app.decode_jwt(request.cookies.get("JWT_TOKEN"))["emp_id"]
-        expense_id = request.args.get("expense_id")
+        expense_id = request.form.get("expense_id")
+
+        # Ensure we have an expense_id
+        if expense_id and len(expense_id) != 0:
+            pass
+        else:
+            return json({"status": "failure", "message": "No Expense ID given"})
+
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 try:
@@ -153,13 +160,6 @@ class Employee_Expenses(HTTPMethodView):
                         ),
                     )
                     result = await cur.fetchone()
-                    await cur.execute(
-                        "DELETE FROM expenses WHERE Id = %s AND Employee_Id = %s",
-                        (
-                            expense_id,
-                            emp_id,
-                        ),
-                    )
                     if result:
                         file_name = result[0]
                         if file_name:
@@ -167,6 +167,13 @@ class Employee_Expenses(HTTPMethodView):
                                 "DELETE FROM files WHERE File_Id = %s",
                                 (file_name,),
                             )
+                    await cur.execute(
+                        "DELETE FROM expenses WHERE Id = %s AND Employee_Id = %s",
+                        (
+                            expense_id,
+                            emp_id,
+                        ),
+                    )
                 except Exception:
                     return json({"status": "failure", "message": "Expense not found"})
             await conn.commit()

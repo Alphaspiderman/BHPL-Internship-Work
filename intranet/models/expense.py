@@ -41,7 +41,7 @@ class Expense:
     def to_dict(self) -> dict:
         return {field: getattr(self, field) for field in self.fields}
 
-    def get_data(self, show_id: bool = False) -> dict:
+    def get_data(self, show_id: bool = False, show_file_names: bool = False) -> dict:
         data = self.to_dict()
         hide = self.hidden_fields.copy()
         if show_id:
@@ -50,6 +50,8 @@ class Expense:
             data.pop(field, None)
         for field, convert in self.convert_fields.items():
             data[field] = convert(data[field])
+        if show_file_names and self.is_bill_attached() == "Yes":
+            data["Bill_Attached"] = self.Bill_Attached
         return data
 
     def get_schema(self, show_id: bool = False) -> dict:
