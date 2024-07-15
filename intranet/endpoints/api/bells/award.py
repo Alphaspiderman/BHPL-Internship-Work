@@ -1,4 +1,5 @@
 from typing import List
+import uuid
 from sanic.request import Request
 from sanic.request.form import File
 from sanic.response import json
@@ -53,6 +54,7 @@ class Award_Bells(HTTPMethodView):
         Bells_Awarded = form_data.get("Bells_Awarded")
         Award_Date = form_data.get("Award_Date")
         Reason = form_data.get("Reason")
+        file_id = uuid.uuid4().hex
 
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
@@ -97,16 +99,12 @@ class Award_Bells(HTTPMethodView):
                         file_name = file.name
                         file_data = file.body
                         file_type = file.type
+                        file_id = file_id + "." + file_name.split(".")[-1]
 
                         await cur.execute(
-                            "INSERT INTO files (File_Name, File_Data, File_Type, Uploaded_By) VALUES (%s, %s, %s, %s)",  # noqa: E501
-                            (file_name, file_data, file_type, Awarded_By_Id),
+                            "INSERT INTO files (File_Id, File_Name, File_Data, File_Type, Uploaded_By) VALUES (%s, %s, %s, %s, %s)",  # noqa: E501
+                            (file_id, file_name, file_data, file_type, Awarded_By_Id),
                         )
-
-                        await cur.execute("select LAST_INSERT_ID()")
-
-                        file_id_resp = await cur.fetchone()
-                        file_id = file_id_resp[0]
 
                         await cur.execute(
                             self.insert_query,
@@ -142,16 +140,12 @@ class Award_Bells(HTTPMethodView):
                         file_name = file.name
                         file_data = file.body
                         file_type = file.type
+                        file_id = file_id + "." + file_name.split(".")[-1]
 
                         await cur.execute(
-                            "INSERT INTO files (File_Name, File_Data, File_Type, Uploaded_By) VALUES (%s, %s, %s, %s)",  # noqa: E501
-                            (file_name, file_data, file_type, Awarded_By_Id),
+                            "INSERT INTO files (File_Id, File_Name, File_Data, File_Type, Uploaded_By) VALUES (%s, %s, %s, %s, %s)",  # noqa: E501
+                            (file_id, file_name, file_data, file_type, Awarded_By_Id),
                         )
-
-                        await cur.execute("select LAST_INSERT_ID()")
-
-                        file_id_resp = await cur.fetchone()
-                        file_id = file_id_resp[0]
 
                         await cur.execute(
                             self.insert_query,
@@ -187,16 +181,13 @@ class Award_Bells(HTTPMethodView):
                         file_name = file.name
                         file_data = file.body
                         file_type = file.type
+                        file_id = file_id + "." + file_name.split(".")[-1]
 
                         await cur.execute(
-                            "INSERT INTO files (File_Name, File_Data, File_Type, Uploaded_By) VALUES (%s, %s, %s, %s)",  # noqa: E501
-                            (file_name, file_data, file_type, Awarded_By_Id),
+                            "INSERT INTO files (File_Id, File_Name, File_Data, File_Type, Uploaded_By) VALUES (%s, %s, %s, %s, %s)",  # noqa: E501
+                            (file_id, file_name, file_data, file_type, Awarded_By_Id),
                         )
 
-                        await cur.execute("select LAST_INSERT_ID()")
-
-                        file_id_resp = await cur.fetchone()
-                        file_id = file_id_resp[0]
                         await cur.execute(
                             self.insert_query,
                             (
