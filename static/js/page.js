@@ -20,6 +20,12 @@ navbar_entries = [
   },
   ["/locations", "Location Master"],
   ["/connectivity", "Connectivity Status"],
+  {
+    Expenses: [
+      ["/expenses", "Submit Expense"],
+      ["/api/expenses/pdf", "Print Report"],
+    ],
+  },
 ];
 
 // Load the navbar
