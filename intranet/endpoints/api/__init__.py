@@ -9,6 +9,7 @@ from .login.callback import Callback
 from .login.root import Login_Root
 from .logout import Logout
 from .sites.checker import Site_Checker
+from .sites.csv import Location_CSV
 from .sites.employees import Location_Employees
 from .sites.info import Location_Master
 from .sites.status import Site_Status
@@ -63,3 +64,6 @@ appserver.add_route(Expenses_PDF.as_view(), "/api/expenses/pdf")
 
 # Register the files endpoint
 appserver.add_route(Files.as_view(), "/api/files")
+
+# Register the location csv endpoint
+appserver.add_route(Location_CSV.as_view(), "/api/sites/csv")
