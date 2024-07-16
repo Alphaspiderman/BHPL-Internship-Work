@@ -16,8 +16,16 @@ class Vendor_Contract(HTTPMethodView):
     async def get(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
-        contract_id = request.args.get("id")
+        reference_id = request.args.get("id")
         export = request.args.get("export")
+        if request.args.get("lookup"):
+            lookup = request.args.get("lookup").lower() == "contract"
+        else:
+            lookup = False
+        if request.args.get("all"):
+            show_all = request.args.get("all").lower() == "true"
+        else:
+            show_all = False
         if export:
             export = export.lower() == "true"
         else:
@@ -27,37 +35,50 @@ class Vendor_Contract(HTTPMethodView):
 
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
-                if contract_id in [None, ""]:
+                if reference_id in [None, ""]:
                     await cur.execute(
                         "SELECT DISTINCT Vendor_Code FROM vendor_contract"
                     )
                     vendor_contract = await cur.fetchall()
                     return json(vendor_contract)
-                elif contract_id in ["all", "null"]:
+                elif reference_id in ["all", "null"]:
                     await cur.execute(
                         "SELECT * FROM vendor_contract ORDER BY AMC_Start_Date DESC"
                     )
                     vendor_contract = await cur.fetchall()
                     contact_info = [VendorContract(entry) for entry in vendor_contract]
                 else:
-                    await cur.execute(
-                        "SELECT * FROM vendor_contract WHERE Vendor_Code = %s ORDER BY AMC_Start_Date DESC",
-                        (contract_id,),
-                    )
+                    if lookup:
+                        await cur.execute(
+                            "SELECT * FROM vendor_contract WHERE Contract_Id = %s",
+                            (reference_id,),
+                        )
+                    else:
+                        await cur.execute(
+                            "SELECT * FROM vendor_contract WHERE Vendor_Code = %s ORDER BY AMC_Start_Date DESC",  # noqa: E501
+                            (reference_id,),
+                        )
                     vendor_contract = await cur.fetchall()
                     contact_info = [VendorContract(entry) for entry in vendor_contract]
-        data = [list(entry.get_data().values()) for entry in contact_info]
+        data = [
+            list(entry.get_data(show_all=show_all).values()) for entry in contact_info
+        ]
         temp_name = f"temp/{uuid.uuid4().hex}.csv"
         if export:
             async with aiofiles.open(temp_name, "w", newline="") as f:
                 writer = aiocsv.AsyncWriter(f)
-                await writer.writerow(contact_info[0].get_schema())
+                await writer.writerow(contact_info[0].get_schema(show_all=show_all))
                 await writer.writerows(data)
             resp = await file(temp_name, filename="vendor_contract.csv")
             await request.respond(resp)
             await aiofiles.os.remove(temp_name)
         else:
-            return json({"data": data, "schema": contact_info[0].get_schema()})
+            return json(
+                {
+                    "data": data,
+                    "schema": contact_info[0].get_schema(show_all=show_all),
+                }
+            )
 
     async def post(self, request: Request):
         app: IntranetApp = request.app

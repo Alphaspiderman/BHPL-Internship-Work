@@ -35,16 +35,20 @@ class VendorContract:
     def to_dict(self) -> dict:
         return {field: getattr(self, field) for field in self.fields}
 
-    def get_data(self) -> dict:
+    def get_data(self, show_all: bool = False) -> dict:
         data = self.to_dict()
-        for field in self.hidden_fields:
-            data.pop(field, None)
+        hidden_fields = self.hidden_fields.copy()
+        if not show_all:
+            for field in hidden_fields:
+                data.pop(field, None)
         for field, convert in self.convert_fields.items():
             data[field] = convert(data[field])
         return data
 
-    def get_schema(self) -> list:
+    def get_schema(self, show_all: bool = False) -> list:
         schema = self.fields.copy()
-        for field in self.hidden_fields:
-            schema.remove(field)
+        hidden_fields = self.hidden_fields.copy()
+        if not show_all:
+            for field in hidden_fields:
+                schema.remove(field)
         return schema
