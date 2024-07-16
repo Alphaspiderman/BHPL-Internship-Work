@@ -1,5 +1,9 @@
+from json import loads
+
+
 class VendorContract:
     fields = [
+        "Contract_Id",
         "Vendor_Code",
         "Department_Code",
         "Contract_Active",
@@ -14,13 +18,15 @@ class VendorContract:
     ]
 
     convert_fields = {
+        "Contract_Active": lambda x: "Yes" if x else "No",
         "AMC_Start_Date": lambda x: x.strftime("%Y-%m-%d"),
         "AMC_End_Date": lambda x: x.strftime("%Y-%m-%d"),
-        "File_Name": lambda x: f"<a href='{x}'>Click Me</a>" if x else None,
-        "Next_Reminder": lambda x: x.strftime("%Y-%m-%d") if x else None,
+        "Next_Reminder": lambda x: x.strftime("%Y-%m-%d") if x else "Pending Setup",
+        "Invoice_Base_Cost": lambda x: str(x) if x else None,
+        "Reminder_Addresses": lambda x: ", ".join(loads(x)) if x else None,
     }
 
-    hidden_fields = ["Contract_Description"]
+    hidden_fields = ["Contract_Id", "Contract_Description"]
 
     def __init__(self, data):
         for idx, field in enumerate(self.fields):

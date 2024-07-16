@@ -1,6 +1,7 @@
 import uuid
 import aiocsv
 import aiofiles
+from json import loads, dumps
 from sanic.request import Request
 from sanic.response import json, file
 from sanic.views import HTTPMethodView
@@ -57,3 +58,61 @@ class Vendor_Contract(HTTPMethodView):
             await aiofiles.os.remove(temp_name)
         else:
             return json({"data": data, "schema": contact_info[0].get_schema()})
+
+    async def post(self, request: Request):
+        app: IntranetApp = request.app
+        db_pool = app.get_db_pool()
+
+        emp_id = app.decode_jwt(request.cookies.get("JWT_TOKEN"))["emp_id"]
+        # Extract the data from the request
+        data = loads(request.form.get("data"))
+        file = request.files.get("file")
+        # Extract the data form the form
+        Vendor_Code = data.get("vendor")
+        Department = data.get("department")
+        contract_status = data.get("contractStatus")
+        AMC_Start_Date = data.get("startDate")
+        AMC_End_Date = data.get("endDate")
+        AMC_Amount = data.get("baseCost")
+        Frequency = data.get("frequency")
+        Contract_Desc = data.get("contractDesc")
+        Emails = data.get("emails")
+
+        # Transform Contract Status
+        if not contract_status or len(contract_status) == 0:
+            contract_status = None
+        else:
+            contract_status = 1
+
+        # Save the data
+        async with db_pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                try:
+                    # Insert file
+                    file_name = f"{uuid.uuid4().hex}.{file.name.split('.')[-1]}"
+                    await cur.execute(
+                        "INSERT INTO files (File_Id, File_Name, File_Type, File_Data, Uploaded_By, File_Flag) VALUES (%s, %s, %s, %s, %s, %s)",  # noqa: E501
+                        (file_name, file.name, file.type, file.body, emp_id, "Public"),
+                    )
+
+                    await cur.execute(
+                        "INSERT INTO vendor_contract (Contract_Id, Vendor_Code, Department_Code, Contract_Active, Contract_Description, AMC_Start_Date, AMC_End_Date, File_Name, Invoice_Frequency, Invoice_Base_Cost, Reminder_Addresses) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)",  # noqa: E501
+                        (
+                            str(uuid.uuid4().hex),
+                            Vendor_Code,
+                            Department,
+                            contract_status,
+                            Contract_Desc,
+                            AMC_Start_Date,
+                            AMC_End_Date,
+                            file_name,
+                            Frequency,
+                            AMC_Amount,
+                            dumps(Emails),
+                        ),
+                    )
+                    await conn.commit()
+                except Exception:
+                    await conn.rollback()
+                    return json({"status": "failed"})
+        return json({"status": "success"})
