@@ -22,6 +22,12 @@ $(document).ready(function () {
     default:
       return;
   }
+  document.getElementById("edit-btn").addEventListener("click", function () {
+    window.location.href =
+      window.location.pathname +
+      "/edit/" +
+      document.getElementById("item-select").value;
+  });
   document
     .getElementById("item-select")
     .addEventListener("change", function () {
@@ -29,8 +35,7 @@ $(document).ready(function () {
         .replace("/vendors", "")
         .replace("/", "")
         .split("?")[0];
-      // Change the URL
-      history.pushState("", "", "/vendors?show=" + active_tab);
+      query = document.getElementById("item-select").value;
       switch (active_tab) {
         case "vendors":
           show_vendors(query);
@@ -49,22 +54,39 @@ $(document).ready(function () {
 });
 
 function load_dropdown(type) {
+  btn = document.getElementById("export-btn");
   switch (type) {
     case "vendors":
       url = "/api/vendors/info";
       text_val = "Select a Vendor";
+      btn.setAttribute(
+        "onclick",
+        "export_csv('vendors', document.getElementById('item-select').value)",
+      );
       break;
     case "contracts":
       url = "/api/vendors/contract";
       text_val = "Select a Vendor Contract";
+      btn.setAttribute(
+        "onclick",
+        "export_csv('contracts', document.getElementById('item-select').value)",
+      );
       break;
     case "payments":
       url = "/api/vendors/payment";
       text_val = "Select a Vendor Payment";
+      btn.setAttribute(
+        "onclick",
+        "export_csv('payments', document.getElementById('item-select').value)",
+      );
       break;
     default:
       url = "/api/vendors/info";
       text_val = "Select a Vendor";
+      btn.setAttribute(
+        "onclick",
+        "export_csv('vendors', document.getElementById('item-select').value)",
+      );
       break;
   }
   $.ajax({
@@ -105,6 +127,12 @@ function render_table(data) {
     th.innerHTML = element.replaceAll("_", " ");
     tableHead.appendChild(th);
   });
+
+  if (document.getElementById("item-select").value == "all") {
+    document.getElementById("edit-btn").setAttribute("hidden", "");
+  } else {
+    document.getElementById("edit-btn").removeAttribute("hidden");
+  }
 
   tableData.forEach((element) => {
     var tr = document.createElement("tr");
@@ -169,4 +197,25 @@ function show_payments(selected_id) {
       console.log(response);
     },
   });
+}
+
+function export_csv(type, selected_id) {
+  selected_id = selected_id == null ? "all" : selected_id;
+  switch (type) {
+    case "vendors":
+      url = "/api/vendors/info";
+      break;
+    case "contracts":
+      url = "/api/vendors/contract";
+      break;
+    case "payments":
+      url = "/api/vendors/payment";
+      break;
+    default:
+      url = "/api/vendors/info";
+      break;
+  }
+  url += "?id=" + selected_id;
+  url += "&export=true";
+  window.open(url, "_blank");
 }
