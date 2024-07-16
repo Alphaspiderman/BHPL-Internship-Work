@@ -64,12 +64,13 @@ function handle_form_submit() {
     ? "Active"
     : "Inactive";
 
+  data["contractId"] = document.getElementById("contract").value;
+
   // Add the file
-  newFormData.append("file", document.getElementById("formFile").files[0]);
   newFormData.append("data", JSON.stringify(data));
   $.ajax({
     url: "/api/vendors/contract",
-    type: "POST",
+    type: "PATCH",
     data: newFormData,
     contentType: false,
     processData: false,

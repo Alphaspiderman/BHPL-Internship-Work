@@ -137,3 +137,51 @@ class Vendor_Contract(HTTPMethodView):
                     await conn.rollback()
                     return json({"status": "failed"})
         return json({"status": "success"})
+
+    async def patch(self, request: Request):
+        app: IntranetApp = request.app
+        db_pool = app.get_db_pool()
+        # Extract the data from the request
+        data = loads(request.form.get("data"))
+        # Extract the data form the form
+        contract_id = data.get("contractId")
+        Vendor_Code = data.get("vendor")
+        Department = data.get("department")
+        contract_status = data.get("contractStatus")
+        AMC_Start_Date = data.get("startDate")
+        AMC_End_Date = data.get("endDate")
+        AMC_Amount = data.get("baseCost")
+        Frequency = data.get("frequency")
+        Contract_Desc = data.get("contractDesc")
+        Emails = data.get("emails")
+
+        # Transform Contract Status
+        if not contract_status or len(contract_status) == 0:
+            contract_status = None
+        else:
+            contract_status = 1
+
+        # Save the data
+        async with db_pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                try:
+                    await cur.execute(
+                        "UPDATE vendor_contract SET Vendor_Code = %s, Department_Code = %s, Contract_Active = %s, Contract_Description = %s, AMC_Start_Date = %s, AMC_End_Date = %s, Invoice_Frequency = %s, Invoice_Base_Cost = %s, Reminder_Addresses = %s WHERE Contract_Id = %s",  # noqa: E501
+                        (
+                            Vendor_Code,
+                            Department,
+                            contract_status,
+                            Contract_Desc,
+                            AMC_Start_Date,
+                            AMC_End_Date,
+                            Frequency,
+                            AMC_Amount,
+                            dumps(Emails),
+                            contract_id,
+                        ),
+                    )
+                    await conn.commit()
+                except Exception:
+                    await conn.rollback()
+                    return json({"status": "failed"})
+        return json({"status": "success"})
