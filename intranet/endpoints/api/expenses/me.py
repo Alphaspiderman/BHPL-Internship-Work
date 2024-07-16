@@ -200,10 +200,15 @@ class Employee_Expenses(HTTPMethodView):
                     )
                     for entry in result
                 ]
-        return json(
-            {
-                "data": [list(expense.get_data().values()) for expense in expense_data],
-                "schema": expense_data[0].get_schema(),
-                "total": sum([expense.get_total() for expense in expense_data]),
-            }
-        )
+        if len(expense_data) > 0:
+            return json(
+                {
+                    "data": [
+                        list(expense.get_data().values()) for expense in expense_data
+                    ],
+                    "schema": expense_data[0].get_schema(),
+                    "total": sum([expense.get_total() for expense in expense_data]),
+                }
+            )
+        else:
+            return json({"data": [], "total": "0"})
