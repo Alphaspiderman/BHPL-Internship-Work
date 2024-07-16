@@ -1,5 +1,8 @@
+import uuid
+import aiocsv
+import aiofiles
 from sanic.request import Request
-from sanic.response import json
+from sanic.response import json, file
 from sanic.views import HTTPMethodView
 
 from intranet.app import IntranetApp
@@ -22,6 +25,12 @@ class Vendor_Info(HTTPMethodView):
     async def get(self, request: Request):
         app: IntranetApp = request.app
         vendor_id = request.args.get("id")
+        export = request.args.get("export")
+        if export:
+            export = export.lower() == "true"
+        else:
+            export = False
+
         db_pool = app.get_db_pool()
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
@@ -43,7 +52,18 @@ class Vendor_Info(HTTPMethodView):
                     return json(
                         {"status": "failure", "message": "Vendor not found"}, status=404
                     )
-                return json({"data": vendor_info, "schema": self.schema})
+        temp_name = f"temp/{uuid.uuid4().hex}.csv"
+        if export:
+            print(vendor_info)
+            async with aiofiles.open(temp_name, "w", newline="") as f:
+                writer = aiocsv.AsyncWriter(f)
+                await writer.writerow(self.schema)
+                await writer.writerows(vendor_info)
+            resp = await file(temp_name, filename="vendor_info.csv")
+            await request.respond(resp)
+            await aiofiles.os.remove(temp_name)
+        else:
+            return json({"data": vendor_info, "schema": self.schema})
 
     async def post(self, request: Request):
         app: IntranetApp = request.app
