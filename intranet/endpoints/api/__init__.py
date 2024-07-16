@@ -2,6 +2,7 @@ from intranet.app import appserver
 from .announcements import Announcements_API
 from .bells.award import Award_Bells
 from .bells.info import Bell_Info
+from .departments import Departments
 from .expenses.pdf import Expenses_PDF
 from .expenses.me import Employee_Expenses
 from .files import Files
@@ -67,3 +68,6 @@ appserver.add_route(Files.as_view(), "/api/files")
 
 # Register the location csv endpoint
 appserver.add_route(Location_CSV.as_view(), "/api/sites/csv")
+
+# Register the departments endpoint
+appserver.add_route(Departments.as_view(), "/api/departments")
