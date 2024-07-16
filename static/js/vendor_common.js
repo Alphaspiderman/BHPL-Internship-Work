@@ -122,9 +122,14 @@ function render_table(data) {
   headerData = data["schema"];
   tableData = data["data"];
 
-  headerData.forEach((element) => {
+  var has_file = -1;
+
+  headerData.forEach((element, idx) => {
     var th = document.createElement("th");
     th.innerHTML = element.replaceAll("_", " ");
+    if (th.innerHTML === "File Name") {
+      has_file = idx;
+    }
     tableHead.appendChild(th);
   });
 
@@ -136,9 +141,13 @@ function render_table(data) {
 
   tableData.forEach((element) => {
     var tr = document.createElement("tr");
-    element.forEach((ele) => {
+    element.forEach((ele, idx) => {
       var td = document.createElement("td");
-      td.innerHTML = ele;
+      if (idx == has_file) {
+        td.innerHTML = `<a href="/api/files?file_id=${ele}">Download</a>`;
+      } else {
+        td.innerHTML = ele;
+      }
       tr.appendChild(td);
     });
     tableBody.appendChild(tr);
