@@ -66,3 +66,29 @@ class Vendor_Info(HTTPMethodView):
                 )
                 await conn.commit()
         return json({"status": "success"})
+
+    async def patch(self, request: Request):
+        app: IntranetApp = request.app
+        db_pool = app.get_db_pool()
+        data = request.form
+        vendor_id = data.get("id")
+        async with db_pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                try:
+                    await cur.execute(
+                        "UPDATE vendor_info SET Vendor_Name = %s, Vendor_Address = %s, Vendor_Phone = %s, Vendor_Email = %s, PAN_Number = %s, GST_Number = %s, Account_Number = %s WHERE Vendor_Code = %s",  # noqa: E501
+                        (
+                            data["Vendor_Name"],
+                            data["Vendor_Address"],
+                            data["Vendor_Phone"],
+                            data["Vendor_Email"],
+                            data["PAN_Number"],
+                            data["GST_Number"],
+                            data["Account_Number"],
+                            vendor_id,
+                        ),
+                    )
+                    await conn.commit()
+                except Exception:
+                    return json({"status": "failure", "message": "An Error Occoured"})
+        return json({"status": "success"})
