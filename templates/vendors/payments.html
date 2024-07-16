@@ -58,6 +58,22 @@
       <div class="body">
         <h1 class="center">List of Vendor Payments</h1>
         <div class="container-fluid" id="page-container">
+          <div class="row justify-content-around align-items-center">
+            <div class="alert alert-info col-md-6">
+              <strong>Info!</strong> Use Ctrl + F to find data quickly or filter
+              by using the dropdown.
+            </div>
+            <div class="col-md-4">
+              <div class="row justify-content-around align-items-center">
+                <button class="btn btn-primary col-md-5" id="export-btn">
+                  Export Data
+                </button>
+                <button class="btn btn-primary col-md-5" id="edit-btn" hidden>
+                  Edit Data
+                </button>
+              </div>
+            </div>
+          </div>
           <select class="form-select" id="item-select">
             <option value="all">Show All</option>
           </select>
