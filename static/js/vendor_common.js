@@ -28,6 +28,9 @@ $(document).ready(function () {
       "/edit/" +
       document.getElementById("item-select").value;
   });
+  document.getElementById("new-btn").addEventListener("click", function () {
+    window.location.href = window.location.pathname + "/create";
+  });
   document
     .getElementById("item-select")
     .addEventListener("change", function () {
