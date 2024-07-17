@@ -1,11 +1,7 @@
-import asyncio
-
-import aioping
 from sanic.request import Request
 from sanic.response import json
 from sanic.views import HTTPMethodView
 
-from intranet.app import IntranetApp
 from intranet.decorators.require_login import require_login
 
 
@@ -15,35 +11,5 @@ class Site_Checker(HTTPMethodView):
 
     @require_login(is_api=True)
     async def get(self, request: Request):
-        response = await request.respond(json({"message": "Site check triggered"}))
-        app: IntranetApp = request.app
-        await request.respond(response)
-
-        # Get IPs from DB
-        db_pool = app.get_db_pool()
-
-        async with db_pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute(
-                    "SELECT Store_Name, Static_Ip FROM sites WHERE Status = 'Operational' AND Static_Ip IS NOT NULL"  # noqa: E501
-                )
-                sites = await cur.fetchall()
-
-        app.reset_site_checker()
-
-        total_count = len(sites)
-        app.set_site_checked_total(total_count)
-
-        # Check if the site is up
-        tasks = []
-        for site in sites:
-            name, ip = site
-            tasks.append(self.check_site(app, ip, name))
-        await asyncio.gather(*tasks)
-
-    async def check_site(self, app: IntranetApp, ip: str, name: str):
-        try:
-            await aioping.ping(ip, 4)
-            app.add_site_checker(name, True)
-        except Exception:
-            app.add_site_checker(name, False)
+        await request.app.dispatch("intranet.network_checker.trigger")
+        return json({"message": "Site check triggered"})

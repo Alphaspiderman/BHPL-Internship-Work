@@ -1,11 +1,10 @@
 var api_data = "/api/sites/status";
 var api_refresh = "/api/sites/checker";
-var refresh_interval = 300000;
+var refresh_interval = 30000;
 var refresh_set = false;
 
 $(document).ready(function () {
-  var btn = document.getElementById("recheck-btn");
-  btn.onclick = function () {
+  document.getElementById("recheck-btn").onclick = function () {
     recheck_sites();
   };
   get_data();
@@ -33,27 +32,18 @@ function process_data(api_response) {
   var last_run = document.getElementById("last-run");
   var date = new Date(api_response.last_run);
 
-  var now = new Date();
-  var diff = now - date;
-
   if (!refresh_set) {
     // Start refresh with next refresh
     refresh_set = true;
-    setTimeout(function () {
-      setInterval(recheck_sites, refresh_interval);
-    }, refresh_interval - diff);
-  }
-
-  // If the last run was more than 5 minutes ago, recheck
-  if (diff > refresh_interval + 5000) {
-    recheck_sites();
-    return;
+    setInterval(get_data, refresh_interval);
   }
 
   var online_cnt = api_response.online.length;
   var offline_cnt = api_response.offline.length;
   var to_process = api_response.total_count - api_response.checked;
   var total_count = api_response.total_count;
+
+  console.log(api_response);
 
   var data = [
     {
@@ -68,7 +58,7 @@ function process_data(api_response) {
     },
     {
       label: "To Process",
-      y: (to_process / total_count) * 100,
+      y: ((to_process / total_count) * 100).toFixed(2),
       color: "yellow",
     },
   ];
@@ -114,6 +104,12 @@ function process_data(api_response) {
     var msg = document.getElementById("checkMsg");
     msg.innerHTML = "All Sites are Online";
   }
+  if (to_process != 0) {
+    // Reload the page in 5 seconds
+    setTimeout(function () {
+      location.reload();
+    }, 5000);
+  }
 }
 
 function build_chart(data) {
@@ -157,11 +153,9 @@ function recheck_sites() {
   $.ajax({
     type: "GET",
     url: api_refresh,
-    success: function (data) {
-      get_data();
-    },
-    error: function (data) {
-      console.log(data);
-    },
   });
+  // Delay for 5 seconds
+  setTimeout(function () {
+    get_data();
+  }, 5000);
 }

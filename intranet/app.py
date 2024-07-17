@@ -17,9 +17,9 @@ class IntranetApp(Sanic):
             "checked": 0,
             "online": list(),
             "offline": list(),
-            "is_processing": False,
             "last_run": None,
         }
+        self.ctx.site_checker_running = False
 
     def get_entra_jwt_keys(self) -> dict:
         return self.ctx.entra_public_keys
@@ -117,7 +117,6 @@ class IntranetApp(Sanic):
             "checked": 0,
             "online": list(),
             "offline": list(),
-            "is_processing": False,
             "last_run": None,
         }
 
@@ -132,11 +131,14 @@ class IntranetApp(Sanic):
         else:
             self.ctx.site_checker["offline"].append(site)
 
-    def get_site_checker_status(self):
-        return self.ctx.site_checker["is_processing"]
-
     def get_site_checker_info(self):
         return self.ctx.site_checker
+
+    def set_checker_running(self, is_running: bool):
+        self.ctx.site_checker_running = is_running
+
+    def is_checker_running(self) -> bool:
+        return self.ctx.site_checker_running
 
 
 appserver = IntranetApp("intranet", strict_slashes=False)
