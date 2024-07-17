@@ -3,8 +3,9 @@ import json
 import aiohttp
 from dotenv import dotenv_values
 from jwt import algorithms
-from sanic import Request, response
+from sanic import NotFound, Request, response
 from sanic.log import logger
+from sanic_ext import render
 from .app import IntranetApp, appserver
 
 # noinspection PyUnresolvedReferences
@@ -47,6 +48,13 @@ if (
 # Convert the string to a bool and update the config with the bool.
 config.update({"IS_PROD": is_prod.lower() == "true"})
 
+# Disable OpenAPI docs
+config["OAS"] = False
+config["OAS_UI_DEFAULT"] = None
+config["OAS_UI_REDOC"] = False
+config["OAS_UI_SWAGGER"] = False
+
+
 app: IntranetApp = appserver
 app.config.update(config)
 app.config.PROXIES_COUNT = int(config.get("PROXIES_COUNT", 0))
@@ -61,7 +69,8 @@ app.static("/files/", "./dynamic/", name="files")
 async def setup_app(app: IntranetApp):
     try:
         await app.connect_db()
-    except Exception:
+    except Exception as e:
+        logger.error(e)
         logger.error("Error connecting to DB")
         app.stop()
 
@@ -117,6 +126,11 @@ async def route_to_login_or_home(request: Request):
         return response.redirect("login")
     else:
         return response.redirect("home")
+
+
+@app.exception(NotFound)
+def ignore_404s(request, exception):
+    return render("404.html")
 
 
 if __name__ == "__main__":
