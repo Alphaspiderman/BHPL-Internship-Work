@@ -31,32 +31,26 @@ class Callback(HTTPMethodView):
                 algorithms=["RS256"],
                 audience=request.app.config["AZURE_AD_CLIENT_ID"],
             )
-            # Consume the nonce
-            app.consume_login_state(decoded["nonce"])
-        except KeyError:
-            logger.error("Possible replay attack!")
-            # Invalid token
-            return redirect("login?error=replay_attack")
         except jwt.exceptions.InvalidAudienceError:
             logger.warning("Invalid audience for JWT")
             # Invalid token
-            return redirect("login?error=invalid_token")
+            return redirect("/login?error=invalid_token")
         except jwt.exceptions.InvalidIssuedAtError:
             logger.warning("JWT issued in future")
             # Invalid token
-            return redirect("login?error=invalid_token")
+            return redirect("/login?error=invalid_token")
         except jwt.exceptions.ImmatureSignatureError:
             logger.warning("JWT issued in future")
             # Invalid token
-            return redirect("login?error=invalid_token")
+            return redirect("/login?error=invalid_token")
         except jwt.exceptions.ExpiredSignatureError:
             logger.warning("JWT has expired")
             # Invalid token
-            return redirect("login?error=invalid_token")
+            return redirect("/login?error=invalid_token")
         except jwt.exceptions.DecodeError:
             logger.warning("JWT decode error")
             # Invalid token
-            return redirect("login?error=invalid_token")
+            return redirect("/login?error=invalid_token")
 
         # Get email from decoded token
         email = decoded["email"]
@@ -66,7 +60,7 @@ class Callback(HTTPMethodView):
 
         # Check Domain
         if domain != "burmanhospitality.com":
-            return redirect("login?error=invalid_domain")
+            return redirect("/login?error=invalid_domain")
 
         # Get the user from the database
         async with app.get_db_pool().acquire() as conn:
@@ -76,9 +70,9 @@ class Callback(HTTPMethodView):
 
         # Check if user exists
         if user is None or len(user) == 0:
-            return redirect("login?error=user_not_found")
+            return redirect("/login?error=user_not_found")
         if len(user) > 1:
-            return redirect("login?error=too_many_users")
+            return redirect("/login?error=too_many_users")
 
         # Extract data for adding to JWT
         Employee_Id: str = user[0][0]

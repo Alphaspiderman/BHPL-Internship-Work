@@ -11,7 +11,6 @@ class IntranetApp(Sanic):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ctx.entra_public_keys = dict()
-        self.ctx.login_states = dict()
         self.ctx.site_checker = {
             "total": 0,
             "checked": 0,
@@ -99,14 +98,6 @@ class IntranetApp(Sanic):
         iss = f"INTRANET_API_{host}"
         data.update({"exp": expire, "iat": now, "nbf": now, "iss": iss})
         return jwt.encode(data, self.config["PRIV_KEY"], algorithm="RS256")
-
-    def add_login_state(self, state: str, nonce: str):
-        dic: dict = self.ctx.login_states
-        dic[nonce] = state
-
-    def consume_login_state(self, nonce: str) -> str:
-        dic: dict = self.ctx.login_states
-        return dic.pop(nonce)
 
     def get_site_check_time(self) -> datetime:
         return self.ctx.site_check_last_run
