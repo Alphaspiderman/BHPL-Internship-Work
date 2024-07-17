@@ -28,6 +28,8 @@
     <link href="/static/css/styles.css" rel="stylesheet" />
     <script src="/static/js/page.js"></script>
     <link rel="icon" type="image/png" href="/static/images/favicon.jpg" />
+    <link rel="stylesheet" href="/static/css/vendor_form.css" />
+    <script src="/static/js/vendors/edit/payment.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -55,7 +57,88 @@
       </div>
     </nav>
     <div class="body">
-      <p>Body Here</p>
+      <div class="container-fluid" style="padding: 2%">
+        <h2 class="center">Edit Vendor Payment Form</h2>
+        <form id="form" action="/api/vendors/contract" method="post">
+          <div class="row align-items-center align-self-center">
+            <div class="form-group colpad col-md-4">
+              <label for="vendor">Vendor</label>
+              <input class="form-control" id="vendor" name="vendor" readonly />
+            </div>
+            <div class="form-group colpad col-md-4">
+              <label for="department">Department</label>
+              <input
+                class="form-control"
+                id="department"
+                name="department"
+                readonly
+              />
+            </div>
+            <div class="form-group colpad col-md-4">
+              <label for="frequency">Invoice Frequency</label>
+              <input
+                class="form-control"
+                id="frequency"
+                name="frequency"
+                readonly
+              />
+            </div>
+            <div class="form-group colpad col-md-4">
+              <label for="due_date">Due Date</label>
+              <select
+                class="form-control"
+                id="due_date"
+                name="due_date"
+              ></select>
+            </div>
+            <div class="form-group colpad col-md-4">
+              <label for="due_amount">Expected Amount</label>
+              <input
+                class="form-control"
+                id="due_amount"
+                name="due_amount"
+                readonly
+              />
+            </div>
+          </div>
+          <br />
+          <h2 class="center">Edit-able Information</h2>
+          <div class="row align-items-center align-self-center">
+            <div class="form-group colpad col-md-4">
+              <label for="status">Current Status</label>
+              <select class="form-control" id="status" name="status">
+                <option value="Pending">Pending</option>
+                <option value="Raised">Shared to Finance</option>
+                <option value="Paid">Paid</option>
+              </select>
+            </div>
+            <div class="form-group colpad col-md-4">
+              <label for="payment_date">Payment Date</label>
+              <input
+                class="form-control"
+                type="date"
+                id="payment_date"
+                name="payment_date"
+                required
+              />
+            </div>
+            <div class="form-group colpad col-md-4">
+              <label for="payment_amount">Payment Amount</label>
+              <input
+                class="form-control"
+                type="number"
+                id="payment_amount"
+                name="payment_amount"
+                required
+              />
+            </div>
+          </div>
+          <br/>
+          <div class="center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
     </div>
   </body>
 </html>
