@@ -6,16 +6,18 @@ from sanic.response import json
 from sanic.views import HTTPMethodView
 
 from intranet.app import IntranetApp
+from intranet.decorators.require_login import require_login
 
 
 class Site_Checker(HTTPMethodView):
     def __init__(self):
         super().__init__()
 
+    @require_login(is_api=True)
     async def get(self, request: Request):
         response = await request.respond(json({"message": "Site check triggered"}))
         app: IntranetApp = request.app
-        await response.send()
+        await request.respond(response)
 
         # Get IPs from DB
         db_pool = app.get_db_pool()

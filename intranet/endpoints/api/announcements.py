@@ -9,9 +9,11 @@ from sanic.response import json
 from sanic.views import HTTPMethodView
 
 from intranet.app import IntranetApp
+from intranet.decorators.require_login import require_login
 
 
 class Announcements_API(HTTPMethodView):
+    @require_login(is_api=True)
     async def get(self, request: Request, id: str = None):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
@@ -45,6 +47,7 @@ class Announcements_API(HTTPMethodView):
             }
             return json({"status": "success", "announcement": announcement})
 
+    @require_login(is_api=True)
     async def post(self, request: Request, id: str = None):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
@@ -109,5 +112,6 @@ class Announcements_API(HTTPMethodView):
 
         return json({"status": "success", "id": announcement_id})
 
+    @require_login(is_api=True)
     async def patch(self, request: Request):
-        ...
+        return await json({"status": "failure", "message": "Not implemented"})

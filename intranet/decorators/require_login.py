@@ -5,7 +5,7 @@ from intranet.app import IntranetApp
 from intranet.models.JWTStatus import JWTStatus
 
 
-def require_login():
+def require_login(is_api: bool = False):
     def decorator(f):
         async def decorated_function(*args, **kwargs):
             # Check if the first argument is a view or a request
@@ -25,8 +25,10 @@ def require_login():
                 # Call the function if the request is authorized
                 return await f(*args, **kwargs)
             else:
-                # Redirect to the login page if the request is not authorized
-                return response.redirect("login")
+                if is_api:
+                    return response.json({"error": "Unauthorized access"}, status=401)
+                else:
+                    return response.redirect("/login")
 
         return decorated_function
 

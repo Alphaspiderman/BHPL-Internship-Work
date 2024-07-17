@@ -5,9 +5,11 @@ from sanic.views import HTTPMethodView
 from sanic.log import logger
 
 from intranet.app import IntranetApp
+from intranet.decorators.require_login import require_login
 
 
 class Files(HTTPMethodView):
+    @require_login(is_api=True)
     async def get(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()

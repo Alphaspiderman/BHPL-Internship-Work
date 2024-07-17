@@ -5,10 +5,12 @@ from sanic.response import json as json_resp
 from sanic.views import HTTPMethodView
 
 from intranet.app import IntranetApp
+from intranet.decorators.require_login import require_login
 from intranet.models.location import Location
 
 
 class Location_Master(HTTPMethodView):
+    @require_login(is_api=True)
     async def get(self, request: Request):
         location = request.args.get("location")
         app: IntranetApp = request.app
@@ -63,6 +65,7 @@ class Location_Master(HTTPMethodView):
             dumps=lambda x: json.dumps(x, default=str),
         )
 
+    @require_login(is_api=True)
     async def post(self, request: Request):
         return json_resp({"message": "To be implemented"})
         # data = request.json
@@ -76,6 +79,7 @@ class Location_Master(HTTPMethodView):
         #         )
         # return json_resp({"message": "Location added"})
 
+    @require_login(is_api=True)
     async def patch(self, request: Request):
         return json_resp({"message": "To be implemented"})
         # data = request.json

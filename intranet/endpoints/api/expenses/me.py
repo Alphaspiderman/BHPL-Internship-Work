@@ -9,6 +9,7 @@ from sanic.views import HTTPMethodView
 from sanic.request.form import File
 
 from intranet.app import IntranetApp
+from intranet.decorators.require_login import require_login
 from intranet.models.expense import Expense
 
 
@@ -16,6 +17,7 @@ class Employee_Expenses(HTTPMethodView):
     cost_per_km_4 = 13
     cost_per_km_2 = 8
 
+    @require_login(is_api=True)
     async def get(self, request: Request):
         by_doc_date = request.args.get("by_doc_date")
         if by_doc_date is not None and by_doc_date.lower() == "true":
@@ -57,6 +59,7 @@ class Employee_Expenses(HTTPMethodView):
             }
         )
 
+    @require_login(is_api=True)
     async def post(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
@@ -138,6 +141,7 @@ class Employee_Expenses(HTTPMethodView):
             await conn.commit()
         return json({"status": "success"})
 
+    @require_login(is_api=True)
     async def delete(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()

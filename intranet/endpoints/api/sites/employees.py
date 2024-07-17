@@ -3,9 +3,11 @@ from sanic.response import json
 from sanic.views import HTTPMethodView
 
 from intranet.app import IntranetApp
+from intranet.decorators.require_login import require_login
 
 
 class Location_Employees(HTTPMethodView):
+    @require_login(is_api=True)
     async def get(self, request: Request):
         location = request.args.get("loc")
         app: IntranetApp = request.app

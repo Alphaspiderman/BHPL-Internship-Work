@@ -21,7 +21,7 @@ class Vendor_Info(HTTPMethodView):
         "Account_Number",
     ]
 
-    @require_login()
+    @require_login(is_api=True)
     async def get(self, request: Request):
         app: IntranetApp = request.app
         vendor_id = request.args.get("id")
@@ -65,6 +65,7 @@ class Vendor_Info(HTTPMethodView):
         else:
             return json({"data": vendor_info, "schema": self.schema})
 
+    @require_login(is_api=True)
     async def post(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
@@ -87,6 +88,7 @@ class Vendor_Info(HTTPMethodView):
                 await conn.commit()
         return json({"status": "success"})
 
+    @require_login(is_api=True)
     async def patch(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()

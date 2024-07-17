@@ -6,10 +6,12 @@ from sanic.response import file
 from sanic.views import HTTPMethodView
 
 from intranet.app import IntranetApp
+from intranet.decorators.require_login import require_login
 from intranet.models.location import Location
 
 
 class Location_CSV(HTTPMethodView):
+    @require_login(is_api=True)
     async def get(self, request: Request):
         location = request.args.get("location")
         app: IntranetApp = request.app

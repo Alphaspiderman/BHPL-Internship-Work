@@ -25,7 +25,7 @@ class Bell_Info(HTTPMethodView):
         else:
             raise ValueError("Invalid card type")
 
-    @require_login()
+    @require_login(is_api=True)
     async def get(self, request: Request):
         """Stats about Bells awarded to the employee this month"""
         app: IntranetApp = request.app

@@ -14,7 +14,7 @@ class Departments(HTTPMethodView):
         "Department_Email",
     ]
 
-    @require_login()
+    @require_login(is_api=True)
     async def get(self, request: Request):
         app: IntranetApp = request.app
         show_all = request.args.get("show")

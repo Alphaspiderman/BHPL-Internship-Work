@@ -4,9 +4,11 @@ from sanic.response import json
 from sanic.views import HTTPMethodView
 
 from intranet.app import IntranetApp
+from intranet.decorators.require_login import require_login
 
 
 class Site_Status(HTTPMethodView):
+    @require_login(is_api=True)
     async def get(self, request: Request):
         logger.info("Getting site status")
         app: IntranetApp = request.app

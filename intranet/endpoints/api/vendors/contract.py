@@ -12,7 +12,7 @@ from intranet.models.vendor_contract import VendorContract
 
 
 class Vendor_Contract(HTTPMethodView):
-    @require_login()
+    @require_login(is_api=True)
     async def get(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
@@ -80,6 +80,7 @@ class Vendor_Contract(HTTPMethodView):
                 }
             )
 
+    @require_login(is_api=True)
     async def post(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
@@ -138,6 +139,7 @@ class Vendor_Contract(HTTPMethodView):
                     return json({"status": "failed"})
         return json({"status": "success"})
 
+    @require_login(is_api=True)
     async def patch(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()

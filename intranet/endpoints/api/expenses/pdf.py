@@ -5,6 +5,7 @@ from sanic.views import HTTPMethodView
 from sanic_ext import render
 
 from intranet.app import IntranetApp
+from intranet.decorators.require_login import require_login
 from intranet.models.employee import Employee
 from intranet.models.expense import Expense
 
@@ -13,6 +14,7 @@ class Expenses_PDF(HTTPMethodView):
     cost_per_km_4 = 13
     cost_per_km_2 = 8
 
+    @require_login(is_api=True)
     async def get(self, request: Request):
         app: IntranetApp = request.app
         date_from = request.args.get("from")
