@@ -11,7 +11,6 @@ from intranet.endpoints.rewards.reward_bells import Reward_Bells
 from intranet.endpoints.rewards.rewards import Rewards
 from intranet.endpoints.sales import Sales
 from intranet.endpoints.vendors.create.vendors import Vendors_Create
-from intranet.endpoints.vendors.create.payments import Payments_Create
 from intranet.endpoints.vendors.create.contracts import Contracts_Create
 from intranet.endpoints.vendors.edit.vendors import Vendors_Edit
 from intranet.endpoints.vendors.edit.payments import Payments_Edit
@@ -32,7 +31,6 @@ appserver.add_route(Contracts_View.as_view(), "/vendors/contracts")
 appserver.add_route(Payments_View.as_view(), "/vendors/payments")
 appserver.add_route(Vendors_Create.as_view(), "/vendors/vendors/create")
 appserver.add_route(Contracts_Create.as_view(), "/vendors/contracts/create")
-appserver.add_route(Payments_Create.as_view(), "/vendors/payments/create")
 appserver.add_route(Vendors_Edit.as_view(), "/vendors/vendors/edit/<uuid:str>")
 appserver.add_route(Contracts_Edit.as_view(), "/vendors/contracts/edit/<uuid:str>")
 appserver.add_route(Payments_Edit.as_view(), "/vendors/payments/edit/<uuid:str>")

@@ -101,7 +101,7 @@ function handle_form_submit() {
       // Update data in DB
       $.ajax({
         url: "/api/vendors/info",
-        type: "PATCH",
+        type: "PUT",
         data: {
           id: vendor_id,
           modified_fields: modified_fields,
@@ -112,13 +112,12 @@ function handle_form_submit() {
           PAN_Number: panNumber,
           GST_Number: gstNumber,
           Account_Number: accountNumber,
-
         },
         success: function (data) {
           alert("Vendor updated successfully");
           window.location.href = "/vendors/vendors";
         },
       });
-    }
+    },
   });
 }

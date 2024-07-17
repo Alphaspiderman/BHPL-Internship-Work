@@ -70,7 +70,7 @@ function handle_form_submit() {
   newFormData.append("data", JSON.stringify(data));
   $.ajax({
     url: "/api/vendors/contract",
-    type: "PATCH",
+    type: "PUT",
     data: newFormData,
     contentType: false,
     processData: false,

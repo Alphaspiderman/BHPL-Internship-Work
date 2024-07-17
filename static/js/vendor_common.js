@@ -101,12 +101,12 @@ function load_dropdown(type) {
       elem.appendChild(new Option("Show All", "all"));
       response.forEach((element) => {
         if (element.length > 1) {
-          elem.appendChild(
-            new Option(element[0] + " - " + element[1], element[0]),
-          );
+          // Join all the elements except the first in the array to form a single string
+          var option_val = element.slice(1).join(" - ");
         } else {
-          elem.appendChild(new Option(element[0], element[0]));
+          var option_val = element[0];
         }
+        elem.appendChild(new Option(option_val, element[0]));
       });
     },
     error: function (response) {

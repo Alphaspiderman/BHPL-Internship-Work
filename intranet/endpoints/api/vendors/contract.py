@@ -140,7 +140,7 @@ class Vendor_Contract(HTTPMethodView):
         return json({"status": "success"})
 
     @require_login(is_api=True)
-    async def patch(self, request: Request):
+    async def put(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
         # Extract the data from the request
