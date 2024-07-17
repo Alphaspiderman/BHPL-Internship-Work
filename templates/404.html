@@ -25,40 +25,21 @@
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
     ></script>
-    <script src="/static/js/page.js"></script>
     <link rel="icon" type="image/png" href="/static/images/favicon.jpg" />
     <link href="/static/css/styles.css" rel="stylesheet" />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/home">
-          <img
-            alt="Burman Hospitality"
-            height="30px"
-            src="/static/images/bh.svg"
-          />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarContent"
-          aria-controls="navbarContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+    <div class="body">
+      <div class="d-flex flex-column min-vh-100 min-vw-100">
+        <div
+          class="d-flex flex-column flex-grow-1 justify-content-center align-items-center"
         >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarContent"></div>
-      </div>
-    </nav>
-    <div class="d-flex flex-column min-vh-100 min-vw-100">
-      <div
-        class="d-flex flex-column flex-grow-1 justify-content-center align-items-center"
-      >
-        <h1>404</h1>
-        <p>Page not found</p>
+          <h1>404</h1>
+          <p>Page not found</p>
+          <button class="btn btn-primary" onclick="window.location.href = '/';">
+            Back to Home
+          </button>
+        </div>
       </div>
     </div>
   </body>
