@@ -114,4 +114,4 @@ class Announcements_API(HTTPMethodView):
 
     @require_login(is_api=True)
     async def patch(self, request: Request):
-        return await json({"status": "failure", "message": "Not implemented"})
+        return json({"status": "failure", "message": "Not implemented"})

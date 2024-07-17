@@ -65,8 +65,6 @@ app.config.PROXIES_COUNT = int(config.get("PROXIES_COUNT", 0))
 
 # Static files
 app.static("/static/", "./static/", name="static")
-# Dynamic files (Uploaded files, temp storage for download files, etc.)
-app.static("/files/", "./dynamic/", name="files")
 
 
 @app.listener("before_server_start")
@@ -183,24 +181,24 @@ def ignore_404s(request, exception):
     return render("404.html")
 
 
+# Check for Production environment
+is_prod = app.config["IS_PROD"]
+
+# Use a KWARGS dict to pass to app.run dynamically
+kwargs = {"host": "0.0.0.0"}
+
+if is_prod:
+    # If prod, check for HOST (internally required for JWTs).
+    if app.config.get("HOST") is None:
+        logger.error("MISSING HOST")
+        quit(1)
+
+else:
+    # If DEV, set HOST to DEV.
+    app.config["HOST"] = "DEV"
+    kwargs["debug"] = True
+    kwargs["auto_reload"] = True
+
 if __name__ == "__main__":
-    # Check for Production environment
-    is_prod = app.config["IS_PROD"]
-
-    # Use a KWARGS dict to pass to app.run dynamically
-    kwargs = {"access_log": True, "host": "0.0.0.0"}
-
-    if is_prod:
-        # If prod, check for HOST (internally required for JWTs).
-        if app.config.get("HOST") is None:
-            logger.error("MISSING HOST")
-            quit(1)
-
-    else:
-        # If DEV, set HOST to DEV.
-        app.config["HOST"] = "DEV"
-        kwargs["debug"] = True
-        kwargs["auto_reload"] = True
-
     # Run the API Server
     app.run(**kwargs)

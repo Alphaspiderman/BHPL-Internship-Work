@@ -27,6 +27,7 @@ python-dotenv = "^1.0.0"
 
 [tool.taskipy.tasks]
 server = { cmd = "python -m intranet.server", help = "Runs the API Server"}
+prod = { cmd = "python -m sanic intranet.server --host=0.0.0.0 --port=8000 --fast", help = "Runs the API Server"}
 lint = { cmd = "pre-commit run", help = "Lints project" }
 lintall = { cmd = "pre-commit run --all-files", help = "Lints project" }
 precommit = { cmd = "pre-commit install", help = "Installs the pre-commit git hook" }

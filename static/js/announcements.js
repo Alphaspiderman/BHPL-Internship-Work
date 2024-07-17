@@ -21,7 +21,7 @@ function load_announcements(data) {
     announcement = document.createElement("div");
     announcement.className = "card";
     img = document.createElement("img");
-    img.src = `/files/${image}`;
+    img.src = `/api/files/?file_id=${image}`;
     img.class = "rounded mx-auto d-block";
     announcement.appendChild(img);
     body = document.createElement("div");

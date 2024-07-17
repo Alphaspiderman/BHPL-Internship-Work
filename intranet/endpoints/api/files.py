@@ -30,7 +30,6 @@ class Files(HTTPMethodView):
             file_flag = file_to_send[6]
             # Check File's Flag
             if file_flag == "public":
-                logger.info("Public File")
                 pass
             elif file_flag == "private":
                 try:
@@ -79,14 +78,14 @@ class Files(HTTPMethodView):
                         }
                     )
             # Write file to disk
-            logger.info(f"Writing file to disk: {file_name}")
+            logger.debug(f"Writing file to disk: {file_name}")
             path = f"temp/{file_name}"
             async with aiofiles.open(path, "wb") as f:
                 await f.write(file_data)
-            logger.info(f"File written to disk: {path}")
+            logger.debug(f"File written to disk: {path}")
             resp = await file(path, filename=file_name, mime_type=file_mime_type)
             await request.respond(resp)
 
             # Delete file from disk
-            logger.info(f"Deleting file from disk: {path}")
+            logger.debug(f"Deleting file from disk: {path}")
             await aiofiles.os.remove(path)
