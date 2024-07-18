@@ -20,10 +20,10 @@ class Location:
         "Latitude",
         "Longitude",
         "Store_Open_Date",
-        "Posit_Live_Date",
+        "Posist_Live_Date",
         "Seat_Count",
         "Local_Org_Name",
-        "Franchisee_id",
+        "Franchisee_Id",
         "Temp_Close_Date",
         "Reopen_Date",
         "Store_Closure_Date",
@@ -43,7 +43,7 @@ class Location:
         "Saturday_Close",
         "Market_Name",
         "Area_Name",
-        "Coach_ID",
+        "Coach_Id",
         "Ip_Range_Start",
         "Ip_Range_End",
         "Subnet",
@@ -91,19 +91,21 @@ class Location:
     def to_dict(self) -> dict:
         return {field: getattr(self, field) for field in self.fields}
 
-    def get_data(self, is_IT: bool) -> dict:
+    def get_data(self, is_IT: bool, show_all: bool = False) -> dict:
         data = self.to_dict()
-        for field in self.hidden_fields:
-            data.pop(field, None)
+        if not show_all:
+            for field in self.hidden_fields:
+                data.pop(field, None)
         if not is_IT:
             for field in self.IT_only_fields:
                 data.pop(field, None)
         return data
 
-    def get_schema(self, is_IT) -> dict:
+    def get_schema(self, is_IT: bool = False, show_all: bool = False) -> dict:
         schema = self.fields.copy()
-        for field in self.hidden_fields:
-            schema.remove(field)
+        if not show_all:
+            for field in self.hidden_fields:
+                schema.remove(field)
         if not is_IT:
             for field in self.IT_only_fields:
                 schema.remove(field)
