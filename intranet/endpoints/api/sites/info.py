@@ -84,20 +84,20 @@ class Location_Master(HTTPMethodView):
             async with conn.cursor() as cur:
                 try:
                     storeOpenDate = data.get("storeOpenDate", None)
-                    positLiveDate = data.get("positLiveDate", None)
+                    posistLiveDate = data.get("posistLiveDate", None)
                     if storeOpenDate:
                         storeOpenDate = datetime.strptime(
                             storeOpenDate, "%Y-%m-%d"
                         ).strftime("%Y-%m-%d")
-                    if positLiveDate:
-                        positLiveDate = datetime.strptime(
-                            positLiveDate, "%Y-%m-%d"
+                    if posistLiveDate:
+                        posistLiveDate = datetime.strptime(
+                            posistLiveDate, "%Y-%m-%d"
                         ).strftime("%Y-%m-%d")
                     await cur.execute(
                         """INSERT INTO sites (Champs_Number, Store_Code, Store_Name, Posist_Store_Name,
                         Ownership_Type, Local_Address, City, State_Name, Region_Internal, Postal_Code,
                         Primary_Brand_Channel, Facility_Type, Ordering_Methods, Store_Type, Store_Phone,
-                        Store_Email, Status, Latitude, Longitude, Store_Open_Date, Posit_Live_Date,
+                        Store_Email, Status, Latitude, Longitude, Store_Open_Date, Posist_Live_Date,
                         Seat_Count, Local_Org_Name, Franchisee_id, Temp_Close_Date, Reopen_Date,
                         Store_Closure_Date, Sunday_Open, Sunday_Close, Monday_Open, Monday_Close,
                         Tuesday_Open, Tuesday_Close, Wednesday_Open, Wednesday_Close, Thursday_Open,
@@ -128,7 +128,7 @@ class Location_Master(HTTPMethodView):
                             data.get("latitude", None),
                             data.get("longitude", None),
                             storeOpenDate,
-                            positLiveDate,
+                            posistLiveDate,
                             data.get("seatCount", None),
                             data.get("localOrgName", None),
                             data.get("franchiseeId", None),
@@ -182,7 +182,7 @@ class Location_Master(HTTPMethodView):
                         Region_Internal = %s, Postal_Code = %s, Primary_Brand_Channel = %s,
                         Facility_Type = %s, Ordering_Methods = %s, Store_Type = %s, Store_Phone = %s,
                         Store_Email = %s, Status = %s, Latitude = %s, Longitude = %s, Store_Open_Date = %s,
-                        Posit_Live_Date = %s, Seat_Count = %s, Local_Org_Name = %s, Franchisee_id = %s,
+                        posist_Live_Date = %s, Seat_Count = %s, Local_Org_Name = %s, Franchisee_id = %s,
                         Temp_Close_Date = %s, Reopen_Date = %s, Store_Closure_Date = %s, Sunday_Open = %s,
                         Sunday_Close = %s, Monday_Open = %s, Monday_Close = %s, Tuesday_Open = %s,
                         Tuesday_Close = %s, Wednesday_Open = %s, Wednesday_Close = %s, Thursday_Open = %s,
@@ -209,7 +209,7 @@ class Location_Master(HTTPMethodView):
                             data.get("latitude", None),
                             data.get("longitude", None),
                             data.get("storeOpenDate", None),
-                            data.get("positLiveDate", None),
+                            data.get("posistLiveDate", None),
                             data.get("seatCount", None),
                             data.get("localOrgName", None),
                             data.get("franchiseeId", None),

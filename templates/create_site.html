@@ -29,6 +29,7 @@
     <script src="/static/js/page.js"></script>
     <link rel="icon" type="image/png" href="/static/images/favicon.jpg" />
     <link rel="stylesheet" href="/static/css/create_location.css" />
+    <script src="/static/js/create_location.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -56,7 +57,7 @@
     </nav>
     <div class="body">
       <div class="container-fluid">
-        <form action="/api/sites/info" method="post">
+        <form action="/api/sites/info" method="post" id="form">
           <h2 class="center">Store Referenece Code</h2>
           <div class="row align-items-center align-self-center">
             <div class="col-md-4">
@@ -104,11 +105,11 @@
               />
             </div>
             <div class="col-md-4">
-              <label for="positLiveDate">Posit Live Date</label>
+              <label for="posistLiveDate">Posist Live Date</label>
               <input
                 type="date"
-                id="positLiveDate"
-                name="positLiveDate"
+                id="posistLiveDate"
+                name="posistLiveDate"
                 class="form-control"
                 required
               />
@@ -273,7 +274,6 @@
                 id="coachId"
                 name="coachId"
                 class="form-control"
-                required
               />
             </div>
           </div>
@@ -322,7 +322,7 @@
             <div class="col-md-4">
               <label for="seatCount">Seat Count</label>
               <input
-                type="number"
+                type="text"
                 id="seatCount"
                 name="seatCount"
                 class="form-control"
@@ -497,7 +497,6 @@
                 id="ipRangeStart"
                 name="ipRangeStart"
                 class="form-control"
-                required
               />
             </div>
             <div class="col-md-4">
@@ -507,7 +506,6 @@
                 id="ipRangeEnd"
                 name="ipRangeEnd"
                 class="form-control"
-                required
               />
             </div>
             <div class="col-md-4">
@@ -517,7 +515,6 @@
                 id="subnet"
                 name="subnet"
                 class="form-control"
-                required
               />
             </div>
             <div class="col-md-4">
@@ -527,7 +524,6 @@
                 id="staticIp"
                 name="staticIp"
                 class="form-control"
-                required
               />
             </div>
             <div class="col-md-4">
@@ -537,7 +533,7 @@
                 id="linkISP"
                 name="linkISP"
                 class="form-control"
-                required
+                value="ALLINT"
               />
             </div>
             <div class="col-md-4">
@@ -547,13 +543,15 @@
                 id="linkType"
                 name="linkType"
                 class="form-control"
-                required
+                value="BB"
               />
             </div>
           </div>
           <br />
           <div class="center">
-            <button type="submit" class="btn btn-primary center">Submit</button>
+            <button type="submit" class="btn btn-primary center" id="submit">
+              Submit
+            </button>
           </div>
           <br />
         </form>
