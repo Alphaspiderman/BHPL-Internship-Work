@@ -5,6 +5,7 @@ from intranet.endpoints.announcements import Announcements
 from intranet.endpoints.connectivity import Connectivity
 from intranet.endpoints.create_announcement import Create_Announcement
 from intranet.endpoints.create_location import Create_Location
+from intranet.endpoints.edit_location import Edit_Location
 from intranet.endpoints.home import Home
 from intranet.endpoints.locations import Locations
 from intranet.endpoints.login import Login
@@ -22,10 +23,12 @@ from intranet.endpoints.vendors.view.contracts import Contracts_View
 from intranet.endpoints.expenses.expenses import Expenses
 from intranet.endpoints.expenses.expense_report import Expense_Report
 
+
 appserver.add_route(Home.as_view(), "/home")
 appserver.add_route(Login.as_view(), "/login")
 appserver.add_route(Locations.as_view(), "/locations")
 appserver.add_route(Create_Location.as_view(), "/locations/create")
+appserver.add_route(Edit_Location.as_view(), "/locations/edit/<uuid:str>")
 appserver.add_route(Sales.as_view(), "/sales")
 appserver.add_route(Connectivity.as_view(), "/connectivity")
 appserver.add_route(Vendors_View.as_view(), "/vendors/vendors")

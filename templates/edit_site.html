@@ -1,0 +1,561 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Burman Hospitality</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      crossorigin="anonymous"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    ></script>
+    <link href="/static/css/styles.css" rel="stylesheet" />
+    <script src="/static/js/page.js"></script>
+    <link rel="icon" type="image/png" href="/static/images/favicon.jpg" />
+    <link rel="stylesheet" href="/static/css/create_location.css" />
+    <script src="/static/js/edit_location.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="https://burmanhospitality.com/">
+          <img
+            alt="Burman Hospitality"
+            height="30px"
+            src="/static/images/bh.svg"
+          />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+          aria-controls="navbarContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent"></div>
+      </div>
+    </nav>
+    <div class="body">
+      <div class="container-fluid">
+        <form action="/api/sites/info" method="put">
+          <h2 class="center">Store Referenece Code</h2>
+          <div class="row align-items-center align-self-center">
+            <div class="col-md-4">
+              <label for="storeCode">Store Code</label>
+              <input
+                type="text"
+                id="storeCode"
+                name="storeCode"
+                class="form-control"
+                readonly
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label for="champsNumber">Champs Number</label>
+              <input
+                type="text"
+                id="champsNumber"
+                name="champsNumber"
+                class="form-control"
+                readonly
+              />
+            </div>
+          </div>
+          <h2 class="center">Store Information</h2>
+          <div class="row align-items-center align-self-center">
+            <div class="col-md-4">
+              <label for="storeName">Store Name</label>
+              <input
+                type="text"
+                id="storeName"
+                name="storeName"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="posistStoreName">Posist Store Name</label>
+              <input
+                type="text"
+                id="posistStoreName"
+                name="posistStoreName"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="positLiveDate">Posit Live Date</label>
+              <input
+                type="date"
+                id="positLiveDate"
+                name="positLiveDate"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+          <h2 class="center">Address Information</h2>
+          <div class="row align-items-center align-self-center">
+            <div class="col-md-12">
+              <label for="localAddress">Local Address</label>
+              <input
+                type="text"
+                id="localAddress"
+                name="localAddress"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="city">City</label>
+              <input
+                type="text"
+                id="city"
+                name="city"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="stateName">State Name</label>
+              <input
+                type="text"
+                id="stateName"
+                name="stateName"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="regionInternal">Region Internal</label>
+              <input
+                type="text"
+                id="regionInternal"
+                name="regionInternal"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="postalCode">Postal Code</label>
+              <input
+                type="text"
+                id="postalCode"
+                name="postalCode"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="latitude">Latitude</label>
+              <input
+                type="text"
+                id="latitude"
+                name="latitude"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="longitude">Longitude</label>
+              <input
+                type="text"
+                id="longitude"
+                name="longitude"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <h2 class="center">Franchise Information</h2>
+          <div class="row align-items-center align-self-center">
+            <div class="col-md-4">
+              <label for="ownershipType">Ownership Type</label>
+              <input
+                type="text"
+                id="ownershipType"
+                name="ownershipType"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="primaryBrandChannel">Primary Brand Channel</label>
+              <input
+                type="text"
+                id="primaryBrandChannel"
+                name="primaryBrandChannel"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="facilityType">Facility Type</label>
+              <input
+                type="text"
+                id="facilityType"
+                name="facilityType"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="storeType">Store Type</label>
+              <input
+                type="text"
+                id="storeType"
+                name="storeType"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="localOrgName">Local Org Name</label>
+              <input
+                type="text"
+                id="localOrgName"
+                name="localOrgName"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="franchiseeId">Franchisee ID</label>
+              <input
+                type="text"
+                id="franchiseeId"
+                name="franchiseeId"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="marketName">Market Name</label>
+              <input
+                type="text"
+                id="marketName"
+                name="marketName"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="areaName">Area Name</label>
+              <input
+                type="text"
+                id="areaName"
+                name="areaName"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="coachId">Coach ID</label>
+              <input
+                type="text"
+                id="coachId"
+                name="coachId"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+          <div class="row align-items-center align-self-center">
+            <h2 class="center">Store Contact</h2>
+            <div class="col-md-4">
+              <label for="storePhone">Store Phone</label>
+              <input
+                type="text"
+                id="storePhone"
+                name="storePhone"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="storeEmail">Store Email</label>
+              <input
+                type="email"
+                id="storeEmail"
+                name="storeEmail"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="status">Status</label>
+              <input
+                type="text"
+                id="status"
+                name="status"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="storeOpenDate">Store Open Date</label>
+              <input
+                type="date"
+                id="storeOpenDate"
+                name="storeOpenDate"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="seatCount">Seat Count</label>
+              <input
+                type="number"
+                id="seatCount"
+                name="seatCount"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="tempCloseDate">Temporary Close Date</label>
+              <input
+                type="date"
+                id="tempCloseDate"
+                name="tempCloseDate"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="reopenDate">Reopen Date</label>
+              <input
+                type="date"
+                id="reopenDate"
+                name="reopenDate"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="storeClosureDate">Store Closure Date</label>
+              <input
+                type="date"
+                id="storeClosureDate"
+                name="storeClosureDate"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <h2 class="center">Store Hours</h2>
+          <div
+            class="row justify-content-around align-items-center align-self-center"
+          >
+            <div class="col-md-5">
+              <label for="sundayOpen">Sunday Open</label>
+              <input
+                type="time"
+                id="sundayOpen"
+                name="sundayOpen"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="sundayClose">Sunday Close</label>
+              <input
+                type="time"
+                id="sundayClose"
+                name="sundayClose"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="mondayOpen">Monday Open</label>
+              <input
+                type="time"
+                id="mondayOpen"
+                name="mondayOpen"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="mondayClose">Monday Close</label>
+              <input
+                type="time"
+                id="mondayClose"
+                name="mondayClose"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="tuesdayOpen">Tuesday Open</label>
+              <input
+                type="time"
+                id="tuesdayOpen"
+                name="tuesdayOpen"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="tuesdayClose">Tuesday Close</label>
+              <input
+                type="time"
+                id="tuesdayClose"
+                name="tuesdayClose"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="wednesdayOpen">Wednesday Open</label>
+              <input
+                type="time"
+                id="wednesdayOpen"
+                name="wednesdayOpen"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="wednesdayClose">Wednesday Close</label>
+              <input
+                type="time"
+                id="wednesdayClose"
+                name="wednesdayClose"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="thursdayOpen">Thursday Open</label>
+              <input
+                type="time"
+                id="thursdayOpen"
+                name="thursdayOpen"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="thursdayClose">Thursday Close</label>
+              <input
+                type="time"
+                id="thursdayClose"
+                name="thursdayClose"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="fridayOpen">Friday Open</label>
+              <input
+                type="time"
+                id="fridayOpen"
+                name="fridayOpen"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="fridayClose">Friday Close</label>
+              <input
+                type="time"
+                id="fridayClose"
+                name="fridayClose"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="saturdayOpen">Saturday Open</label>
+              <input
+                type="time"
+                id="saturdayOpen"
+                name="saturdayOpen"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="saturdayClose">Saturday Close</label>
+              <input
+                type="time"
+                id="saturdayClose"
+                name="saturdayClose"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <h2 class="center">Network Information</h2>
+          <div class="row align-items-center align-self-center">
+            <div class="col-md-4">
+              <label for="ipRangeStart">IP Range Start</label>
+              <input
+                type="text"
+                id="ipRangeStart"
+                name="ipRangeStart"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="ipRangeEnd">IP Range End</label>
+              <input
+                type="text"
+                id="ipRangeEnd"
+                name="ipRangeEnd"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="subnet">Subnet</label>
+              <input
+                type="text"
+                id="subnet"
+                name="subnet"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="staticIp">Static IP</label>
+              <input
+                type="text"
+                id="staticIp"
+                name="staticIp"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="linkISP">Link ISP</label>
+              <input
+                type="text"
+                id="linkISP"
+                name="linkISP"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="linkType">Link Type</label>
+              <input
+                type="text"
+                id="linkType"
+                name="linkType"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+          <br />
+          <div class="center">
+            <button type="submit" class="btn btn-primary center">Submit</button>
+          </div>
+          <br />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
