@@ -1,7 +1,7 @@
 import uuid
 
 from sanic.request import Request
-from sanic.response import redirect
+from sanic.response import redirect, json
 from sanic.views import HTTPMethodView
 
 
@@ -20,11 +20,21 @@ class Login_Root(HTTPMethodView):
         state = uuid.uuid1()
         nonce = uuid.uuid1()
 
+        # ENV Variables
+        tenant_id = request.app.config["AZURE_AD_TENANT_ID"]
+        client_id = request.app.config["AZURE_AD_CLIENT_ID"]
+        redirect_url = request.app.config["AZURE_AD_REDIRECT_URI"]
+
+        if len(tenant_id) == 0 or len(client_id) == 0 or len(redirect_url) == 0:
+            return json(
+                {"status": "error", "message": "Server is improperly configured"}
+            )
+
         # Generate the URL to redirect the user to.
         url = self.template % {
-            "tenant": request.app.config["AZURE_AD_TENANT_ID"],
-            "client_id": request.app.config["AZURE_AD_CLIENT_ID"],
-            "redirect_uri": request.app.config["AZURE_AD_REDIRECT_URI"],
+            "tenant": tenant_id,
+            "client_id": client_id,
+            "redirect_uri": redirect_url,
             "scope": "openid profile email offline_access",
             "state": state,
             "nonce": nonce,
