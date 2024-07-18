@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  $("#form").parsley();
   document.getElementById("form").addEventListener("submit", function (e) {
     e.preventDefault();
     handle_form_submit();

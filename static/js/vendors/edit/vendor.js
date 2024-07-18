@@ -10,6 +10,7 @@ const mapping = {
 };
 
 $(document).ready(function () {
+  $("#form").parsley();
   vendor_id = window.location.href.split("/").pop();
   $.ajax({
     url: "/api/vendors/info",

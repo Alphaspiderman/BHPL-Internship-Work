@@ -28,6 +28,8 @@
     <link href="/static/css/styles.css" rel="stylesheet" />
     <script src="/static/js/page.js"></script>
     <link rel="icon" type="image/png" href="/static/images/favicon.jpg" />
+    <script src="https://parsleyjs.org/dist/parsley.min.js"></script>
+    <link rel="stylesheet" href="https://parsleyjs.org/src/parsley.css" />
     <script src="/static/js/vendors/edit/contract.js"></script>
     <link rel="stylesheet" href="/static/css/vendor_contract.css" />
   </head>
@@ -59,7 +61,12 @@
     <div class="body">
       <div class="container-fluid" style="padding: 2%">
         <h2 class="center">Vendor Contract Update Form</h2>
-        <form id="form" action="/api/vendors/contract" method="post">
+        <form
+          id="form"
+          action="/api/vendors/contract"
+          method="post"
+          data-parsley-trigger="focusin focusout"
+        >
           <div class="row align-items-center align-self-center">
             <div class="form-group colpad col-md-4">
               <label for="vendor">Vendor</label>
@@ -71,6 +78,7 @@
                 class="form-control"
                 id="contract"
                 name="contract"
+                required
               ></select>
             </div>
             <div class="form-group colpad col-md-4">
@@ -89,6 +97,7 @@
                 class="form-control"
                 id="startDate"
                 name="startDate"
+                required
               />
             </div>
             <div class="form-group colpad col-md-4">
@@ -98,6 +107,7 @@
                 class="form-control"
                 id="endDate"
                 name="endDate"
+                required
               />
             </div>
             <div class="form-group colpad col-md-4 center">
@@ -136,11 +146,18 @@
                 id="contractDesc"
                 name="contractDesc"
                 placeholder="Enter Descrption"
+                data-parsley-maxlength="64000"
+                required
               />
             </div>
             <div class="form-group colpad col-md-4">
               <label for="frequency">Select Frequency of Invoice</label>
-              <select class="form-control" id="frequency" name="frequency">
+              <select
+                class="form-control"
+                id="frequency"
+                name="frequency"
+                required
+              >
                 <option value="Monthly">Monthly</option>
                 <option value="Quarterly">Quarterly</option>
                 <option value="Yearly">Yearly</option>
@@ -149,11 +166,13 @@
             <div class="form-group colpad col-md-4">
               <label for="baseCost">Base Cost</label>
               <input
-                type="number"
+                data-parsley-type="number"
                 class="form-control"
                 id="baseCost"
                 name="baseCost"
                 placeholder="Enter Base Cost"
+                data-parsley-maxlength="13"
+                required
               />
             </div>
           </div>

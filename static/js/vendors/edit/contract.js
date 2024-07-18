@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  $("#form").parsley();
   document.getElementById("form").addEventListener("submit", function (e) {
     // Log the form data
     e.preventDefault();
