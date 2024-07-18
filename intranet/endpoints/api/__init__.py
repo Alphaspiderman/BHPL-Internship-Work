@@ -3,8 +3,8 @@ from .announcements import Announcements_API
 from .bells.award import Award_Bells
 from .bells.info import Bell_Info
 from .departments import Departments
-from .expenses.pdf import Expenses_PDF
 from .expenses.me import Employee_Expenses
+from .expenses.pdf import Expenses_PDF
 from .files import Files
 from .login.callback import Callback
 from .login.root import Login_Root

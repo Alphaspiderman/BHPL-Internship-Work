@@ -1,28 +1,27 @@
-from intranet.app import appserver
 import intranet.endpoints.api  # noqa: F401
+from intranet.app import appserver
 from intranet.endpoints.HTTP_404 import HTTP_404
 from intranet.endpoints.announcements import Announcements
 from intranet.endpoints.connectivity import Connectivity
 from intranet.endpoints.create_announcement import Create_Announcement
 from intranet.endpoints.create_location import Create_Location
 from intranet.endpoints.edit_location import Edit_Location
+from intranet.endpoints.expenses.expense_report import Expense_Report
+from intranet.endpoints.expenses.expenses import Expenses
 from intranet.endpoints.home import Home
 from intranet.endpoints.locations import Locations
 from intranet.endpoints.login import Login
 from intranet.endpoints.rewards.reward_bells import Reward_Bells
 from intranet.endpoints.rewards.rewards import Rewards
 from intranet.endpoints.sales import Sales
-from intranet.endpoints.vendors.create.vendors import Vendors_Create
 from intranet.endpoints.vendors.create.contracts import Contracts_Create
-from intranet.endpoints.vendors.edit.vendors import Vendors_Edit
-from intranet.endpoints.vendors.edit.payments import Payments_Edit
+from intranet.endpoints.vendors.create.vendors import Vendors_Create
 from intranet.endpoints.vendors.edit.contracts import Contracts_Edit
-from intranet.endpoints.vendors.view.vendors import Vendors_View
-from intranet.endpoints.vendors.view.payments import Payments_View
+from intranet.endpoints.vendors.edit.payments import Payments_Edit
+from intranet.endpoints.vendors.edit.vendors import Vendors_Edit
 from intranet.endpoints.vendors.view.contracts import Contracts_View
-from intranet.endpoints.expenses.expenses import Expenses
-from intranet.endpoints.expenses.expense_report import Expense_Report
-
+from intranet.endpoints.vendors.view.payments import Payments_View
+from intranet.endpoints.vendors.view.vendors import Vendors_View
 
 appserver.add_route(Home.as_view(), "/home")
 appserver.add_route(Login.as_view(), "/login")

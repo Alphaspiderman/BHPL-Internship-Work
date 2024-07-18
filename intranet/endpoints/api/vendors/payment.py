@@ -1,10 +1,11 @@
+import uuid
 from datetime import datetime
 from json import loads
-import uuid
+
 import aiocsv
 import aiofiles
-from sanic.request import Request
 from sanic.log import logger
+from sanic.request import Request
 from sanic.response import json, file
 from sanic.views import HTTPMethodView
 

@@ -11,6 +11,7 @@ $(document).ready(function () {
   // Set Posist Live Date to today's date
   document.getElementById("posistLiveDate").value = formattedDate;
 });
+
 function handle_form_submit() {
   var formData = new FormData(document.getElementById("form"));
   var newFormData = new FormData();

@@ -1,7 +1,8 @@
 import uuid
+from json import loads, dumps
+
 import aiocsv
 import aiofiles
-from json import loads, dumps
 from sanic.request import Request
 from sanic.response import json, file
 from sanic.views import HTTPMethodView

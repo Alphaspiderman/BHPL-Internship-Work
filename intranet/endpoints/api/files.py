@@ -1,8 +1,8 @@
 import aiofiles
+from sanic.log import logger
 from sanic.request import Request
 from sanic.response import json, file
 from sanic.views import HTTPMethodView
-from sanic.log import logger
 
 from intranet.app import IntranetApp
 from intranet.decorators.require_login import require_login

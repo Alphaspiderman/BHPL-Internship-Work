@@ -1,12 +1,12 @@
-from datetime import datetime
-from typing import List
 import uuid
+from datetime import datetime
 from json import loads
+from typing import List
 
-from sanic.response import json
 from sanic.request import Request
-from sanic.views import HTTPMethodView
 from sanic.request.form import File
+from sanic.response import json
+from sanic.views import HTTPMethodView
 
 from intranet.app import IntranetApp
 from intranet.decorators.require_login import require_login

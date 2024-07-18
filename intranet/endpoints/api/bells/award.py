@@ -1,5 +1,6 @@
-from typing import List
 import uuid
+from typing import List
+
 from sanic.request import Request
 from sanic.request.form import File
 from sanic.response import json
