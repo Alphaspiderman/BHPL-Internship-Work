@@ -12,6 +12,37 @@ from intranet.models.location import Location
 
 
 class Location_Master(HTTPMethodView):
+    update_query_it = """
+    UPDATE sites SET Store_Name = %s, Posist_Store_Name = %s,
+    Ownership_Type = %s, Local_Address = %s, City = %s, State_Name = %s,
+    Region_Internal = %s, Postal_Code = %s, Primary_Brand_Channel = %s,
+    Facility_Type = %s, Ordering_Methods = %s, Store_Type = %s, Store_Phone = %s,
+    Store_Email = %s, Status = %s, Latitude = %s, Longitude = %s, Store_Open_Date = %s,
+    posist_Live_Date = %s, Seat_Count = %s, Local_Org_Name = %s, Franchisee_id = %s,
+    Temp_Close_Date = %s, Reopen_Date = %s, Store_Closure_Date = %s, Sunday_Open = %s,
+    Sunday_Close = %s, Monday_Open = %s, Monday_Close = %s, Tuesday_Open = %s,
+    Tuesday_Close = %s, Wednesday_Open = %s, Wednesday_Close = %s, Thursday_Open = %s,
+    Thursday_Close = %s, Friday_Open = %s, Friday_Close = %s, Saturday_Open = %s,
+    Saturday_Close = %s, Market_Name = %s, Area_Name = %s, Coach_ID = %s,
+    Ip_Range_Start = %s, Ip_Range_End = %s, Subnet = %s, Static_Ip = %s, Link_ISP = %s,
+    Link_Type = %s WHERE Store_Code = %s AND Champs_Number = %s
+    """
+
+    update_query_non_it = """
+    UPDATE sites SET Store_Name = %s, Posist_Store_Name = %s,
+    Ownership_Type = %s, Local_Address = %s, City = %s, State_Name = %s,
+    Region_Internal = %s, Postal_Code = %s, Primary_Brand_Channel = %s,
+    Facility_Type = %s, Ordering_Methods = %s, Store_Type = %s, Store_Phone = %s,
+    Store_Email = %s, Status = %s, Latitude = %s, Longitude = %s, Store_Open_Date = %s,
+    posist_Live_Date = %s, Seat_Count = %s, Local_Org_Name = %s, Franchisee_id = %s,
+    Temp_Close_Date = %s, Reopen_Date = %s, Store_Closure_Date = %s, Sunday_Open = %s,
+    Sunday_Close = %s, Monday_Open = %s, Monday_Close = %s, Tuesday_Open = %s,
+    Tuesday_Close = %s, Wednesday_Open = %s, Wednesday_Close = %s, Thursday_Open = %s,
+    Thursday_Close = %s, Friday_Open = %s, Friday_Close = %s, Saturday_Open = %s,
+    Saturday_Close = %s, Market_Name = %s, Area_Name = %s, Coach_ID = %s,
+    Link_Type = %s WHERE Store_Code = %s AND Champs_Number = %s
+    """
+
     @require_login(is_api=True)
     async def get(self, request: Request):
         location = request.args.get("location")
@@ -173,75 +204,77 @@ class Location_Master(HTTPMethodView):
         data = request.form
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
+
+        # Check department of user
+        is_it = app.decode_jwt(request.cookies.get("JWT_TOKEN"))["department"] == "IT"
+
+        query = self.update_query_non_it
+        value_list = [
+            data.get("storeName", None),
+            data.get("posistStoreName", None),
+            data.get("ownershipType", None),
+            data.get("localAddress", None),
+            data.get("city", None),
+            data.get("stateName", None),
+            data.get("regionInternal", None),
+            data.get("postalCode", None),
+            data.get("primaryBrandChannel", None),
+            data.get("facilityType", None),
+            data.get("orderingMethods", None),
+            data.get("storeType", None),
+            data.get("storePhone", None),
+            data.get("storeEmail", None),
+            data.get("status", None),
+            data.get("latitude", None),
+            data.get("longitude", None),
+            data.get("storeOpenDate", None),
+            data.get("posistLiveDate", None),
+            data.get("seatCount", None),
+            data.get("localOrgName", None),
+            data.get("franchiseeId", None),
+            data.get("tempCloseDate", None),
+            data.get("reopenDate", None),
+            data.get("storeClosureDate", None),
+            data.get("sundayOpen", None),
+            data.get("sundayClose", None),
+            data.get("mondayOpen", None),
+            data.get("mondayClose", None),
+            data.get("tuesdayOpen", None),
+            data.get("tuesdayClose", None),
+            data.get("wednesdayOpen", None),
+            data.get("wednesdayClose", None),
+            data.get("thursdayOpen", None),
+            data.get("thursdayClose", None),
+            data.get("fridayOpen", None),
+            data.get("fridayClose", None),
+            data.get("saturdayOpen", None),
+            data.get("saturdayClose", None),
+            data.get("marketName", None),
+            data.get("areaName", None),
+            data.get("coachId", None),
+        ]
+        if is_it:
+            query = self.update_query_it
+            value_list.extend(
+                [
+                    data.get("ipRangeStart", None),
+                    data.get("ipRangeEnd", None),
+                    data.get("subnet", None),
+                    data.get("staticIp", None),
+                    data.get("linkISP", None),
+                    data.get("linkType", None),
+                ]
+            )
+        value_list.extend([data.get("storeCode", None), data.get("champsNumber", None)])
+
+        value_tuple = tuple(value_list)
+
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 try:
                     await cur.execute(
-                        """UPDATE sites SET Store_Name = %s, Posist_Store_Name = %s,
-                        Ownership_Type = %s, Local_Address = %s, City = %s, State_Name = %s,
-                        Region_Internal = %s, Postal_Code = %s, Primary_Brand_Channel = %s,
-                        Facility_Type = %s, Ordering_Methods = %s, Store_Type = %s, Store_Phone = %s,
-                        Store_Email = %s, Status = %s, Latitude = %s, Longitude = %s, Store_Open_Date = %s,
-                        posist_Live_Date = %s, Seat_Count = %s, Local_Org_Name = %s, Franchisee_id = %s,
-                        Temp_Close_Date = %s, Reopen_Date = %s, Store_Closure_Date = %s, Sunday_Open = %s,
-                        Sunday_Close = %s, Monday_Open = %s, Monday_Close = %s, Tuesday_Open = %s,
-                        Tuesday_Close = %s, Wednesday_Open = %s, Wednesday_Close = %s, Thursday_Open = %s,
-                        Thursday_Close = %s, Friday_Open = %s, Friday_Close = %s, Saturday_Open = %s,
-                        Saturday_Close = %s, Market_Name = %s, Area_Name = %s, Coach_ID = %s,
-                        Ip_Range_Start = %s, Ip_Range_End = %s, Subnet = %s, Static_Ip = %s, Link_ISP = %s,
-                        Link_Type = %s WHERE Store_Code = %s AND Champs_Number = %s""",
-                        (
-                            data.get("storeName", None),
-                            data.get("posistStoreName", None),
-                            data.get("ownershipType", None),
-                            data.get("localAddress", None),
-                            data.get("city", None),
-                            data.get("stateName", None),
-                            data.get("regionInternal", None),
-                            data.get("postalCode", None),
-                            data.get("primaryBrandChannel", None),
-                            data.get("facilityType", None),
-                            data.get("orderingMethods", None),
-                            data.get("storeType", None),
-                            data.get("storePhone", None),
-                            data.get("storeEmail", None),
-                            data.get("status", None),
-                            data.get("latitude", None),
-                            data.get("longitude", None),
-                            data.get("storeOpenDate", None),
-                            data.get("posistLiveDate", None),
-                            data.get("seatCount", None),
-                            data.get("localOrgName", None),
-                            data.get("franchiseeId", None),
-                            data.get("tempCloseDate", None),
-                            data.get("reopenDate", None),
-                            data.get("storeClosureDate", None),
-                            data.get("sundayOpen", None),
-                            data.get("sundayClose", None),
-                            data.get("mondayOpen", None),
-                            data.get("mondayClose", None),
-                            data.get("tuesdayOpen", None),
-                            data.get("tuesdayClose", None),
-                            data.get("wednesdayOpen", None),
-                            data.get("wednesdayClose", None),
-                            data.get("thursdayOpen", None),
-                            data.get("thursdayClose", None),
-                            data.get("fridayOpen", None),
-                            data.get("fridayClose", None),
-                            data.get("saturdayOpen", None),
-                            data.get("saturdayClose", None),
-                            data.get("marketName", None),
-                            data.get("areaName", None),
-                            data.get("coachId", None),
-                            data.get("ipRangeStart", None),
-                            data.get("ipRangeEnd", None),
-                            data.get("subnet", None),
-                            data.get("staticIp", None),
-                            data.get("linkISP", None),
-                            data.get("linkType", None),
-                            data.get("storeCode", None),
-                            data.get("champsNumber", None),
-                        ),
+                        query,
+                        value_tuple,
                     )
                 except Exception as e:
                     logger.error(f"Failed to update data: {e}")
