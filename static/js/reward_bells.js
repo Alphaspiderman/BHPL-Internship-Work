@@ -167,9 +167,7 @@ function process_submission() {
     contentType: false,
     success: function (data) {
       if (data.status == "success") {
-        alert(
-          "Bells awarded successfully! Chart may take a few minutes to update.",
-        );
+        alert("Bells awarded successfully!");
         location.reload();
       } else {
         alert(data.message);
