@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  $("#form").parsley();
   // Listen to form submission
   $("#form").submit(function (e) {
     e.preventDefault();

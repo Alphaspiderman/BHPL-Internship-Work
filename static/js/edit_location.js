@@ -1,5 +1,6 @@
 $(document).ready(function () {
   load_location();
+  $("#form").parsley();
   // Listen to the click event of edit button
   $("#form").submit(function (e) {
     e.preventDefault();
@@ -149,5 +150,35 @@ function load_location() {
           location[schema.indexOf("Link_Type")];
       }
     },
+  });
+}
+
+function handle_form_submit() {
+  var formData = new FormData(document.getElementById("form"));
+  var newFormData = new FormData();
+  // Drop all empty values
+  formData.forEach(function (value, key) {
+    console.log(key + " : " + value);
+    if (value != "" && value != null) {
+      newFormData.append(key, value);
+    }
+  });
+  $.ajax({
+    url: "/api/sites/info",
+    type: "PUT",
+    data: newFormData,
+    success: function (response) {
+      if (response.status === "success") {
+        alert("Location updated successfully");
+        window.location.href = "/locations";
+      } else {
+        alert("Failed to update location");
+      }
+    },
+    error: function (xhr, status, error) {
+      alert("Failed to update location");
+    },
+    contentType: false,
+    processData: false,
   });
 }
