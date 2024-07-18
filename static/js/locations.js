@@ -17,6 +17,17 @@ $(document).ready(function () {
     window.open(url, "_blank");
   });
 
+  // Listen to the click of the create button
+  document.getElementById("create-btn").addEventListener("click", function () {
+    window.location.href = "/locations/create";
+  });
+
+  // Listen to the click of the edit button
+  document.getElementById("edit-btn").addEventListener("click", function () {
+    var loc = document.getElementById("loc-select").value;
+    window.location.href = "/locations/edit/" + loc;
+  });
+
   // Get list of locations for the dropdown
   $.ajax({
     type: "GET",
@@ -77,6 +88,12 @@ function load_data_table(data) {
     th.innerHTML = element.replaceAll("_", " ");
     tableHead.appendChild(th);
   });
+
+  if (tableData.length == 1) {
+    document.getElementById("edit-btn-div").removeAttribute("hidden");
+  } else {
+    document.getElementById("edit-btn-div").setAttribute("hidden", "");
+  }
 
   tableData.forEach((element) => {
     var tr = document.createElement("tr");
