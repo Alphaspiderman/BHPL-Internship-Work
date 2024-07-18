@@ -1,6 +1,8 @@
 $(document).ready(function () {
+  $("#form").parsley();
   load_expenses();
-  document.getElementById("submit").addEventListener("click", function () {
+  document.getElementById("form").addEventListener("submit", function (e) {
+    e.preventDefault();
     handle_submit();
   });
 });
