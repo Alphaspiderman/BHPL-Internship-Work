@@ -1,3 +1,4 @@
+import aiohttp
 from sanic.request import Request
 from sanic.response import json
 from sanic.views import HTTPMethodView
@@ -11,5 +12,6 @@ class Site_Checker(HTTPMethodView):
 
     @require_login(is_api=True)
     async def get(self, request: Request):
-        await request.app.dispatch("intranet.network_checker.trigger")
-        return json({"message": "Site check triggered"})
+        async with aiohttp.ClientSession() as session:
+            resp = await session.post("http://localhost:1234")
+            return json(await resp.json())

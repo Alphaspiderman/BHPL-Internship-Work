@@ -11,14 +11,6 @@ class IntranetApp(Sanic):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ctx.entra_public_keys = dict()
-        self.ctx.site_checker = {
-            "total": 0,
-            "checked": 0,
-            "online": list(),
-            "offline": list(),
-            "last_run": None,
-        }
-        self.ctx.site_checker_running = False
 
     def get_entra_jwt_keys(self) -> dict:
         return self.ctx.entra_public_keys
@@ -98,38 +90,6 @@ class IntranetApp(Sanic):
         iss = f"INTRANET_API_{host}"
         data.update({"exp": expire, "iat": now, "nbf": now, "iss": iss})
         return jwt.encode(data, self.config["PRIV_KEY"], algorithm="RS256")
-
-    def get_site_check_time(self) -> datetime:
-        return self.ctx.site_check_last_run
-
-    def reset_site_checker(self):
-        self.ctx.site_checker = {
-            "total": 0,
-            "checked": 0,
-            "online": list(),
-            "offline": list(),
-            "last_run": None,
-        }
-
-    def set_site_checked_total(self, total: int):
-        self.ctx.site_checker["last_run"] = datetime.now(timezone.utc)
-        self.ctx.site_checker["total"] = total
-
-    def add_site_checker(self, site: str, is_online: bool):
-        self.ctx.site_checker["checked"] += 1
-        if is_online:
-            self.ctx.site_checker["online"].append(site)
-        else:
-            self.ctx.site_checker["offline"].append(site)
-
-    def get_site_checker_info(self):
-        return self.ctx.site_checker
-
-    def set_checker_running(self, is_running: bool):
-        self.ctx.site_checker_running = is_running
-
-    def is_checker_running(self) -> bool:
-        return self.ctx.site_checker_running
 
 
 appserver = IntranetApp("intranet", strict_slashes=False)

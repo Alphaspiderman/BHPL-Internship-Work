@@ -1,15 +1,11 @@
-import asyncio
 import json
 
 import aiohttp
-import aioping
 from dotenv import dotenv_values
 from jwt import algorithms
 from sanic import NotFound, Request, response
 from sanic.log import logger
 from sanic_ext import render
-
-from intranet.utils import tasks
 
 from .app import IntranetApp, appserver
 
@@ -106,7 +102,6 @@ async def setup_app(app: IntranetApp):
 
     logger.info("Saving public keys to the app")
     app.set_entra_jwt_keys(public_keys)
-    site_checker.start()
 
 
 @app.listener("after_server_stop")
@@ -129,51 +124,6 @@ async def route_to_login_or_home(request: Request):
         return response.redirect("login")
     else:
         return response.redirect("home")
-
-
-@tasks.loop(minutes=5)
-async def site_checker():
-    await app.dispatch("intranet.network_checker.trigger")
-
-
-@app.signal("intranet.network_checker.trigger")
-async def network_checker():
-    if app.is_checker_running():
-        logger.info("Network checker already running")
-        return
-    app.set_checker_running(True)
-    logger.info("Checking sites")
-    # Get IPs from DB
-    db_pool = app.get_db_pool()
-
-    async with db_pool.acquire() as conn:
-        async with conn.cursor() as cur:
-            await cur.execute(
-                "SELECT Store_Name, Static_Ip FROM sites WHERE Status = 'Operational' AND Static_Ip IS NOT NULL"  # noqa: E501
-            )
-            sites = await cur.fetchall()
-
-    app.reset_site_checker()
-
-    total_count = len(sites)
-    app.set_site_checked_total(total_count)
-
-    # Check if the site is up
-    tasks = []
-    for site in sites:
-        name, ip = site
-        tasks.append(check_site(app, ip, name))
-    await asyncio.gather(*tasks)
-    logger.info("Site Check Finished")
-    app.set_checker_running(False)
-
-
-async def check_site(app: IntranetApp, ip: str, name: str):
-    try:
-        await aioping.ping(ip, 4)
-        app.add_site_checker(name, True)
-    except Exception:
-        app.add_site_checker(name, False)
 
 
 @app.exception(NotFound)
