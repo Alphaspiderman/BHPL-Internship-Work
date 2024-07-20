@@ -17,6 +17,7 @@ from .sites.status import Site_Status
 from .vendors.contract import Vendor_Contract
 from .vendors.info import Vendor_Info
 from .vendors.payment import Vendor_Payment
+from .navbar import NavBar
 
 # Register the login endpoints
 appserver.add_route(Login_Root.as_view(), "/api/login")
@@ -71,3 +72,6 @@ appserver.add_route(Location_CSV.as_view(), "/api/sites/csv")
 
 # Register the departments endpoint
 appserver.add_route(Departments.as_view(), "/api/departments")
+
+# Register the navbar endpoint
+appserver.add_route(NavBar.as_view(), "/api/navbar")

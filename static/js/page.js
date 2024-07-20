@@ -3,31 +3,6 @@ $(document).ready(function () {
   load_navbar();
 });
 
-navbar_entries = [
-  ["/home", "Home"],
-  {
-    Rewards: [
-      ["/rewards/view", "Reward & Recognition"],
-      ["/rewards/bells", "Award Bells"],
-    ],
-  },
-  {
-    Vendors: [
-      ["/vendors/vendors", "Vendor Management"],
-      ["/vendors/contracts", "Vendor Contracts"],
-      ["/vendors/payments", "Vendor Payments"],
-    ],
-  },
-  ["/locations", "Location Master"],
-  ["/connectivity", "Connectivity Status"],
-  {
-    Expenses: [
-      ["/expenses/submit", "Submit Expense"],
-      ["/expenses/report", "View Report"],
-    ],
-  },
-];
-
 // Load the navbar
 function load_navbar() {
   path = window.location.pathname;
@@ -36,6 +11,21 @@ function load_navbar() {
   ul = document.createElement("ul");
   ul.className = "navbar-nav me-auto mb-2 mb-lg-0";
   navbar.appendChild(ul);
+
+  // Refresh the navbar entries if required or get the entries from server and store them in localStorage
+  checkNavbarEntries();
+
+  // Get the navbar entries from localStorage
+  data = localStorage.getItem("navbar_entries");
+  // Reload the page if the entries are not available
+  if (data === null) {
+    console.error("Navbar entries not available");
+    // Wait for 1 second and reload the page
+    setTimeout(function () {
+      location.reload();
+    }, 500);
+  }
+  navbar_entries = JSON.parse(data);
   // Add the entries
   navbar_entries.forEach((entry) => {
     // Check if the entry is an array or an dict
@@ -90,4 +80,36 @@ function load_navbar() {
   a.href = "/api/logout";
   a.innerHTML = "Logout";
   div.appendChild(a);
+}
+function fetchNavbarEntries() {
+  $.ajax({
+    url: "/api/navbar",
+    type: "GET",
+    success: function (data) {
+      // Set expiration time to 6 hour
+      var now = new Date();
+      var time = now.getTime();
+      time += 3600 * 6 * 1000;
+      now.setTime(time);
+      // Store the navbar entries in localStorage
+      localStorage.setItem("navbar_entries", JSON.stringify(data));
+      localStorage.setItem("navbar_entries_expiration", now);
+    },
+    error: function (xhr, status, error) {
+      console.error("Error while loading the navbar entries");
+    },
+  });
+}
+function checkNavbarEntries() {
+  // Check if the navbar entries exist in localStorage
+  if (localStorage.getItem("navbar_entries") === null) {
+    fetchNavbarEntries();
+  } else {
+    // Check if the navbar entries are expired
+    expiration = new Date(localStorage.getItem("navbar_entries_expiration"));
+    now = new Date();
+    if (now > expiration) {
+      fetchNavbarEntries();
+    }
+  }
 }
