@@ -13,7 +13,8 @@ from intranet.endpoints.locations import Locations
 from intranet.endpoints.login import Login
 from intranet.endpoints.rewards.reward_bells import Reward_Bells
 from intranet.endpoints.rewards.rewards import Rewards
-from intranet.endpoints.sales import Sales
+from intranet.endpoints.sales.stats import Sales_Stats
+from intranet.endpoints.sales.submit import Sales_Input
 from intranet.endpoints.vendors.create.contracts import Contracts_Create
 from intranet.endpoints.vendors.create.vendors import Vendors_Create
 from intranet.endpoints.vendors.edit.contracts import Contracts_Edit
@@ -28,7 +29,8 @@ appserver.add_route(Login.as_view(), "/login")
 appserver.add_route(Locations.as_view(), "/locations")
 appserver.add_route(Create_Location.as_view(), "/locations/create")
 appserver.add_route(Edit_Location.as_view(), "/locations/edit/<uuid:str>")
-appserver.add_route(Sales.as_view(), "/sales")
+appserver.add_route(Sales_Input.as_view(), "/sales/submit")
+appserver.add_route(Sales_Stats.as_view(), "/sales/stats")
 appserver.add_route(Connectivity.as_view(), "/connectivity")
 appserver.add_route(Vendors_View.as_view(), "/vendors/vendors")
 appserver.add_route(Contracts_View.as_view(), "/vendors/contracts")
