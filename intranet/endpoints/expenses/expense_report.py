@@ -8,4 +8,4 @@ from intranet.decorators.require_login import require_login
 class Expense_Report(HTTPMethodView):
     @require_login()
     async def get(self, request: Request):
-        return await render("expense_report.html")
+        return await render("expenses/report.html")

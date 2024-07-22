@@ -74,7 +74,7 @@ class Expenses_PDF(HTTPMethodView):
             if entry.is_bill_attached() == "No":
                 tot_without_bill += entry.get_total()
         return await render(
-            "expense_claim_template.html",
+            "expenses/claim_template.html",
             context={
                 "employee_name": employee.get_full_name(),
                 "department": employee.Department,

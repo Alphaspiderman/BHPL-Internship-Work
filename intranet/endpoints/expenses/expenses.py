@@ -25,7 +25,7 @@ class Expenses(HTTPMethodView):
             emp_dept = employee[0][5]
             emp_grade = employee[0][7]
             return await render(
-                "expenses.html",
+                "expenses/claim.html",
                 context={
                     "emp_name": emp_name,
                     "emp_id": emp_id,

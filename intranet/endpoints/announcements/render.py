@@ -27,7 +27,7 @@ class Announcements(HTTPMethodView):
         announcement_header = f"/api/files?file_id={announcements[0][5]}"
 
         return await render(
-            "announcement_template.html",
+            "announcements/template.html",
             context={
                 "header_image": announcement_header,
                 "title": announcement_title,
