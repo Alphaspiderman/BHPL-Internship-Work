@@ -55,7 +55,266 @@
       </div>
     </nav>
     <div class="body">
-      <p>Body Here</p>
+      <div class="container-fluid" style="padding: 2%">
+        <h1 class="center">Sales Report</h1>
+        <form id="form">
+          <div class="row justify-content-between">
+            <div class="col-xs-12 col-md-6">
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Store Name</span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="store_name"
+                    disabled
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Store ID</span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="store_id"
+                    disabled
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="col-xs-12 col-md-4">
+            <div class="mb-3">
+              <div class="input-group">
+                <span class="input-group-text">Date</span>
+                <input type="date" class="form-control" id="date" required />
+              </div>
+            </div>
+          </div>
+          <br />
+          <h1 class="center">By Order Type</h1>
+          <br />
+          <div class="row justify-content-evenly">
+            <div class="col-xs-12 col-md-4">
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Delivery Sales</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="delivery_sales"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Dine-in Sales</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="dinein_sales"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Takeaway Sales</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="Takeaway_sales"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Kiosk Sales</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="kiosk_sales"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Delivery Bill Count</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="delivery_bill_count"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Dine-in Bill Count</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="dinein_bill_count"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Takeaway Bill Count</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="Takeaway_bill_count"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Kiosk Bill Count</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="kiosk_bill_count"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <h1 class="center">By Source</h1>
+          <br />
+          <div class="row justify-content-evenly">
+            <div class="col-xs-12 col-md-4">
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Swiggy Sales</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="swiggy_sales"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">POS Sales</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="pos_sales"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Zomato Sales</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="zomato_sales"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Maginpine Sales</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="maginpine_sales"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Kiosk Sales</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="kiosk_sales"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Swiggy Bill Count</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="swiggy_bill_count"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">POS Bill Count</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="pos_bill_count"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Zomato Bill Count</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="zomato_bill_count"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Maginpine Bill Count</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="maginpine_bill_count"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Kiosk Bill Count</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="kiosk_bill_count"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </body>
 </html>
