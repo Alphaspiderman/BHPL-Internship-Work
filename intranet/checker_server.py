@@ -60,12 +60,31 @@ class CheckerApp(Sanic):
         self.ctx.site_checker["last_run"] = datetime.now(timezone.utc)
         self.ctx.site_checker["total"] = total
 
-    def add_site_checker(self, site: str, is_online: bool):
+    async def add_site_checker(self, site: str, is_online: bool, store_code: str):
+        logger.info(
+            f"Site {site} ({store_code}) is {'online' if is_online else 'offline'}"
+        )
         self.ctx.site_checker["checked"] += 1
-        if is_online:
-            self.ctx.site_checker["online"].append(site)
-        else:
-            self.ctx.site_checker["offline"].append(site)
+        async with self.get_db_pool().acquire() as conn:
+            async with conn.cursor() as cur:
+                if is_online:
+                    self.ctx.site_checker["online"].append(site)
+                    await cur.execute(
+                        "UPDATE network_uptime SET End_Time = NOW() WHERE Store_Code = %s AND End_Time IS NULL",  # noqa: E501
+                        (store_code,),
+                    )
+                else:
+                    self.ctx.site_checker["offline"].append(site)
+                    # Make sure the site is not already in the DB
+                    await cur.execute(
+                        "SELECT * FROM network_uptime WHERE Store_Code = %s AND End_Time IS NULL",  # noqa: E501
+                        (store_code,),
+                    )
+                    if not await cur.fetchone():
+                        await cur.execute(
+                            "INSERT INTO network_uptime (Store_Code, Start_Time) VALUES (%s, NOW())",  # noqa: E501
+                            (store_code,),
+                        )
 
     def get_site_checker_info(self):
         return self.ctx.site_checker
@@ -94,7 +113,7 @@ async def index(request):
     return json(data)
 
 
-@tasks.loop(minutes=5)
+@tasks.loop(seconds=30)
 async def site_checker():
     await app.dispatch("intranet.network_checker.trigger")
 
@@ -108,7 +127,7 @@ async def network_checker():
     async with db_pool.acquire() as conn:
         async with conn.cursor() as cur:
             await cur.execute(
-                "SELECT Store_Name, Static_Ip FROM sites WHERE Status = 'Operational' AND Static_Ip IS NOT NULL"  # noqa: E501
+                "SELECT Store_Name, Static_Ip, Store_Code FROM sites WHERE Status = 'Operational' AND Static_Ip IS NOT NULL"  # noqa: E501
             )
             sites = await cur.fetchall()
 
@@ -120,18 +139,18 @@ async def network_checker():
     # Check if the site is up
     tasks = []
     for site in sites:
-        name, ip = site
-        tasks.append(check_site(app, ip, name))
+        name, ip, store_code = site
+        tasks.append(check_site(app, ip, name, store_code))
     await asyncio.gather(*tasks)
     logger.info("Site Check Finished")
 
 
-async def check_site(app: CheckerApp, ip: str, name: str):
+async def check_site(app: CheckerApp, ip: str, name: str, store_code: str):
     try:
         await aioping.ping(ip, 4)
-        app.add_site_checker(name, True)
+        await app.add_site_checker(name, True, store_code)
     except Exception:
-        app.add_site_checker(name, False)
+        await app.add_site_checker(name, False, store_code)
 
 
 kwargs = {"host": "127.0.0.1", "port": 1234}
