@@ -28,6 +28,8 @@
     <link href="/static/css/styles.css" rel="stylesheet" />
     <script src="/static/js/page.js"></script>
     <link rel="icon" type="image/png" href="/static/images/favicon.jpg" />
+    <script src="https://parsleyjs.org/dist/parsley.min.js"></script>
+    <script src="/static/js/sales/submit.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -57,7 +59,7 @@
     <div class="body">
       <div class="container-fluid" style="padding: 2%">
         <h1 class="center">Sales Report</h1>
-        <form id="form">
+        <form id="form" data-parsley-trigger="focusin focusout">
           <div class="row justify-content-between">
             <div class="col-xs-12 col-md-6">
               <div class="mb-3">
@@ -130,7 +132,7 @@
                   <input
                     type="number"
                     class="form-control"
-                    id="Takeaway_sales"
+                    id="takeaway_sales"
                     required
                   />
                 </div>
@@ -176,7 +178,7 @@
                   <input
                     type="number"
                     class="form-control"
-                    id="Takeaway_bill_count"
+                    id="takeaway_bill_count"
                     required
                   />
                 </div>
@@ -234,11 +236,11 @@
               </div>
               <div class="mb-3">
                 <div class="input-group">
-                  <span class="input-group-text">Maginpine Sales</span>
+                  <span class="input-group-text">Maginpin Sales</span>
                   <input
                     type="number"
                     class="form-control"
-                    id="maginpine_sales"
+                    id="magicpin_sales"
                     required
                   />
                 </div>
@@ -291,11 +293,11 @@
               </div>
               <div class="mb-3">
                 <div class="input-group">
-                  <span class="input-group-text">Maginpine Bill Count</span>
+                  <span class="input-group-text">Maginpin Bill Count</span>
                   <input
                     type="number"
                     class="form-control"
-                    id="maginpine_bill_count"
+                    id="magicpin_bill_count"
                     required
                   />
                 </div>
@@ -313,7 +315,12 @@
               </div>
             </div>
           </div>
+          <br />
+          <div class="row justify-content-center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
         </form>
+        <br />
       </div>
     </div>
   </body>
