@@ -1,3 +1,4 @@
+from json import loads
 from sanic.request import Request
 from sanic.response import json
 from sanic.views import HTTPMethodView
@@ -5,6 +6,7 @@ from sanic.log import logger
 from intranet.app import IntranetApp
 from intranet.decorators.require_login import require_login
 from datetime import datetime
+from pymysql.err import IntegrityError
 
 
 class Location_Sales(HTTPMethodView):
@@ -68,98 +70,124 @@ class Location_Sales(HTTPMethodView):
     async def post(self, request: Request):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
-        data = request.json
-
+        data = loads(request.form.get("data"))
         store_code = data["Store_Id"]
         date = data["Date"]
-        order_type_data = data["Order_Type_Data"]
-        order_source_data = data["Order_Source_Data"]
+        order_type_data = data["Order_Type_Data"].copy()
+        order_source_data = data["Order_Source_Data"].copy()
+
+        # Convert the date to the correct format
+        date = datetime.strptime(date, "%Y-%m-%d")
+
+        for key in order_type_data.keys():
+            order_type_data[key] = float(order_type_data[key])
+        for key in order_source_data.keys():
+            order_source_data[key] = float(order_source_data[key])
 
         try:
             # Ensure that all the keys are present
-            assert set(order_type_data.keys()) == {
-                "Delivery_Total_Sales",
-                "Delivery_Bill_Count",
-                "Takeaway_Total_Sales",
-                "Takeaway_Bill_Count",
-                "Dinein_Total_Sales",
-                "Dinein_Bill_Count",
-                "Kiosk_Total_Sales",
-                "Kiosk_Bill_Count",
-            }
-            assert set(order_source_data.keys()) == {
-                "Zomato_Total_Sales",
-                "Zomato_Bill_Count",
-                "Swiggy_Total_Sales",
-                "Swiggy_Bill_Count",
-                "POS_Total_Sales",
-                "POS_Bill_Count",
-                "Kiosk_Total_Sales",
-                "Kiosk_Bill_Count",
-                "Magicpin_Total_Sales",
-                "Magicpin_Bill_Count",
-            }
+            assert order_type_data.keys() == set(
+                [
+                    "Delivery_Total_Sales",
+                    "Delivery_Bill_Count",
+                    "Takeaway_Total_Sales",
+                    "Takeaway_Bill_Count",
+                    "Dinein_Total_Sales",
+                    "Dinein_Bill_Count",
+                    "Kiosk_Total_Sales",
+                    "Kiosk_Bill_Count",
+                ]
+            )
+            assert order_source_data.keys() == set(
+                [
+                    "Zomato_Total_Sales",
+                    "Zomato_Bill_Count",
+                    "Swiggy_Total_Sales",
+                    "Swiggy_Bill_Count",
+                    "POS_Total_Sales",
+                    "POS_Bill_Count",
+                    "Kiosk_Total_Sales",
+                    "Kiosk_Bill_Count",
+                    "Magicpin_Total_Sales",
+                    "Magicpin_Bill_Count",
+                ]
+            )
 
             # Ensure that all the values are of the correct type
             assert isinstance(order_type_data["Delivery_Total_Sales"], float)
-            assert isinstance(order_type_data["Delivery_Bill_Count"], int)
+            assert isinstance(order_type_data["Delivery_Bill_Count"], float)
             assert isinstance(order_type_data["Takeaway_Total_Sales"], float)
-            assert isinstance(order_type_data["Takeaway_Bill_Count"], int)
+            assert isinstance(order_type_data["Takeaway_Bill_Count"], float)
             assert isinstance(order_type_data["Dinein_Total_Sales"], float)
-            assert isinstance(order_type_data["Dinein_Bill_Count"], int)
+            assert isinstance(order_type_data["Dinein_Bill_Count"], float)
             assert isinstance(order_type_data["Kiosk_Total_Sales"], float)
-            assert isinstance(order_type_data["Kiosk_Bill_Count"], int)
+            assert isinstance(order_type_data["Kiosk_Bill_Count"], float)
 
             assert isinstance(order_source_data["Zomato_Total_Sales"], float)
-            assert isinstance(order_source_data["Zomato_Bill_Count"], int)
+            assert isinstance(order_source_data["Zomato_Bill_Count"], float)
             assert isinstance(order_source_data["Swiggy_Total_Sales"], float)
-            assert isinstance(order_source_data["Swiggy_Bill_Count"], int)
+            assert isinstance(order_source_data["Swiggy_Bill_Count"], float)
             assert isinstance(order_source_data["POS_Total_Sales"], float)
-            assert isinstance(order_source_data["POS_Bill_Count"], int)
+            assert isinstance(order_source_data["POS_Bill_Count"], float)
             assert isinstance(order_source_data["Kiosk_Total_Sales"], float)
-            assert isinstance(order_source_data["Kiosk_Bill_Count"], int)
+            assert isinstance(order_source_data["Kiosk_Bill_Count"], float)
             assert isinstance(order_source_data["Magicpin_Total_Sales"], float)
-            assert isinstance(order_source_data["Magicpin_Bill_Count"], int)
+            assert isinstance(order_source_data["Magicpin_Bill_Count"], float)
 
+            # Check that Store_Id is a string and non-empty
+            assert isinstance(store_code, str)
+            assert store_code != ""
+
+            # Check that Date not in the future
+            assert date <= datetime.now()
         except AssertionError as e:
             logger.error("API Failed to Validate the data", exc_info=e)
             return json(
-                {"status": "error", "message": "API Failed to Validate the data"}
+                {"status": "error", "message": "Backend Failed to Validate the data"}
             )
 
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(
-                    "INSERT INTO order_type_data (Store_Id, Date, Delivery_Total_Sales, Delivery_Bill_Count, Takeaway_Total_Sales, Takeaway_Bill_Count, Dinein_Total_Sales, Dinein_Bill_Count, Kiosk_Total_Sales, Kiosk_Bill_Count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",  # noqa: E501
-                    (
-                        store_code,
-                        date,
-                        order_type_data["Delivery_Total_Sales"],
-                        order_type_data["Delivery_Bill_Count"],
-                        order_type_data["Takeaway_Total_Sales"],
-                        order_type_data["Takeaway_Bill_Count"],
-                        order_type_data["Dinein_Total_Sales"],
-                        order_type_data["Dinein_Bill_Count"],
-                        order_type_data["Kiosk_Total_Sales"],
-                        order_type_data["Kiosk_Bill_Count"],
-                    ),
-                )
-                await cur.execute(
-                    "INSERT INTO order_source_data (Store_Id, Date, Zomato_Total_Sales, Zomato_Bill_Count, Swiggy_Total_Sales, Swiggy_Bill_Count, POS_Total_Sales, POS_Bill_Count, Kiosk_Total_Sales, Kiosk_Bill_Count, Magicpin_Total_Sales, Magicpin_Bill_Count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",  # noqa: E501
-                    (
-                        store_code,
-                        date,
-                        order_source_data["Zomato_Total_Sales"],
-                        order_source_data["Zomato_Bill_Count"],
-                        order_source_data["Swiggy_Total_Sales"],
-                        order_source_data["Swiggy_Bill_Count"],
-                        order_source_data["POS_Total_Sales"],
-                        order_source_data["POS_Bill_Count"],
-                        order_source_data["Kiosk_Total_Sales"],
-                        order_source_data["Kiosk_Bill_Count"],
-                        order_source_data["Magicpin_Total_Sales"],
-                        order_source_data["Magicpin_Bill_Count"],
-                    ),
-                )
+                try:
+                    await cur.execute(
+                        "INSERT INTO order_type_data (Store_Id, Date, Delivery_Total_Sales, Delivery_Bill_Count, Takeaway_Total_Sales, Takeaway_Bill_Count, Dinein_Total_Sales, Dinein_Bill_Count, Kiosk_Total_Sales, Kiosk_Bill_Count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",  # noqa: E501
+                        (
+                            store_code,
+                            date,
+                            order_type_data["Delivery_Total_Sales"],
+                            order_type_data["Delivery_Bill_Count"],
+                            order_type_data["Takeaway_Total_Sales"],
+                            order_type_data["Takeaway_Bill_Count"],
+                            order_type_data["Dinein_Total_Sales"],
+                            order_type_data["Dinein_Bill_Count"],
+                            order_type_data["Kiosk_Total_Sales"],
+                            order_type_data["Kiosk_Bill_Count"],
+                        ),
+                    )
+                    await cur.execute(
+                        "INSERT INTO order_source_data (Store_Id, Date, Zomato_Total_Sales, Zomato_Bill_Count, Swiggy_Total_Sales, Swiggy_Bill_Count, POS_Total_Sales, POS_Bill_Count, Kiosk_Total_Sales, Kiosk_Bill_Count, Magicpin_Total_Sales, Magicpin_Bill_Count) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",  # noqa: E501
+                        (
+                            store_code,
+                            date,
+                            order_source_data["Zomato_Total_Sales"],
+                            order_source_data["Zomato_Bill_Count"],
+                            order_source_data["Swiggy_Total_Sales"],
+                            order_source_data["Swiggy_Bill_Count"],
+                            order_source_data["POS_Total_Sales"],
+                            order_source_data["POS_Bill_Count"],
+                            order_source_data["Kiosk_Total_Sales"],
+                            order_source_data["Kiosk_Bill_Count"],
+                            order_source_data["Magicpin_Total_Sales"],
+                            order_source_data["Magicpin_Bill_Count"],
+                        ),
+                    )
+                except IntegrityError as e:
+                    logger.error("Integrity Erroe", exc_info=e)
+                    return json(
+                        {
+                            "status": "error",
+                            "message": "Data already exists for the given date",
+                        }
+                    )
 
         return json({"status": "success"})
