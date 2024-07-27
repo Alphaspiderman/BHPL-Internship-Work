@@ -55,9 +55,15 @@ class NavBar(HTTPMethodView):
                 },
             )
 
+            # Add the Location Master section to the navbar
+            navbar.insert(3, ["/locations", "Location Master"])
+
+            # Add the Sales Dashboard section to the navbar
+            navbar.insert(5, ["/sales/stats", "Sales Dashboard"])
+
             # Add the Expenses section to the navbar
             navbar.insert(
-                4,
+                5,
                 {
                     "Expenses": [
                         ["/expenses/submit", "Submit Expense"],
@@ -65,6 +71,10 @@ class NavBar(HTTPMethodView):
                     ],
                 },
             )
+
+        else:
+            # Add the Sales Dashboard section to the navbar
+            navbar.insert(2, ["/sales/submit", "Sales Dashboard"])
 
         emp_id = jwt_data["emp_id"]
         async with app.get_db_pool().acquire() as conn:
