@@ -21,6 +21,13 @@ class Location_Sales(HTTPMethodView):
         date_from = request.args.get("from")
         date_to = request.args.get("to")
 
+        if location == "all":
+            store_filter = ""
+            args = (date_from, date_to)
+        else:
+            store_filter = "Store_Id = %s AND"
+            args = (location, date_from, date_to)
+
         # Default date range
         if not date_from:
             # Start of Month
@@ -52,14 +59,14 @@ class Location_Sales(HTTPMethodView):
             async with conn.cursor() as cur:
                 # Get the data related to Source
                 await cur.execute(
-                    "SELECT * FROM order_source_data WHERE Store_Id = %s AND Date BETWEEN %s AND %s",
-                    (location, date_from, date_to),
+                    f"SELECT * FROM order_source_data WHERE {store_filter} Date BETWEEN %s AND %s",
+                    args,
                 )
                 source_data = await cur.fetchall()
                 # Get the data related to Type
                 await cur.execute(
-                    "SELECT * FROM order_type_data WHERE Store_Id = %s AND Date BETWEEN %s AND %s",
-                    (location, date_from, date_to),
+                    f"SELECT * FROM order_type_data WHERE {store_filter} Date BETWEEN %s AND %s",
+                    args,
                 )
                 type_data = await cur.fetchall()
         return json(
