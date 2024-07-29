@@ -5,6 +5,14 @@ $(document).ready(function () {
     e.preventDefault();
     handle_form_submit();
   });
+  // Listen to Kiosk Total Sales change and set it to Kiosk Total Sales Source
+  $("#kiosk_sales").change(function () {
+    $("#kiosk_sales_source").val($("#kiosk_sales").val());
+  });
+  // Listen to Kiosk Bill Count change and set it to Kiosk Bill Count Source
+  $("#kiosk_bill_count").change(function () {
+    $("#kiosk_bill_count_source").val($("#kiosk_bill_count").val());
+  });
 });
 
 function handle_form_submit() {
