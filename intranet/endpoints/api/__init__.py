@@ -1,4 +1,5 @@
 from intranet.app import appserver
+
 from .announcements import Announcements_API
 from .bells.award import Award_Bells
 from .bells.info import Bell_Info
@@ -9,15 +10,17 @@ from .files import Files
 from .login.callback import Callback
 from .login.root import Login_Root
 from .logout import Logout
+from .navbar import NavBar
 from .sites.checker import Site_Checker
 from .sites.csv import Location_CSV
 from .sites.employees import Location_Employees
 from .sites.info import Location_Master
+from .sites.missing_sales import Missing_Sales
+from .sites.sales import Location_Sales
 from .sites.status import Site_Status
 from .vendors.contract import Vendor_Contract
 from .vendors.info import Vendor_Info
 from .vendors.payment import Vendor_Payment
-from .navbar import NavBar
 
 # Register the login endpoints
 appserver.add_route(Login_Root.as_view(), "/api/login")
@@ -75,3 +78,9 @@ appserver.add_route(Departments.as_view(), "/api/departments")
 
 # Register the navbar endpoint
 appserver.add_route(NavBar.as_view(), "/api/navbar")
+
+# Register the location sales endpoint
+appserver.add_route(Location_Sales.as_view(), "/api/sites/sales")
+
+# Register the missing sales endpoint
+appserver.add_route(Missing_Sales.as_view(), "/api/sites/missing")

@@ -14,7 +14,9 @@ from intranet.endpoints.rewards.rewards import Rewards
 from intranet.endpoints.sales.stats import Sales_Stats
 from intranet.endpoints.sales.submit import Sales_Input
 from intranet.endpoints.sites.create import Create_Site
+from intranet.endpoints.sites.downtime import Site_Downtime
 from intranet.endpoints.sites.edit import Edit_Site
+from intranet.endpoints.sales.missing import Missing_Sales
 from intranet.endpoints.vendors.create.contracts import Contracts_Create
 from intranet.endpoints.vendors.create.vendors import Vendors_Create
 from intranet.endpoints.vendors.edit.contracts import Contracts_Edit
@@ -47,3 +49,5 @@ appserver.add_route(HTTP_404.as_view(), "/404")
 appserver.add_route(Rewards.as_view(), "/rewards/view")
 appserver.add_route(Expenses.as_view(), "/expenses/submit")
 appserver.add_route(Expense_Report.as_view(), "/expenses/report")
+appserver.add_route(Site_Downtime.as_view(), "/sites/downtime")
+appserver.add_route(Missing_Sales.as_view(), "/sales/missing")
