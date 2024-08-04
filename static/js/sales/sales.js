@@ -72,5 +72,23 @@ function load_fields(data) {
     return;
   }
   // Set values in the fields
-  document.getElementById("total_orders").value = data["total_orders"];
+  $("#delivery_sales").val(order_type_data["Delivery_Total_Sales"]);
+  $("#delivery_bill_count").val(order_type_data["Delivery_Bill_Count"]);
+  $("#takeaway_sales").val(order_type_data["Takeaway_Total_Sales"]);
+  $("#takeaway_bill_count").val(order_type_data["Takeaway_Bill_Count"]);
+  $("#dinein_sales").val(order_type_data["Dinein_Total_Sales"]);
+  $("#dinein_bill_count").val(order_type_data["Dinein_Bill_Count"]);
+  $("#kiosk_sales").val(order_type_data["Kiosk_Total_Sales"]);
+  $("#kiosk_bill_count").val(order_type_data["Kiosk_Bill_Count"]);
+
+  $("#zomato_sales").val(order_source_data["Zomato_Total_Sales"]);
+  $("#zomato_bill_count").val(order_source_data["Zomato_Bill_Count"]);
+  $("#swiggy_sales").val(order_source_data["Swiggy_Total_Sales"]);
+  $("#swiggy_bill_count").val(order_source_data["Swiggy_Bill_Count"]);
+  $("#pos_sales").val(order_source_data["POS_Total_Sales"]);
+  $("#pos_bill_count").val(order_source_data["POS_Bill_Count"]);
+  $("#kiosk_sales_source").val(order_source_data["Kiosk_Total_Sales"]);
+  $("#kiosk_bill_count_source").val(order_source_data["Kiosk_Bill_Count"]);
+  $("#magicpin_sales").val(order_source_data["Magicpin_Total_Sales"]);
+  $("#magicpin_bill_count").val(order_source_data["Magicpin_Bill_Count"]);
 }
