@@ -28,6 +28,7 @@
     <link href="/static/css/styles.css" rel="stylesheet" />
     <script src="/static/js/page.js"></script>
     <link rel="icon" type="image/png" href="/static/images/favicon.jpg" />
+    <script src="/static/js/sales/missing.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -55,7 +56,60 @@
       </div>
     </nav>
     <div class="body">
-      <p>Body Here</p>
+      <div class="container-fluid">
+        <h1 class="center">Sales Missing Statistics</h1>
+
+        <div class="row align-items-end justify-content-center">
+          <div class="col-md-10">
+            <div class="form-group">
+              <select
+                class="form-select"
+                aria-label="Select a Location"
+                id="loc-select"
+              >
+                <option value="all">Show All</option>
+              </select>
+            </div>
+            <br />
+            <div class="alert alert-primary" role="alert">
+              Note: If no entry exists for a date, then the date is ignored
+            </div>
+          </div>
+        </div>
+        <div class="row align-items-end justify-content-center">
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-text">Date From</span>
+              <input
+                type="date"
+                class="form-control"
+                id="dateFrom"
+                name="dateFrom"
+              />
+            </div>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-primary" id="get-stats">
+              Get Stats
+            </button>
+          </div>
+          <!-- Empty vertical space-->
+          <div style="height: 3vh"></div>
+          <div class="col-md-10">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Champs ID</th>
+                  <th scope="col">Store Code</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
