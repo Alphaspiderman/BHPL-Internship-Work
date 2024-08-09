@@ -28,6 +28,7 @@
     <link href="/static/css/styles.css" rel="stylesheet" />
     <script src="/static/js/page.js"></script>
     <link rel="icon" type="image/png" href="/static/images/favicon.jpg" />
+    <script src="/static/js/locations/downtime.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -55,7 +56,74 @@
       </div>
     </nav>
     <div class="body">
-      <p>Body Here</p>
+      <div class="container-fluid">
+        <h1 class="center">Downtime Statistics</h1>
+
+        <div class="row align-items-end justify-content-center">
+          <div class="col-md-10">
+            <div class="form-group">
+              <select
+                class="form-select"
+                aria-label="Select a Location"
+                id="loc-select"
+              >
+                <option value="all">Show All</option>
+              </select>
+            </div>
+            <br />
+            <div class="alert alert-primary" role="alert">
+              Note: Start date is inclusive and end date is exclusive.
+            </div>
+          </div>
+        </div>
+        <div class="row align-items-end justify-content-center">
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-text">Date From</span>
+              <input
+                type="date"
+                class="form-control"
+                id="dateFrom"
+                name="dateFrom"
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-text">Date To</span>
+              <input
+                type="date"
+                class="form-control"
+                id="dateTo"
+                name="dateTo"
+              />
+            </div>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-primary" id="get-stats">
+              Get Stats
+            </button>
+          </div>
+        </div>
+
+        <br />
+
+        <div class="row align-items-end justify-content-center">
+          <div class="col-md-10">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Store ID</th>
+                  <th scope="col">Start Time</th>
+                  <th scope="col">End Time</th>
+                  <th scope="col">Duration</th>
+                </tr>
+              </thead>
+              <tbody id="downtime-stats"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
