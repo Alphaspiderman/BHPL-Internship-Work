@@ -7,7 +7,7 @@ from intranet.endpoints.expenses.expense_report import Expense_Report
 from intranet.endpoints.expenses.expenses import Expenses
 from intranet.endpoints.home import Home
 from intranet.endpoints.HTTP_404 import HTTP_404
-from intranet.endpoints.locations import Locations
+from intranet.endpoints.locations.master import Location_Master
 from intranet.endpoints.login import Login
 from intranet.endpoints.rewards.reward_bells import Reward_Bells
 from intranet.endpoints.rewards.rewards import Rewards
@@ -28,7 +28,7 @@ from intranet.endpoints.vendors.view.vendors import Vendors_View
 
 appserver.add_route(Home.as_view(), "/home")
 appserver.add_route(Login.as_view(), "/login")
-appserver.add_route(Locations.as_view(), "/locations")
+appserver.add_route(Location_Master.as_view(), "/locations")
 appserver.add_route(Create_Site.as_view(), "/locations/create")
 appserver.add_route(Edit_Site.as_view(), "/locations/edit/<uuid:str>")
 appserver.add_route(Sales_Input.as_view(), "/sales/submit")
