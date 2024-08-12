@@ -13,6 +13,7 @@ from .logout import Logout
 from .navbar import NavBar
 from .sites.checker import Site_Checker
 from .sites.csv import Location_CSV
+from .sites.downtime import Site_Downtime_Stats
 from .sites.employees import Location_Employees
 from .sites.info import Location_Master
 from .sites.missing_sales import Missing_Sales
@@ -84,3 +85,6 @@ appserver.add_route(Location_Sales.as_view(), "/api/sites/sales")
 
 # Register the missing sales endpoint
 appserver.add_route(Missing_Sales.as_view(), "/api/sites/missing")
+
+# Register the site downtime endpoint
+appserver.add_route(Site_Downtime_Stats.as_view(), "/api/sites/downtime")
