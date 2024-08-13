@@ -11,12 +11,13 @@ from intranet.endpoints.locations.master import Location_Master
 from intranet.endpoints.login import Login
 from intranet.endpoints.rewards.reward_bells import Reward_Bells
 from intranet.endpoints.rewards.rewards import Rewards
+from intranet.endpoints.sales.missing import Missing_Site_Sales
+from intranet.endpoints.sales.overview import Sales_Overview
 from intranet.endpoints.sales.stats import Sales_Stats
 from intranet.endpoints.sales.submit import Sales_Input
 from intranet.endpoints.sites.create import Create_Site
 from intranet.endpoints.sites.downtime import Site_Downtime
 from intranet.endpoints.sites.edit import Edit_Site
-from intranet.endpoints.sales.missing import Missing_Site_Sales
 from intranet.endpoints.vendors.create.contracts import Contracts_Create
 from intranet.endpoints.vendors.create.vendors import Vendors_Create
 from intranet.endpoints.vendors.edit.contracts import Contracts_Edit
@@ -51,3 +52,4 @@ appserver.add_route(Expenses.as_view(), "/expenses/submit")
 appserver.add_route(Expense_Report.as_view(), "/expenses/report")
 appserver.add_route(Site_Downtime.as_view(), "/sites/downtime")
 appserver.add_route(Missing_Site_Sales.as_view(), "/sales/missing")
+appserver.add_route(Sales_Overview.as_view(), "/sales/overview")
