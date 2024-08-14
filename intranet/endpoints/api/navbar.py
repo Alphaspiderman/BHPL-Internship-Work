@@ -7,87 +7,98 @@ from intranet.decorators.require_login import require_login
 
 
 class NavBar(HTTPMethodView):
-    navbar_entries = [
-        ["/home", "Home"],
-        {
-            "Rewards": [
-                ["/rewards/view", "Reward & Recognition"],
-                # ["/rewards/bells", "Award Bells"],
-            ],
-        },
-        # {
-        #     "Vendors": [
-        #         ["/vendors/vendors", "Vendor Management"],
-        #         ["/vendors/contracts", "Vendor Contracts"],
-        #         ["/vendors/payments", "Vendor Payments"],
-        #     ],
-        # },
-        # ["/locations", "Location Master"],
-        ["/connectivity", "Connectivity Status"],
-        # {
-        #     "Expenses": [
-        #         ["/expenses/submit", "Submit Expense"],
-        #         ["/expenses/report", "View Report"],
-        #     ],
-        # },
-    ]
-
     @require_login(is_api=True)
     async def get(self, request: Request):
         app: IntranetApp = request.app
         # Decode the JWT token
         jwt_data = app.decode_jwt(request.cookies.get("JWT_TOKEN"))
 
-        # Copy the navbar entries
-        navbar = [entry.copy() for entry in self.navbar_entries]
+        # Create an empty navbar
+        navbar = []
 
-        # Check if emp_type is not CORP
+        # Add the Home section to the navbar
+        navbar.append(["/home", "Home"])
+
+        # Check if emp_type is CORP
         if jwt_data["emp_type"] == "CORP":
+            emp_id = jwt_data["emp_id"]
+            async with app.get_db_pool().acquire() as conn:
+                async with conn.cursor() as cur:
+                    # Check if emp_id exists in the bells_info table
+                    await cur.execute(
+                        "SELECT * FROM bells_info WHERE Employee_Id = %s", (emp_id,)
+                    )
+                    bells_info = await cur.fetchall()
+                    if len(bells_info) != 0:
+                        navbar.append(
+                            {
+                                "Rewards": [
+                                    ["/rewards/view", "Reward & Recognition"],
+                                    ["/rewards/bells", "Award Bells"],
+                                ],
+                            }
+                        )
+                    else:
+                        navbar.append(
+                            {
+                                "Rewards": [
+                                    ["/rewards/view", "Reward & Recognition"],
+                                ],
+                            }
+                        )
+
             # Add the Vendor section to the navbar
-            navbar.insert(
-                2,
+            navbar.append(
                 {
                     "Vendors": [
                         ["/vendors/vendors", "Vendor Management"],
                         ["/vendors/contracts", "Vendor Contracts"],
                         ["/vendors/payments", "Vendor Payments"],
                     ],
-                },
+                }
             )
 
-            # Add the Location Master section to the navbar
-            navbar.insert(3, ["/locations", "Location Master"])
+            # Add the Location section to the navbar
+            navbar.append(
+                {
+                    "Locations": [
+                        ["/locations", "Location Master"],
+                        ["/sites/downtime", "Network Downtime"],
+                    ]
+                }
+            )
 
             # Add the Sales Dashboard section to the navbar
-            navbar.insert(5, ["/sales/stats", "Sales Dashboard"])
+            navbar.append(
+                {
+                    "Sales": [
+                        ["/sales/overview", "Sales Overview"],
+                        ["/sales/stats", "Sales Dashboard"],
+                        ["/sales/missing", "View Missing Entries"],
+                    ]
+                }
+            )
 
             # Add the Expenses section to the navbar
-            navbar.insert(
-                5,
+            navbar.append(
                 {
                     "Expenses": [
                         ["/expenses/submit", "Submit Expense"],
                         ["/expenses/report", "View Report"],
                     ],
-                },
+                }
+            )
+        else:
+            # Add Reward and Recognition section to the navbar
+            navbar.append(
+                {
+                    "Rewards": [
+                        ["/rewards/view", "Reward & Recognition"],
+                    ],
+                }
             )
 
-        else:
-            # Add the Sales Dashboard section to the navbar
-            navbar.insert(2, ["/sales/submit", "Sales Dashboard"])
-
-        emp_id = jwt_data["emp_id"]
-        async with app.get_db_pool().acquire() as conn:
-            async with conn.cursor() as cur:
-                # Check if emp_id exists in the bells_info table
-                await cur.execute(
-                    "SELECT * FROM bells_info WHERE Employee_Id = %s", (emp_id,)
-                )
-                bells_info = await cur.fetchall()
-                if len(bells_info) != 0:
-                    # Add the Award Bells section to the navbar
-                    copy = navbar[1]["Rewards"].copy()
-                    copy.append(["/rewards/bells", "Award Bells"])
-                    navbar[1]["Rewards"] = copy
+            # Add the sales submit section to the navbar
+            navbar.append(["/sales/submit", "Submit Data"])
 
         return json(navbar)
