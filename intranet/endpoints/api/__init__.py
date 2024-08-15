@@ -15,7 +15,7 @@ from .sites.checker import Site_Checker
 from .sites.csv import Location_CSV
 from .sites.downtime import Site_Downtime_Stats
 from .sites.employees import Location_Employees
-from .sites.info import Location_Master
+from .sites.info import Location_Master_API
 from .sites.missing_sales import Missing_Sales
 from .sites.sales import Location_Sales
 from .sites.status import Site_Status
@@ -39,7 +39,7 @@ appserver.add_route(Site_Checker.as_view(), "/api/sites/checker")
 appserver.add_route(Site_Status.as_view(), "/api/sites/status")
 
 # Register the location master endpoint
-appserver.add_route(Location_Master.as_view(), "/api/sites/info")
+appserver.add_route(Location_Master_API.as_view(), "/api/sites/info")
 
 # Register the location employees endpoint
 appserver.add_route(Location_Employees.as_view(), "/api/sites/employees")

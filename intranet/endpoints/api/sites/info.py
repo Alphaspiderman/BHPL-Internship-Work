@@ -11,7 +11,7 @@ from intranet.decorators.require_login import require_login
 from intranet.models.location import Location
 
 
-class Location_Master(HTTPMethodView):
+class Location_Master_API(HTTPMethodView):
     update_query_it = """
     UPDATE sites SET Store_Name = %s, Posist_Store_Name = %s,
     Ownership_Type = %s, Local_Address = %s, City = %s, State_Name = %s,
