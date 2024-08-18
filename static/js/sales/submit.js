@@ -13,6 +13,8 @@ $(document).ready(function () {
   $("#kiosk_bill_count").change(function () {
     $("#kiosk_bill_count_source").val($("#kiosk_bill_count").val());
   });
+  // Default date to today
+  $("#date").val(new Date().toISOString().split("T")[0]);
 });
 
 function handle_form_submit() {
