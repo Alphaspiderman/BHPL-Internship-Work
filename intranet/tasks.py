@@ -113,7 +113,7 @@ async def index(request):
     return json(data)
 
 
-@tasks.loop(seconds=30)
+@tasks.loop(seconds=300)
 async def site_checker():
     await app.dispatch("intranet.network_checker.trigger")
 
