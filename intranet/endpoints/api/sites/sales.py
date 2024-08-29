@@ -50,7 +50,7 @@ class Location_Sales(HTTPMethodView):
         try:
             d_from = datetime.strptime(date_from, "%Y-%m-%d")
             d_to = datetime.strptime(date_to, "%Y-%m-%d")
-            assert d_from < d_to
+            assert d_from <= d_to
         except ValueError:
             return json({"status": "error", "message": "Invalid Date Range (Parse)"})
         except AssertionError:
