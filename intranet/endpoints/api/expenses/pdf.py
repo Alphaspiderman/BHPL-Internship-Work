@@ -76,7 +76,7 @@ class Expenses_PDF(HTTPMethodView):
         return await render(
             "expenses/claim_template.html",
             context={
-                "employee_name": employee.get_full_name(),
+                "employee_name": employee.Employee_Name,
                 "department": employee.Department,
                 "employee_id": employee_id,
                 "date_from": date_from,

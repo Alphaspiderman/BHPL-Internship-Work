@@ -41,7 +41,7 @@ class Bell_Info(HTTPMethodView):
             async with db_pool.acquire() as conn:
                 async with conn.cursor() as cur:
                     await cur.execute(
-                        "SELECT Bells_Awarded, s.Store_Code, Store_Name, Employee_Code, First_Name, Last_Name FROM bells_awarded b NATURAL JOIN sites s JOIN people p ON Employee_Code = p.Employee_Id  WHERE Award_Date >= %s",  # noqa: E501
+                        "SELECT Bells_Awarded, s.Store_Code, Store_Name, Employee_Code, Employee_Name FROM bells_awarded b NATURAL JOIN sites s JOIN people p ON Employee_Code = p.Employee_Id  WHERE Award_Date >= %s",  # noqa: E501
                         (month_start,),
                     )
                     bells_awarded = await cur.fetchall()
@@ -60,7 +60,7 @@ class Bell_Info(HTTPMethodView):
                 Bells_Awarded = self.convert_bells(award[0])
                 Bell_Value = self.bell_value_map[Bells_Awarded]
                 Employee_Id = award[3]
-                name = f"{award[4]} {award[5]}"
+                name = award[4]
                 total_bells_awarded += Bells_Awarded
                 store_bell_cnt_map[Store_Name] = (
                     store_bell_cnt_map.get(Store_Name, 0) + Bells_Awarded

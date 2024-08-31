@@ -76,9 +76,9 @@ class Callback(HTTPMethodView):
 
         # Extract data for adding to JWT
         Employee_Id: str = user[0][0]
-        Full_Name = f"{user[0][1]} {user[0][2]}"
-        Emp_Type: str = user[0][4].upper()
-        Department: str = user[0][5].upper()
+        Full_Name = f"{user[0][1]}"
+        Emp_Type: str = user[0][3].upper()
+        Department: str = user[0][4].upper()
 
         # Generate Token for 3 days
         token = app.generate_jwt(

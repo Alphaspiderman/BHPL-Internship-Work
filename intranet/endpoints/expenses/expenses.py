@@ -21,9 +21,9 @@ class Expenses(HTTPMethodView):
                 employee = await cur.fetchall()
 
         if len(employee) == 1:
-            emp_name = f"{employee[0][1]} {employee[0][2]}"
-            emp_dept = employee[0][5]
-            emp_grade = employee[0][7]
+            emp_name = employee[0][1]
+            emp_dept = employee[0][4]
+            emp_grade = employee[0][6]
             return await render(
                 "expenses/claim.html",
                 context={

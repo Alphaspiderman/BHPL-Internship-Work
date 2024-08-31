@@ -15,7 +15,7 @@ class Location_Employees(HTTPMethodView):
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(
-                    "SELECT Employee_Id, First_Name, Last_Name FROM people NATURAL JOIN sites WHERE Champs_Number = %s",  # noqa: E501
+                    "SELECT Employee_Id, Employee_Name FROM people NATURAL JOIN sites WHERE Champs_Number = %s",  # noqa: E501
                     (location,),
                 )
                 result = await cur.fetchall()
@@ -23,5 +23,5 @@ class Location_Employees(HTTPMethodView):
         # Only return the Employee Code and Name
         employees = []
         for employee in result:
-            employees.append([employee[0], employee[1] + " " + employee[2]])
+            employees.append([employee[0], employee[1]])
         return json(employees)

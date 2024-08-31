@@ -1,8 +1,7 @@
 class Employee:
     fields = [
         "Employee_Id",
-        "First_Name",
-        "Last_Name",
+        "Employee_Name",
         "Email",
         "Emp_Type",
         "Department",
@@ -32,6 +31,3 @@ class Employee:
         for field in self.hidden_fields:
             schema.remove(field)
         return schema
-
-    def get_full_name(self) -> str:
-        return f"{self.First_Name} {self.Last_Name}"
