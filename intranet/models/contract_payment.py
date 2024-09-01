@@ -35,6 +35,7 @@ class ContractPayment:
             data[field] = convert(data[field])
         return data
 
+    @classmethod
     def get_schema(self) -> list:
         fields = self.fields.copy()
         for field in self.hidden_fields:

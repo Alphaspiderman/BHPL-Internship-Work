@@ -101,6 +101,7 @@ class Location:
                 data.pop(field, None)
         return data
 
+    @classmethod
     def get_schema(self, is_IT: bool = False, show_all: bool = False) -> dict:
         schema = self.fields.copy()
         if not show_all:

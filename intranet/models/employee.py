@@ -26,6 +26,7 @@ class Employee:
             data[field] = convert(data[field])
         return data
 
+    @classmethod
     def get_schema(self) -> dict:
         schema = self.fields.copy()
         for field in self.hidden_fields:

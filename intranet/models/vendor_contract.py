@@ -45,6 +45,7 @@ class VendorContract:
             data[field] = convert(data[field])
         return data
 
+    @classmethod
     def get_schema(self, show_all: bool = False) -> list:
         schema = self.fields.copy()
         hidden_fields = self.hidden_fields.copy()

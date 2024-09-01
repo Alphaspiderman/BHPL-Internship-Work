@@ -54,6 +54,7 @@ class Expense:
             data["Bill_Attached"] = self.Bill_Attached
         return data
 
+    @classmethod
     def get_schema(self, show_id: bool = False) -> dict:
         schema = self.fields.copy()
         hide = self.hidden_fields.copy()
