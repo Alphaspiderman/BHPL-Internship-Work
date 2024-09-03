@@ -89,13 +89,13 @@ class Location_Master_API(HTTPMethodView):
                 list(entry.get_data(is_IT=False, show_all=show_all).values())
                 for entry in location_data
             ]
-            schema = location_data[0].get_schema(is_IT=False, show_all=show_all)
+            schema = Location.get_schema(is_IT=False, show_all=show_all)
         else:
             data = [
                 list(entry.get_data(is_IT=True, show_all=show_all).values())
                 for entry in location_data
             ]
-            schema = location_data[0].get_schema(is_IT=True, show_all=show_all)
+            schema = Location.get_schema(is_IT=True, show_all=show_all)
 
         # Return the data using custom JSON serializer
         return json_resp(

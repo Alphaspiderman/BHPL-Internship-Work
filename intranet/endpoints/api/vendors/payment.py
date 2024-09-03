@@ -57,13 +57,13 @@ class Vendor_Payment(HTTPMethodView):
         if export:
             async with aiofiles.open(temp_name, "w", newline="") as f:
                 writer = aiocsv.AsyncWriter(f)
-                await writer.writerow(payment_info[0].get_schema())
+                await writer.writerow(ContractPayment.get_schema())
                 await writer.writerows(data)
             resp = await file(temp_name, filename="vendor_payment.csv")
             await request.respond(resp)
             await aiofiles.os.remove(temp_name)
         else:
-            return json({"data": data, "schema": payment_info[0].get_schema()})
+            return json({"data": data, "schema": ContractPayment.get_schema()})
 
     @require_login(is_api=True)
     async def put(self, request: Request):

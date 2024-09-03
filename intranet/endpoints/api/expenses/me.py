@@ -54,7 +54,7 @@ class Employee_Expenses(HTTPMethodView):
                     list(expense.get_data(show_id=True, show_file_names=True).values())
                     for expense in expense_data
                 ],
-                "schema": expense_data[0].get_schema(show_id=True),
+                "schema": Expense.get_schema(show_id=True),
                 "total": sum([expense.get_total() for expense in expense_data]),
             }
         )
@@ -210,7 +210,7 @@ class Employee_Expenses(HTTPMethodView):
                     "data": [
                         list(expense.get_data().values()) for expense in expense_data
                     ],
-                    "schema": expense_data[0].get_schema(),
+                    "schema": Expense.get_schema(),
                     "total": sum([expense.get_total() for expense in expense_data]),
                 }
             )

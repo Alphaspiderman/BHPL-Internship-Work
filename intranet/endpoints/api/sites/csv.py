@@ -39,12 +39,12 @@ class Location_CSV(HTTPMethodView):
             data = [
                 list(entry.get_data(is_IT=False).values()) for entry in location_data
             ]
-            schema = location_data[0].get_schema(is_IT=False)
+            schema = Location.get_schema(is_IT=False)
         else:
             data = [
                 list(entry.get_data(is_IT=True).values()) for entry in location_data
             ]
-            schema = location_data[0].get_schema(is_IT=True)
+            schema = Location.get_schema(is_IT=True)
         temp_file_name = f"temp/{uuid.uuid4().hex}.csv"
         async with aiofiles.open(temp_file_name, "w", newline="") as f:
             writer = aiocsv.AsyncWriter(f)

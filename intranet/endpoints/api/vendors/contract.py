@@ -68,7 +68,7 @@ class Vendor_Contract(HTTPMethodView):
         if export:
             async with aiofiles.open(temp_name, "w", newline="") as f:
                 writer = aiocsv.AsyncWriter(f)
-                await writer.writerow(contact_info[0].get_schema(show_all=show_all))
+                await writer.writerow(VendorContract.get_schema(show_all=show_all))
                 await writer.writerows(data)
             resp = await file(temp_name, filename="vendor_contract.csv")
             await request.respond(resp)
@@ -77,7 +77,7 @@ class Vendor_Contract(HTTPMethodView):
             return json(
                 {
                     "data": data,
-                    "schema": contact_info[0].get_schema(show_all=show_all),
+                    "schema": VendorContract.get_schema(show_all=show_all),
                 }
             )
 
