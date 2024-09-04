@@ -20,7 +20,7 @@ class NavBar(HTTPMethodView):
         navbar.append(["/home", "Home"])
 
         # Check if emp_type is CORP
-        if jwt_data["emp_type"] == "CORP":
+        if jwt_data["emp_type"] in ["CORP", "REGI"]:
             emp_id = jwt_data["emp_id"]
             async with app.get_db_pool().acquire() as conn:
                 async with conn.cursor() as cur:
@@ -64,6 +64,7 @@ class NavBar(HTTPMethodView):
                     "Locations": [
                         ["/locations", "Location Master"],
                         ["/sites/downtime", "Network Downtime"],
+                        ["/connectivity", "Network Status"],
                     ]
                 }
             )
