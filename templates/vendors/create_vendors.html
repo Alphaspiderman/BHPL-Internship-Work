@@ -67,7 +67,7 @@
           method="post"
           data-parsley-trigger="focusin focusout"
         >
-          <div class="row">
+          <div class="row justify-content-between">
             <div class="col-md-4">
               <div class="mb-3">
                 <label for="vendorCode" class="form-label">Vendor Code</label>
@@ -77,6 +77,19 @@
                   id="vendorCode"
                   name="vendorCode"
                   data-parsley-maxlength="15"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="serviceType" class="form-label">Service Type</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="serviceType"
+                  name="serviceType"
+                  data-parsley-maxlength="255"
                   required
                 />
               </div>

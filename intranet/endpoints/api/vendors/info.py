@@ -20,6 +20,7 @@ class Vendor_Info(HTTPMethodView):
         "PAN_Number",
         "GST_Number",
         "Account_Number",
+        "Service_Type",
     ]
 
     @require_login(is_api=True)
@@ -74,7 +75,7 @@ class Vendor_Info(HTTPMethodView):
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(
-                    "INSERT INTO vendor_info (Vendor_Code, Vendor_Name, Vendor_Address, Vendor_Phone, Vendor_Email, PAN_Number, GST_Number, Account_Number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",  # noqa: E501
+                    "INSERT INTO vendor_info (Vendor_Code, Vendor_Name, Vendor_Address, Vendor_Phone, Vendor_Email, PAN_Number, GST_Number, Account_Number, Service_Type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",  # noqa: E501
                     (
                         data["vendorCode"],
                         data["vendorName"],
@@ -84,6 +85,7 @@ class Vendor_Info(HTTPMethodView):
                         data["panNumber"],
                         data["gstNumber"],
                         data["accountNumber"],
+                        data["serviceType"],
                     ),
                 )
                 await conn.commit()
@@ -99,7 +101,7 @@ class Vendor_Info(HTTPMethodView):
             async with conn.cursor() as cur:
                 try:
                     await cur.execute(
-                        "UPDATE vendor_info SET Vendor_Name = %s, Vendor_Address = %s, Vendor_Phone = %s, Vendor_Email = %s, PAN_Number = %s, GST_Number = %s, Account_Number = %s WHERE Vendor_Code = %s",  # noqa: E501
+                        "UPDATE vendor_info SET Vendor_Name = %s, Vendor_Address = %s, Vendor_Phone = %s, Vendor_Email = %s, PAN_Number = %s, GST_Number = %s, Account_Number = %s, Service_Type = %s WHERE Vendor_Code = %s",  # noqa: E501
                         (
                             data["Vendor_Name"],
                             data["Vendor_Address"],
@@ -108,6 +110,7 @@ class Vendor_Info(HTTPMethodView):
                             data["PAN_Number"],
                             data["GST_Number"],
                             data["Account_Number"],
+                            data["Service_Type"],
                             vendor_id,
                         ),
                     )

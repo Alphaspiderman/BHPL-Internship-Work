@@ -40,6 +40,8 @@ $(document).ready(function () {
         data.data[0][data.schema.indexOf("GST_Number")];
       document.getElementById("accountNumber").value =
         data.data[0][data.schema.indexOf("Account_Number")];
+      document.getElementById("serviceType").value =
+        data.data[0][data.schema.indexOf("Service_Type")];
     },
   });
   document.getElementById("form").addEventListener("submit", function (e) {
@@ -58,6 +60,7 @@ function handle_form_submit() {
   panNumber = document.getElementById("panNumber").value;
   gstNumber = document.getElementById("gstNumber").value;
   accountNumber = document.getElementById("accountNumber").value;
+  serviceType = document.getElementById("serviceType").value;
 
   // Get data from DB
   vendor_id = window.location.href.split("/").pop();
@@ -93,6 +96,9 @@ function handle_form_submit() {
       if (respData[schema.indexOf("Account_Number")] != accountNumber) {
         modified_fields.push("Account_Number");
       }
+      if (respData[schema.indexOf("Service_Type")] != serviceType) {
+        modified_fields.push("Service_Type");
+      }
       // Check if any field is modified
       if (modified_fields.length == 0) {
         alert("No fields modified");
@@ -113,6 +119,7 @@ function handle_form_submit() {
           PAN_Number: panNumber,
           GST_Number: gstNumber,
           Account_Number: accountNumber,
+          Service_Type: serviceType,
         },
         success: function (data) {
           alert("Vendor updated successfully");
