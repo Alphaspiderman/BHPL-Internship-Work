@@ -7,6 +7,11 @@ $(document).ready(function () {
   document.getElementById("recheck-btn").onclick = function () {
     recheck_sites();
   };
+  if (!refresh_set) {
+    // Start refresh with next refresh
+    refresh_set = true;
+    setInterval(get_data, refresh_interval);
+  }
   get_data();
 });
 
@@ -32,18 +37,16 @@ function process_data(api_response) {
   var last_run = document.getElementById("last-run");
   var date = new Date(api_response.last_run);
 
-  if (!refresh_set) {
-    // Start refresh with next refresh
-    refresh_set = true;
-    setInterval(get_data, refresh_interval);
-  }
-
   var online_cnt = api_response.online.length;
   var offline_cnt = api_response.offline.length;
-  var to_process = api_response.total_count - api_response.checked;
-  var total_count = api_response.total_count;
+  var to_process = api_response.total - api_response.checked;
+  var total_count = api_response.total;
 
-  console.log(api_response);
+  // console.log(api_response);
+  // console.log("Online: " + online_cnt);
+  // console.log("Offline: " + offline_cnt);
+  // console.log("To Process: " + to_process);
+  // console.log("Total Count: " + total_count);
 
   var data = [
     {
