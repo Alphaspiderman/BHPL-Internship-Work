@@ -81,7 +81,7 @@ class Callback(HTTPMethodView):
         Department: str = user[0][4].upper()
 
         # Generate Token for 3 days
-        token = app.generate_jwt(
+        token = await app.generate_jwt(
             {
                 "email": email,
                 "name": Full_Name,
