@@ -35,7 +35,11 @@ function handle_submit() {
     Travel_Charge: document.getElementById("cab_cost").value,
     Others: document.getElementById("misc_expenses").value,
     Reason: document.getElementById("reason").value,
+    Distance_Travelled: document.getElementById("distance_travelled").value,
   };
+
+  console.log(data);
+
   meal_cost = document.getElementById("meal_cost").value;
   meal_type = document.getElementById("meal_type").value;
   switch (meal_type) {

@@ -88,9 +88,7 @@ class Employee_Expenses(HTTPMethodView):
         others = float(data.get("Others")) if data.get("Others") else 0
 
         personal_vehicle_dist = (
-            float(data["Personal_Vehicle_Dist"])
-            if data.get("Personal_Vehicle_Dist")
-            else 0
+            float(data["Distance_Travelled"]) if data.get("Distance_Travelled") else 0
         )
         if personal_vehicle_dist != 0:
             vehicle_type = data["Vehicle_Type"]
