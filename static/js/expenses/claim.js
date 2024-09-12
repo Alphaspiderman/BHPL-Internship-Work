@@ -36,6 +36,7 @@ function handle_submit() {
     Others: document.getElementById("misc_expenses").value,
     Reason: document.getElementById("reason").value,
     Distance_Travelled: document.getElementById("distance_travelled").value,
+    Vehicle_Type: document.getElementById("vehicle_type").value,
   };
 
   console.log(data);
@@ -46,9 +47,11 @@ function handle_submit() {
     case "welfare":
       data.Welfare_Meal = meal_cost;
       data.Promotion_Meal = 0.0;
+      break;
     case "promotion":
       data.Welfare_Meal = 0.0;
       data.Promotion_Meal = meal_cost;
+      break;
   }
 
   distance_travelled = document.getElementById("distance_travelled").value;
@@ -56,18 +59,13 @@ function handle_submit() {
   switch (vehicle_type) {
     case "car":
       data.Vehicle_Type = "Car";
+      break;
     case "bike":
       data.Vehicle_Type = "Bike";
+      break;
   }
 
   formdata = new FormData();
-
-  // Remove empty fields
-  for (var key in data) {
-    if (data[key] == "" || data[key] == "0.00" || data[key] == "0") {
-      delete data[key];
-    }
-  }
 
   // Get file
   var file = document.getElementById("formFile").files[0];
@@ -110,18 +108,28 @@ function load_expenses() {
         return;
       }
       data.forEach((element) => {
+        // Welfare meal is at index 3
+        // Promotion meal is at index 4
+        // Only one can be non-zero
+        meal_cost = element[4] == 0 ? element[3] : element[4];
+        if (meal_cost == 0) {
+          meal_cost = "N/A";
+          meal_type = "N/A";
+        } else {
+          meal_type = element[4] == 0 ? "Welfare" : "Promotion";
+        }
         row = table.insertRow();
-        row.insertCell().textContent = element[0];
-        row.insertCell().textContent = element[1];
-        row.insertCell().textContent = element[2];
-        row.insertCell().textContent = element[3];
-        row.insertCell().textContent = element[4];
-        row.insertCell().textContent = element[5];
-        row.insertCell().textContent = element[6];
-        row.insertCell().textContent = element[7];
-        row.insertCell().textContent = element[8];
-        row.insertCell().textContent = element[11];
+        row.insertCell().textContent = element[0]; // Date
+        row.insertCell().textContent = element[1]; // Location
+        row.insertCell().textContent = element[2]; // Stationary
+        row.insertCell().textContent = element[3]; // Hotel Rent
+        row.insertCell().textContent = meal_cost; // Meal Cost
+        row.insertCell().textContent = meal_type; // Meal Type
+        row.insertCell().textContent = element[7]; // Travel Charge
+        row.insertCell().textContent = element[6]; // Connectivity Charges
         row.insertCell().textContent = element[10];
+        row.insertCell().textContent = element[11];
+        row.insertCell().textContent = element[8];
         row.insertCell().textContent = element[12];
         row.insertCell().textContent = element[9];
       });
