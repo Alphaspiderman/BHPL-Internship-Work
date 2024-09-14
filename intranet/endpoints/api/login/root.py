@@ -10,6 +10,7 @@ class Login_Root(HTTPMethodView):
         "https://login.microsoftonline.com/%(tenant)s/oauth2/v2.0/authorize?client_id=%(client_id)s"
         "&response_type=id_token "
         "&response_mode=form_post"
+        "&prompt=select_account"
         "&redirect_uri=%(redirect_uri)s"
         "&nonce=%(nonce)s"
         "&scope=%(scope)s"
