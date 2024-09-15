@@ -15,7 +15,7 @@ from intranet.models.expense import Expense
 
 class Employee_Expenses(HTTPMethodView):
     cost_per_km_4 = 13
-    cost_per_km_2 = 8
+    cost_per_km_2 = 6.5
 
     @require_login(is_api=True)
     async def get(self, request: Request):
