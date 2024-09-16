@@ -3,6 +3,8 @@ $(document).ready(function () {
   document.getElementById("login-btn").addEventListener("click", function () {
     window.location.href = "/api/login";
   });
+  // Clear the local storage
+  localStorage.clear();
   // Get the query string
   var queryString = window.location.search;
   // If query string is not empty
