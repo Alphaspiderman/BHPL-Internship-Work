@@ -60,12 +60,26 @@ class NavBar(HTTPMethodView):
 
             # Add the Location section to the navbar
             navbar.append(
+                ["/locations", "Location Master"],
+            )
+
+            # Add the Connectivity section to the navbar
+            navbar.append(
                 {
-                    "Locations": [
-                        ["/locations", "Location Master"],
-                        ["/sites/downtime", "Network Downtime"],
+                    "Connectivity": [
                         ["/connectivity", "Network Status"],
-                    ]
+                        ["/sites/downtime", "Network Downtime"],
+                    ],
+                }
+            )
+
+            # Add the Expenses section to the navbar
+            navbar.append(
+                {
+                    "Expenses": [
+                        ["/expenses/submit", "Submit Expense"],
+                        ["/expenses/report", "View Report"],
+                    ],
                 }
             )
 
@@ -77,16 +91,6 @@ class NavBar(HTTPMethodView):
                         ["/sales/stats", "Sales Dashboard"],
                         ["/sales/missing", "View Missing Entries"],
                     ]
-                }
-            )
-
-            # Add the Expenses section to the navbar
-            navbar.append(
-                {
-                    "Expenses": [
-                        ["/expenses/submit", "Submit Expense"],
-                        ["/expenses/report", "View Report"],
-                    ],
                 }
             )
         else:
