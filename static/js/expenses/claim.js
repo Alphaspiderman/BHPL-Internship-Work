@@ -5,6 +5,8 @@ $(document).ready(function () {
     e.preventDefault();
     handle_submit();
   });
+  // Set the date to today
+  document.getElementById("date").valueAsDate = new Date();
 });
 
 function handle_submit() {
