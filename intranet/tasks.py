@@ -61,9 +61,9 @@ class CheckerApp(Sanic):
         self.ctx.site_checker["total"] = total
 
     async def add_site_checker(self, site: str, is_online: bool, store_code: str):
-        logger.info(
-            f"Site {site} ({store_code}) is {'online' if is_online else 'offline'}"
-        )
+        # logger.info(
+        #     f"Site {site} ({store_code}) is {'online' if is_online else 'offline'}"
+        # )
         self.ctx.site_checker["checked"] += 1
         async with self.get_db_pool().acquire() as conn:
             async with conn.cursor() as cur:
@@ -142,6 +142,10 @@ async def network_checker():
         name, ip, store_code = site
         tasks.append(check_site(app, ip, name, store_code))
     await asyncio.gather(*tasks)
+    data = app.get_site_checker_info()
+    logger.info(f"Checked {data['checked']} sites")
+    logger.info(f"Online: {len(data['online'])}")
+    logger.info(f"Offline: {len(data['offline'])}")
     logger.info("Site Check Finished")
 
 

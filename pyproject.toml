@@ -29,7 +29,7 @@ python-dotenv = "^1.0.0"
 server = { cmd = "python -m intranet.server", help = "Runs the API Server"}
 prod = { cmd = "poetry run task start_tasks && poetry run task start_prod", help = "Runs the system for Production"}
 start_tasks = { cmd = "python -m intranet.tasks", help = "Runs the Internal Task Server"}
-start_prod = { cmd = "python -m sanic intranet.server --host=0.0.0.0 --port=8000 --fast", help = "Runs the Web+API Server for Production"}
+start_prod = { cmd = "python -m sanic intranet.server --host=0.0.0.0 --port=8080 --fast", help = "Runs the Web+API Server for Production"}
 lint = { cmd = "pre-commit run", help = "Lints project" }
 lintall = { cmd = "pre-commit run --all-files", help = "Lints project" }
 precommit = { cmd = "pre-commit install", help = "Installs the pre-commit git hook" }
