@@ -65,19 +65,31 @@ function load_data() {
 
 function load_table(data) {
   table_body = document.getElementById("downtime-stats");
+  table_body_active = document.getElementById("downtime-stats-active");
   // Clear the table
   table_body.innerHTML = "";
+  table_body_active.innerHTML = "";
+  // Hide the active table
+  document.getElementById("history-msg").setAttribute("hidden", "");
   // Add the new data
   entries = data.data;
   var now = new Date();
   entries.forEach((element) => {
+    // Based on the status, add the row to the table
     var startTime = new Date(element["startTime"]);
-    // var endTime = new Date(element["endTime"]);
     var endTime = element["endTime"] ? new Date(element["endTime"]) : "Ongoing";
     var duration =
       (element["endTime"] ? new Date(element["endTime"]) : now) -
       new Date(element["startTime"]);
-    var row = table_body.insertRow();
+
+    // Based on the end time, change the table
+    if (element["endTime"]) {
+      var row = table_body.insertRow();
+    } else {
+      var row = table_body_active.insertRow();
+      // Unhide the table
+      document.getElementById("history-msg").removeAttribute("hidden");
+    }
     var cell = row.insertCell();
     cell.innerHTML = element["champsNumber"];
     var cell = row.insertCell();

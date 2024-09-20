@@ -56,9 +56,10 @@
       </div>
     </nav>
     <div class="body">
+      <h1 class="center dark-bg-transparent" style="color: white">
+        Downtime Statistics
+      </h1>
       <div class="container-fluid">
-        <h1 class="center">Downtime Statistics</h1>
-
         <div class="row align-items-end justify-content-center">
           <div class="col-md-10">
             <div class="form-group">
@@ -110,6 +111,26 @@
 
         <div class="row align-items-end justify-content-center">
           <div class="col-md-10">
+            <div
+              class="alert alert-primary"
+              role="alert"
+              id="history-msg"
+              hidden
+            >
+              Showing active downtimes from selected timeframe.
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Store ID</th>
+                    <th scope="col">Start Time</th>
+                    <th scope="col">End Time</th>
+                    <th scope="col">Duration</th>
+                  </tr>
+                </thead>
+                <tbody id="downtime-stats-active"></tbody>
+              </table>
+            </div>
+
             <table class="table table-striped table-hover">
               <thead>
                 <tr>
