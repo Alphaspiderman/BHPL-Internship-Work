@@ -17,35 +17,14 @@ class Announcements_API(HTTPMethodView):
     async def get(self, request: Request, id: str = None):
         app: IntranetApp = request.app
         db_pool = app.get_db_pool()
-        if id is None or len(id) == 0:
-            # Return list of announcements that can be viewed now
-            async with db_pool.acquire() as conn:
-                async with conn.cursor() as cur:
-                    await cur.execute(
-                        "SELECT Announcement_Id, Title, Header_Image FROM announcements WHERE Date_From <= NOW() AND Date_To >= NOW()"  # noqa: E501
-                    )
-                    announcements = await cur.fetchall()
-            return json({"announcements": announcements})
-        else:
-            # Return announcement with the given id
-            async with db_pool.acquire() as conn:
-                async with conn.cursor() as cur:
-                    await cur.execute(
-                        "SELECT Title, Body, Header_Image FROM announcements WHERE Announcement_Id = %s AND Date_From <= NOW() AND Date_To >= NOW()",  # noqa: E501
-                        (id,),
-                    )
-                    announcement = await cur.fetchone()
-            # If the announcement is not found, return a 404
-            if announcement is None:
-                return json({"status": "failure"}, status=404)
-            # If the announcement is found, return the announcement
-            body = base64.b64decode(announcement[1]).decode("ascii")
-            announcement = {
-                "title": announcement[0],
-                "body": body,
-                "header_image": announcement[2],
-            }
-            return json({"status": "success", "announcement": announcement})
+        # Return list of announcements that can be viewed now
+        async with db_pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
+                    "SELECT Announcement_Id, Title FROM announcements WHERE Date_From <= NOW() AND Date_To >= NOW()"  # noqa: E501
+                )
+                announcements = await cur.fetchall()
+        return json({"announcements": announcements})
 
     @require_login(is_api=True)
     async def post(self, request: Request, id: str = None):
@@ -54,7 +33,9 @@ class Announcements_API(HTTPMethodView):
         files: List[File] = request.files.getlist("file")
         announcement_id = uuid.uuid4().hex
 
-        emp_id = app.decode_jwt(request.cookies.get("JWT_TOKEN"))["emp_id"]
+        jwt_data = app.decode_jwt(request.cookies.get("JWT_TOKEN"))
+        emp_id = jwt_data["emp_id"]
+        emp_name = jwt_data["name"]
 
         try:
             body = base64.b64encode(request.form["body"][0].encode("ascii"))
@@ -65,33 +46,40 @@ class Announcements_API(HTTPMethodView):
                 request.form["date_to"][0], "%Y-%m-%d"
             ).strftime("%Y-%m-%d")
             title = request.form["title"][0]
+            as_admin = request.form.get("as_admin", "").lower() == "true"
+            if as_admin:
+                posted_by = "Admin"
+            else:
+                posted_by = request.form.get("posted_by", emp_name)
+
+            # Check the date range
+            if date_from > date_to:
+                return json({"status": "failure", "message": "Invalid date range"})
         except KeyError:
-            return json({"status": "failure"}, status=400)
+            return json({"status": "failure", "message": "Missing Required Fields"})
+        except ValueError:
+            return json({"status": "failure", "message": "Date not Provided"})
 
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 # Insert announcement into the database
                 await cur.execute(
-                    "INSERT INTO announcements (Announcement_Id, Title, Body, Date_From, Date_To) VALUES (%s, %s, %s, %s, %s)",  # noqa: E501
+                    "INSERT INTO announcements (Announcement_Id, Title, Body, Date_From, Date_To, Posted_By, Log_Posted_By) VALUES (%s, %s, %s, %s, %s, %s, %s)",  # noqa: E501
                     (
                         announcement_id,
                         title,
                         body,
                         date_from,
                         date_to,
+                        posted_by,
+                        emp_name,
                     ),
                 )
                 # Insert files into the database
-                for idx, file in enumerate(files):
+                if len(files) > 0:
+                    file = files[0]
                     ext = file.name.split(".")[-1]
                     new_name = uuid.uuid4().hex + "." + ext
-                    if idx == 0:
-                        # Check if the file is an image
-                        if file.type.startswith("image"):
-                            await cur.execute(
-                                "UPDATE announcements SET Header_Image = %s WHERE Announcement_Id = %s",  # noqa: E501
-                                (new_name, announcement_id),
-                            )
                     await cur.execute(
                         "INSERT INTO files(File_Id, File_Name, File_Type, File_Data, Uploaded_By) VALUES (%s, %s, %s, %s, %s)",  # noqa: E501
                         (
@@ -104,7 +92,7 @@ class Announcements_API(HTTPMethodView):
                     )
                     # Insert announcement into the database
                     await cur.execute(
-                        "INSERT INTO announcement_files (Announcement_Id, File_Name) VALUES (%s, %s)",  # noqa: E501
+                        "INSERT INTO announcement_files (Announcement_Id, File_Id) VALUES (%s, %s)",  # noqa: E501
                         (announcement_id, new_name),
                     )
                 # Save the data
