@@ -16,10 +16,19 @@ input {
   border: 1px solid #ccc;
 }
 
+#quillEditor {
+  background-color: #fff;
+}
+
+.ql-snow {
+  background-color: #fff;
+}
+
 input,
 .ql-editor {
   padding: 4px;
   font-size: 14px;
+  background-color: #fff;
 }
 
 #editor {

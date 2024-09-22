@@ -61,49 +61,49 @@
       </div>
     </nav>
     <div class="body">
+      <h1 class="center">Create Announcement</h1>
       <div class="container">
         <br />
-        <form
-          action="/api/announcements/new"
-          method="post"
-          enctype="multipart/form-data"
-          id="createAnnouncementForm"
-        >
-          <div class="form-group">
-            <label for="title">Announcement Title</label>
-            <input id="title" name="title" type="text" />
+        <form id="createAnnouncementForm">
+          <div class="input-group">
+            <span class="input-group-text">Announcement Title</span>
+            <input type="text" class="form-control" id="title" />
           </div>
-          <div class="form-group">
-            <label for="date_from">Start Date (YYYY-MM-DD)</label>
+          <br />
+          <div class="input-group">
+            <span class="input-group-text">Date From</span>
             <input
+              type="date"
               class="form-control"
-              id="date_from"
-              name="date_from"
-              placeholder="YYYY-MM-DD"
-              type="text"
+              id="dateFrom"
+              name="dateFrom"
             />
           </div>
-          <div class="form-group">
-            <label for="date_to">End Date (YYYY-MM-DD)</label>
-            <input
-              class="form-control"
-              id="date_to"
-              name="date_to"
-              placeholder="YYYY-MM-DD"
-              type="text"
-            />
+          <br />
+          <div class="input-group">
+            <span class="input-group-text">Date To</span>
+            <input type="date" class="form-control" id="dateTo" name="dateTo" />
           </div>
+          <br />
           <div class="form-group">
             <label>Body</label>
             <div id="quillEditor"></div>
           </div>
-          <p>You can select multiple files</p>
-          <p>Re-selecting replaces previous files</p>
           <div class="mb-3">
-            <input name="file" type="file" multiple />
+            <label for="formFile" class="form-label"
+              >Image on page (Optional)</label
+            >
+            <input class="form-control" type="file" id="formFile" />
           </div>
-          <div class="alert alert-info">
-            <strong>Info!</strong> The first file should be the header image.
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="asAdmin"
+              checked
+            />
+            <label class="form-check-label" for="asAdmin">Post as Admin</label>
           </div>
           <button type="submit" class="btn btn-primary" id="submitForm">
             Submit Form
