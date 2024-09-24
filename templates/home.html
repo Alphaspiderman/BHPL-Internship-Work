@@ -29,7 +29,7 @@
     <link rel="icon" type="image/png" href="/static/images/favicon.jpg" />
     <link href="/static/css/styles.css" rel="stylesheet" />
     <link href="/static/css/home.css" rel="stylesheet" />
-    <!-- <script src="/static/js/announcements.js"></script> -->
+    <script src="/static/js/announcements.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -56,6 +56,19 @@
       </div>
     </nav>
     <div class="body">
+      <div class="container-fluid" id="home-container">
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <br />
+            <div
+              class="alert alert-secondary center"
+              role="alert"
+              id="announcement-info"
+              hidden
+            ></div>
+          </div>
+        </div>
+      </div>
       <div class="container-fluid" id="logo-container">
         <img
           alt="Burman Hospitality"
@@ -63,13 +76,6 @@
           id="home-logo"
         />
       </div>
-
-      <!-- <h1 class="center">Announcements</h1>
-    <div
-      class="row"
-      data-masonry='{"percentPosition": true }'
-      id="announcements-container"
-    ></div> -->
     </div>
   </body>
 </html>

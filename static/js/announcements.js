@@ -3,39 +3,20 @@ $(document).ready(function () {
     url: "/api/announcements/",
     type: "GET",
     success: function (data) {
-      load_announcements(data["announcements"]);
+      show_banner(data["announcements"]);
     },
   });
 });
 
-function load_announcements(data) {
-  container = document.getElementById("announcements-container");
-  container.style =
-    "position: relative; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;";
-  data.forEach((element) => {
-    image = element["2"];
-    title = element["1"];
-    id = element["0"];
-    div = document.createElement("div");
-    div.style = "width: 500px; padding: 10px; margin: 10px;";
-    announcement = document.createElement("div");
-    announcement.className = "card";
-    img = document.createElement("img");
-    img.src = `/api/files/?file_id=${image}`;
-    img.class = "rounded mx-auto d-block";
-    announcement.appendChild(img);
-    body = document.createElement("div");
-    body.className = "card-body";
-    titleElement = document.createElement("h5");
-    titleElement.innerHTML = title;
-    body.appendChild(titleElement);
-    link = document.createElement("a");
-    link.href = `/announcement/${id}`;
-    link.className = "btn btn-primary";
-    link.innerHTML = "Read More";
-    body.appendChild(link);
-    announcement.appendChild(body);
-    div.appendChild(announcement);
-    container.appendChild(div);
-  });
+function show_banner(announcements) {
+  if (announcements.length > 0) {
+    banner = document.getElementById("announcement-info");
+    banner.innerHTML =
+      "New Announcement! View here: <a href='/announcement/" +
+      announcements[0][0] +
+      "'>" +
+      announcements[0][1] +
+      "</a>";
+    banner.removeAttribute("hidden");
+  }
 }
