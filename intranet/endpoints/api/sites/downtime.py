@@ -57,8 +57,9 @@ class Site_Downtime_Stats(HTTPMethodView):
                     ON
                         s.Store_Code = n.Store_Code
                     WHERE
-                        {filter}
-                        n.Start_Time >= %s AND (n.End_Time <= %s OR n.End_Time IS NULL)
+                        {filter} (
+                        (n.Start_Time >= %s AND n.End_Time <= %s)
+                        OR (n.End_Time IS NULL))
                     ORDER BY
                         n.Start_Time;
                     """,

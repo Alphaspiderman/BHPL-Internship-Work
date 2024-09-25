@@ -66,15 +66,19 @@ function load_data() {
 function load_table(data) {
   table_body = document.getElementById("downtime-stats");
   table_body_active = document.getElementById("downtime-stats-active");
+  no_data_alert = document.getElementById("no-data-alert");
   // Clear the table
   table_body.innerHTML = "";
   table_body_active.innerHTML = "";
-  // Hide the active table
-  document.getElementById("history-msg").setAttribute("hidden", "");
+  // Reset Visibility
+  document.getElementById("main-table").setAttribute("hidden", "");
+  document.getElementById("active-downtime-table").setAttribute("hidden", "");
+  document.getElementById("no-data-alert").removeAttribute("hidden");
   // Add the new data
   entries = data.data;
   var now = new Date();
   entries.forEach((element) => {
+    document.getElementById("no-data-alert").setAttribute("hidden", "");
     // Based on the status, add the row to the table
     var startTime = new Date(element["startTime"]);
     var endTime = element["endTime"] ? new Date(element["endTime"]) : "Ongoing";
@@ -84,14 +88,19 @@ function load_table(data) {
 
     // Based on the end time, change the table
     if (element["endTime"]) {
+      document.getElementById("main-table").removeAttribute("hidden");
       var row = table_body.insertRow();
     } else {
       var row = table_body_active.insertRow();
       // Unhide the table
-      document.getElementById("history-msg").removeAttribute("hidden");
+      document
+        .getElementById("active-downtime-table")
+        .removeAttribute("hidden");
     }
     var cell = row.insertCell();
     cell.innerHTML = element["champsNumber"];
+    var cell = row.insertCell();
+    cell.innerHTML = element["storeName"];
     var cell = row.insertCell();
     cell.innerHTML = startTime;
     var cell = row.insertCell();
@@ -102,8 +111,18 @@ function load_table(data) {
 }
 
 function convert_duration(duration) {
+  var days = Math.floor(duration / 86400000);
   var hours = Math.floor(duration / 3600000);
   var minutes = Math.floor((duration % 3600000) / 60000);
   var seconds = Math.floor((duration % 60000) / 1000);
-  return hours + "h " + minutes + "m " + seconds + "s";
+  if (days > 0) {
+    return days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+  }
+  if (hours > 0) {
+    return hours + "h " + minutes + "m " + seconds + "s";
+  }
+  if (minutes > 0) {
+    return minutes + "m " + seconds + "s";
+  }
+  return seconds + "s";
 }
