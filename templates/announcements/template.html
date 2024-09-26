@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Burman Hospitality</title>
@@ -59,25 +59,20 @@
       <div style="min-height: 95vh">
         <div class="container">
           <div class="row justify-content-center">
-            <div class="col-md-8">
-              <div class="card">
-                <div class="card-body">
-                  <h2 id="announcement-heading">{{ title }}</h2>
-                  <p id="announcement-date">Date: {{ date_posted }}</p>
-                  <p id="announcement-author">Posted By: {{ posted_by }}</p>
-                  <p id="announcement-body">{{ body|safe }}</p>
-                  {# Render images one by one if exists #} {% for img in images
-                  %}
-                  <img src="{{ img }}" alt="Announcement Image" />
-                  {% endfor %} {# Show links to download files one by one if
-                  exists #} {% for file in attachments %}
-                  <p>
-                    Attachment: <a href="{{ file[1] }}" download>{{file[0]}}</a>
-                  </p>
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
+            <h2 id="announcement-heading">{{ title }}</h2>
+            <p id="announcement-date">Date: {{ date_posted }}</p>
+            <p id="announcement-author">Posted By: {{ posted_by }}</p>
+            <p id="announcement-body">{{ body|safe }}</p>
+            {# Render images one by one if exists #} {% for img in images %}
+            <img
+              src="{{ img }}"
+              alt="Announcement Image"
+              style="max-width: fit-content"
+            />
+            {% endfor %} {# Show links to download files one by one if exists #}
+            {% for file in attachments %}
+            <p>Attachment: <a href="{{ file[1] }}" download>{{file[0]}}</a></p>
+            {% endfor %}
           </div>
         </div>
       </div>

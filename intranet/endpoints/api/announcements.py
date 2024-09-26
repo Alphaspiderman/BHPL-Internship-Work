@@ -76,7 +76,9 @@ class Announcements_API(HTTPMethodView):
                     ),
                 )
                 # Insert files into the database
-                if len(files) > 0:
+                if files is None:
+                    pass
+                elif len(files) > 0:
                     file = files[0]
                     ext = file.name.split(".")[-1]
                     new_name = uuid.uuid4().hex + "." + ext

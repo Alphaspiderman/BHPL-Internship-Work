@@ -55,14 +55,15 @@ function submit_form() {
     contentType: false,
     success: function (data) {
       console.log(data);
-      if (data.success) {
+      if (data.status == "success") {
         alert("Announcement created successfully");
         resetForm();
       } else {
-        alert(data.message);
+        alert("Failed to create announcement");
       }
     },
     error: function (data) {
+      alert("Failed to create announcement");
       console.log(data);
     },
   });
