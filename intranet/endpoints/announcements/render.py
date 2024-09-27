@@ -32,7 +32,7 @@ class Announcements(HTTPMethodView):
         title = announcements[0][1]
         body = base64.b64decode(announcements[0][2]).decode("ascii")
         date_posted = announcements[0][3]
-        posted_by = announcements[0][5]
+        posted_by = announcements[0][4]
         images = []
         attachments = []
         for entry in announcement_files:
@@ -40,9 +40,6 @@ class Announcements(HTTPMethodView):
                 images.append(f"/api/files?file_id={entry[0]}")
             else:
                 attachments.append([entry[2], f"/api/files?file_id={entry[0]}"])
-
-        print(images)
-        print(attachments)
 
         return await render(
             "announcements/template.html",

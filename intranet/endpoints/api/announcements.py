@@ -21,7 +21,7 @@ class Announcements_API(HTTPMethodView):
         async with db_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(
-                    "SELECT Announcement_Id, Title FROM announcements WHERE Date_From <= NOW() AND Date_To >= NOW()"  # noqa: E501
+                    "SELECT Announcement_Id, Title FROM announcements WHERE Date = CURDATE()"  # noqa: E501
                 )
                 announcements = await cur.fetchall()
         return json({"announcements": announcements})
@@ -39,22 +39,15 @@ class Announcements_API(HTTPMethodView):
 
         try:
             body = base64.b64encode(request.form["body"][0].encode("ascii"))
-            date_from = datetime.strptime(
-                request.form["date_from"][0], "%Y-%m-%d"
-            ).strftime("%Y-%m-%d")
-            date_to = datetime.strptime(
-                request.form["date_to"][0], "%Y-%m-%d"
-            ).strftime("%Y-%m-%d")
+            date = datetime.strptime(request.form["date"][0], "%Y-%m-%d").strftime(
+                "%Y-%m-%d"
+            )
             title = request.form["title"][0]
             as_admin = request.form.get("as_admin", "").lower() == "true"
             if as_admin:
                 posted_by = "Admin"
             else:
                 posted_by = request.form.get("posted_by", emp_name)
-
-            # Check the date range
-            if date_from > date_to:
-                return json({"status": "failure", "message": "Invalid date range"})
         except KeyError:
             return json({"status": "failure", "message": "Missing Required Fields"})
         except ValueError:
@@ -64,13 +57,12 @@ class Announcements_API(HTTPMethodView):
             async with conn.cursor() as cur:
                 # Insert announcement into the database
                 await cur.execute(
-                    "INSERT INTO announcements (Announcement_Id, Title, Body, Date_From, Date_To, Posted_By, Log_Posted_By) VALUES (%s, %s, %s, %s, %s, %s, %s)",  # noqa: E501
+                    "INSERT INTO announcements (Announcement_Id, Title, Body, Date, Posted_By, Log_Posted_By) VALUES (%s, %s, %s, %s, %s, %s)",  # noqa: E501
                     (
                         announcement_id,
                         title,
                         body,
-                        date_from,
-                        date_to,
+                        date,
                         posted_by,
                         emp_name,
                     ),

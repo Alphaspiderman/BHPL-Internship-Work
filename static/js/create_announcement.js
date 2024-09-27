@@ -32,8 +32,7 @@ $(document).ready(function () {
 
 function submit_form() {
   body = quill.getSemanticHTML();
-  dateFrom = document.querySelector("#dateFrom").value;
-  dateTo = document.querySelector("#dateTo").value;
+  date = document.querySelector("#date").value;
   title = document.querySelector("#title").value;
   asAdmin = document.querySelector("#asAdmin").checked;
   file = document.querySelector("#formFile").files[0];
@@ -42,8 +41,7 @@ function submit_form() {
 
   formData.append("title", title);
   formData.append("body", body);
-  formData.append("date_from", dateFrom);
-  formData.append("date_to", dateTo);
+  formData.append("date", date);
   formData.append("as_admin", asAdmin);
   formData.append("file", file);
 
@@ -72,7 +70,6 @@ function submit_form() {
 function resetForm() {
   data = quill.getSemanticHTML();
   document.querySelector("#title").value = initialData.name;
-  document.querySelector("#dateFrom").value = "";
-  document.querySelector("#dateTo").value = "";
+  document.querySelector("#date").value = "";
   quill.setContents(initialData.about);
 }
