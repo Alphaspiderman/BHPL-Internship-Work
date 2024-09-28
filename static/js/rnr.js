@@ -20,7 +20,11 @@ $(document).ready(function () {
           sum_other_stores += data.store_bell_count_map[entry];
         }
       });
-      dataPoint1.push({ label: "Others", y: sum_other_stores });
+
+      if (sum_other_stores > 0) {
+        dataPoint1.push({ label: "Others", y: sum_other_stores });
+      }
+
 
       load_chart(
         "chartContainer1",
@@ -41,7 +45,9 @@ $(document).ready(function () {
           sum_other_employees += data.employee_id_bell_count_map[entry];
         }
       });
-      dataPoint2.push({ label: "Others", y: sum_other_employees });
+      if (sum_other_employees > 0) {
+        dataPoint2.push({ label: "Others", y: sum_other_employees });
+      }
       load_chart(
         "chartContainer2",
         dataPoint2,
