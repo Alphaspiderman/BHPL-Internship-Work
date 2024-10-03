@@ -1,11 +1,15 @@
 from datetime import datetime
+import uuid
 
 from sanic.request import Request
-from sanic.response import json
+from sanic.response import json, file
 from sanic.views import HTTPMethodView
 
 from intranet.app import IntranetApp
 from intranet.decorators.require_login import require_login
+
+import aiocsv
+import aiofiles
 
 
 class Bell_Info(HTTPMethodView):
@@ -33,16 +37,35 @@ class Bell_Info(HTTPMethodView):
         db_pool = app.get_db_pool()
         display = request.args.get("show")
 
-        # Get date to calculate against
-        now = datetime.now()
-        month_start = now.strftime("%Y-%m-01")
+        year = request.args.get("year")
+        month = request.args.get("month")
+
+        export = request.args.get("export")
+        if year is None or month is None:
+            # Get date to calculate against
+            now = datetime.now()
+            month_start = now.strftime("%Y-%m-01")
+            month_end = now.replace(month=now.month + 1).strftime("%Y-%m-01")
+
+        else:
+            date = datetime.strptime(f"{year}-{month}-01", "%Y-%m-01")
+            month_start = date.strftime("%Y-%m-01")
+            month_end = date.replace(month=date.month + 1).strftime("%Y-%m-01")
+
+        can_export = app.decode_jwt(request.cookies.get("JWT_TOKEN"))["department"] in [
+            "IT",
+            "HR",
+        ]
+
+        if export == "true" and can_export:
+            return await self.export(request, month_start, month_end)
 
         if display == "home":
             async with db_pool.acquire() as conn:
                 async with conn.cursor() as cur:
                     await cur.execute(
-                        "SELECT Bells_Awarded, s.Store_Code, Store_Name, Employee_Code, Employee_Name FROM bells_awarded b NATURAL JOIN sites s JOIN people p ON Employee_Code = p.Employee_Id  WHERE Award_Date >= %s",  # noqa: E501
-                        (month_start,),
+                        "SELECT Bells_Awarded, s.Store_Code, Store_Name, Employee_Code, Employee_Name FROM bells_awarded b NATURAL JOIN sites s JOIN people p ON Employee_Code = p.Employee_Id WHERE Award_Date >= %s AND Award_Date < %s",  # noqa: E501
+                        (month_start, month_end),
                     )
                     bells_awarded = await cur.fetchall()
             # Calculate the stats of bells awarded
@@ -111,7 +134,60 @@ class Bell_Info(HTTPMethodView):
                     "store_bell_count_map": store_bell_cnt_map,
                     "employee_id_name_map": employee_id_name_map,
                     "employee_id_store_map": employee_id_store_map,
+                    "can_export": can_export,
                 }
             )
         else:
             return json({"error": "Invalid display type"})
+
+    async def export(self, request: Request, month_start, month_end):
+        """Trigger download of bells awarded for provided month"""
+        app: IntranetApp = request.app
+        db_pool = app.get_db_pool()
+
+        year = month_start.split("-")[0]
+        month = month_start.split("-")[1]
+
+        # Get the bells awarded for the month
+        async with db_pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
+                    "SELECT * FROM bells_awarded WHERE Award_Date >= %s AND Award_Date < %s",
+                    (
+                        month_start,
+                        month_end,
+                    ),
+                )
+                bells_awarded = await cur.fetchall()
+
+        # Write the bells awarded to a file
+        # Random string to avoid conflicts
+        random = str(uuid.uuid4().hex)
+        file_name = f"temp/{random}.csv"
+        async with aiofiles.open(
+            file_name, mode="w", encoding="utf-8", newline=""
+        ) as afp:
+            writer = aiocsv.AsyncWriter(afp)
+            await writer.writerow(
+                [
+                    "ID",
+                    "Employee_Code",
+                    "Store_Code",
+                    "Bells_Awarded",
+                    "Award_Date",
+                    "Awarded_By_Id",
+                    "Reason",
+                    "File_Id",
+                ]
+            )
+            await writer.writerows(bells_awarded)
+        # Return the file
+        resp = await file(
+            file_name,
+            filename=f"bells_awarded_{month}_{year}.csv",
+            mime_type="text/csv",
+        )
+        # Send the response
+        await request.respond(resp)
+        # Remove the file after sending
+        await aiofiles.os.remove(file_name)
